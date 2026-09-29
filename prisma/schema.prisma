@@ -1,0 +1,126 @@
+datasource db {
+  // Dev: provider "sqlite" + DATABASE_URL="file:./dev.db" (zero setup)
+  // Prod: provider "postgresql" + DATABASE_URL pointing at your Postgres instance
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  CITIZEN
+  COLLECTOR
+  MUNICIPAL_ADMIN
+}
+
+enum ReportStatus {
+  PENDING
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+enum ReportSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum WasteCategory {
+  PLASTIC
+  E_WASTE
+  ORGANIC
+  HAZARDOUS
+  BULK
+  GENERAL
+}
+
+enum PickupStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum RewardTransactionType {
+  EARNED
+  REDEEMED
+}
+
+model User {
+  id                 String              @id @default(cuid())
+  name               String
+  email              String              @unique
+  password           String
+  role               Role                @default(CITIZEN)
+  ecoPoints          Int                 @default(0)
+  avatarUrl          String?
+  reports            WasteReport[]       @relation("ReportedBy")
+  assignedTasks      WasteReport[]       @relation("AssignedTo")
+  pickupSchedules    PickupSchedule[]
+  rewardTransactions RewardTransaction[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+}
+
+model WasteReport {
+  id              String         @id @default(cuid())
+  title           String
+  description     String
+  category        WasteCategory  @default(GENERAL)
+  severity        ReportSeverity @default(MEDIUM)
+  imageUrl        String
+  cleanupImageUrl String?
+  status          ReportStatus   @default(PENDING)
+  latitude        Float
+  longitude       Float
+  address         String?
+  reporterId      String
+  reporter        User           @relation("ReportedBy", fields: [reporterId], references: [id], onDelete: Cascade)
+  assignedToId    String?
+  assignedTo      User?          @relation("AssignedTo", fields: [assignedToId], references: [id], onDelete: SetNull)
+  resolvedAt      DateTime?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+}
+
+model RecyclingCenter {
+  id                String   @id @default(cuid())
+  name              String
+  address           String
+  latitude          Float
+  longitude         Float
+  acceptedMaterials String
+  contactPhone      String?
+  operatingHours    String?  @default("8:00 AM - 6:00 PM")
+  createdAt         DateTime @default(now())
+}
+
+model PickupSchedule {
+  id                String        @id @default(cuid())
+  citizenId         String
+  citizen           User          @relation(fields: [citizenId], references: [id], onDelete: Cascade)
+  wasteType         WasteCategory
+  address           String
+  latitude          Float
+  longitude         Float
+  scheduledDate     DateTime
+  preferredTimeSlot String
+  notes             String?
+  status            PickupStatus  @default(SCHEDULED)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model RewardTransaction {
+  id          String                @id @default(cuid())
+  userId      String
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount      Int
+  type        RewardTransactionType
+  description String
+  createdAt   DateTime              @default(now())
+}
