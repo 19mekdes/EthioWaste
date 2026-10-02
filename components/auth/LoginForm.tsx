@@ -34,8 +34,7 @@ export function LoginForm() {
         return;
       }
 
-      // Success — honor the middleware callbackUrl, otherwise let the
-      // landing page route us to the right role home
+
       router.push(callbackUrl && callbackUrl.startsWith('/') ? callbackUrl : '/');
       router.refresh();
     } catch (err) {

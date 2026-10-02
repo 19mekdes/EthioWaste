@@ -31,7 +31,7 @@ export function CitizenHub({ user, initialData }: CitizenHubProps) {
   const [showReportModal, setShowReportModal] = useState(false);
   const [data, setData] = useState(initialData);
 
-  // Re-sync client state whenever the server re-renders with fresh props
+
   useEffect(() => {
     setData(initialData);
   }, [initialData]);
@@ -126,11 +126,10 @@ export function CitizenHub({ user, initialData }: CitizenHubProps) {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-              activeTab === tab.id
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === tab.id
                 ? tab.activeClass
                 : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-            }`}
+              }`}
           >
             <tab.icon className="w-4 h-4" />
             <span>{tab.label}</span>

@@ -16,7 +16,7 @@ export function RegisterForm() {
   const [state, formAction, pending] = useActionState(registerUser, {});
   const [autoSigningIn, setAutoSigningIn] = useState(false);
 
-  // When registration succeeds, auto sign-in then route home
+
   React.useEffect(() => {
     if (state.success && !autoSigningIn) {
       setAutoSigningIn(true);
