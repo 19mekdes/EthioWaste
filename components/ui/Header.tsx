@@ -61,9 +61,8 @@ export function Header({ user, onOpenReportModal }: HeaderProps) {
               <Link
                 key={l.href}
                 href={l.href}
-                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
-                  active ? 'text-eco-400 bg-eco-500/10' : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-                }`}
+                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${active ? 'text-eco-400 bg-eco-500/10' : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                  }`}
               >
                 <l.icon className="w-4 h-4" />
                 {l.label}
@@ -72,7 +71,7 @@ export function Header({ user, onOpenReportModal }: HeaderProps) {
           })}
         </nav>
 
-        {/* Right User Actions & Points */}
+
         <div className="flex items-center gap-3">
           {user.role === 'CITIZEN' && (
             <div className="flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/30 px-3.5 py-1.5 rounded-full shadow-inner shadow-amber-500/10">
