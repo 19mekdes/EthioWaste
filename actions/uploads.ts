@@ -2,23 +2,19 @@
 
 import { auth } from '@/lib/auth';
 
-/**
- * Server Action — uploads an image (base64 data URL) to Cloudinary when
- * configured, otherwise falls back to returning the base64 payload itself
- * so the demo works with zero external dependencies.
- */
+
 export async function uploadPhoto(base64DataUrl: string): Promise<{ success: boolean; url?: string; storage?: 'cloudinary' | 'local'; error?: string }> {
   const session = await auth();
   if (!session?.user) {
     return { success: false, error: 'You must be signed in to upload photos.' };
   }
 
-  // Validate it's actually a base64 image payload
+
   if (!base64DataUrl || !base64DataUrl.startsWith('data:image/')) {
     return { success: false, error: 'Invalid image payload.' };
   }
 
-  const sizeLimit = 5 * 1024 * 1024; // 5MB
+  const sizeLimit = 5 * 1024 * 1024;
   const estimatedBytes = Math.ceil((base64DataUrl.length * 3) / 4);
   if (estimatedBytes > sizeLimit) {
     return { success: false, error: 'Image is too large. Please use an image under 5MB.' };
@@ -54,7 +50,7 @@ export async function uploadPhoto(base64DataUrl: string): Promise<{ success: boo
       return { success: false, error: data?.error?.message || 'Cloudinary upload failed.' };
     }
 
-    // Fallback: store locally as a data URL (kept inside the database string column)
+
     return { success: true, url: base64DataUrl, storage: 'local' };
   } catch (error: any) {
     console.error('Photo upload error:', error);
@@ -63,7 +59,7 @@ export async function uploadPhoto(base64DataUrl: string): Promise<{ success: boo
 }
 
 async function createCloudinarySignature(folder: string, timestamp: number, apiSecret: string): Promise<string> {
-  // Cloudinary SHA-1 signature over `folder=..&timestamp=..` + api_secret
+
   const { createHash } = await import('node:crypto');
   const toSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
   return createHash('sha1').update(toSign).digest('hex');
