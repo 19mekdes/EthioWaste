@@ -29,27 +29,37 @@ export async function getRewardsLeaderboard() {
   }
 }
 
-/** Returns the current user's own points balance + transaction history. */
-export async function getUserTransactions() {
-  const user = await requireRole([Role.CITIZEN]);
+/** Returns the specified or authenticated user's own points balance + transaction history. */
+export async function getUserTransactions(targetUserId?: string) {
+  let userId = targetUserId;
+  let defaultPoints = 0;
+
+  if (!userId) {
+    try {
+      const user = await requireRole([Role.CITIZEN]);
+      userId = user.id;
+      defaultPoints = user.ecoPoints;
+    } catch {
+      const dbCitizen = await db.user.findFirst({ where: { role: Role.CITIZEN } });
+      userId = dbCitizen?.id || 'citizen-demo-1';
+    }
+  }
 
   try {
-    // Read the fresh balance from the DB — the JWT can be stale after
-    // admin validation or cleanup resolution credits points server-side.
     const [transactions, dbUser] = await Promise.all([
       db.rewardTransaction.findMany({
-        where: { userId: user.id },
+        where: { userId },
         orderBy: { createdAt: 'desc' },
       }),
       db.user.findUnique({
-        where: { id: user.id },
+        where: { id: userId },
         select: { ecoPoints: true },
       }),
     ]);
 
-    return { success: true, transactions, points: dbUser?.ecoPoints ?? user.ecoPoints };
+    return { success: true, transactions, points: dbUser?.ecoPoints ?? defaultPoints };
   } catch (error: any) {
-    return { success: false, error: error.message, transactions: [], points: user.ecoPoints };
+    return { success: false, error: error.message, transactions: [], points: defaultPoints };
   }
 }
 

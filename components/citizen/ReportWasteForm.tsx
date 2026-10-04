@@ -7,6 +7,7 @@ import { createWasteReport } from '@/actions/reports';
 import { ImageUploadField } from '@/components/ui/ImageUploadField';
 
 interface ReportWasteFormProps {
+  userId?: string;
   onSuccess?: () => void;
   onClose?: () => void;
 }

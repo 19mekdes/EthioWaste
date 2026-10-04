@@ -6,6 +6,7 @@ import { createPickupSchedule } from '@/actions/pickups';
 import { WasteCategory } from '@prisma/client';
 
 interface PickupScheduleFormProps {
+  citizenId?: string;
   onSuccess?: () => void;
   onClose?: () => void;
 }

@@ -12,8 +12,8 @@ export interface RecyclingCenterData {
   latitude: number;
   longitude: number;
   acceptedMaterials: string;
-  contactPhone?: string;
-  operatingHours?: string;
+  contactPhone?: string | null;
+  operatingHours?: string | null;
 }
 
 interface RecyclingCenterMapProps {
@@ -45,7 +45,7 @@ export function RecyclingCenterMap({
     longitude: c.longitude,
     type: 'CENTER',
     acceptedMaterials: c.acceptedMaterials,
-    operatingHours: c.operatingHours,
+    operatingHours: c.operatingHours || undefined,
   }));
 
   return (

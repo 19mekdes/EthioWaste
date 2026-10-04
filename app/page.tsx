@@ -138,7 +138,11 @@ export default function Home() {
       <RoleSwitcher currentRole={currentUser.role} onRoleChange={handleRoleChange} />
 
       {/* 2. Platform Navigation Header */}
-      <Header user={currentUser} onOpenReportModal={() => setShowReportModal(true)} />
+      <Header
+        user={currentUser}
+        onOpenReportModal={() => setShowReportModal(true)}
+        onSelectTab={(tab) => setActiveTab(tab as any)}
+      />
 
       {/* 3. Hero Header Section */}
       <section className="relative overflow-hidden pt-8 pb-12 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-950 to-brand-dark">
@@ -339,7 +343,11 @@ export default function Home() {
         {/* COLLECTOR DASHBOARD VIEW */}
         {activeTab === 'COLLECTOR' && (
           <TaskRouteMap
-            tasks={reports.filter((r: any) => r.assignedToId === currentUser.id || !r.assignedToId)}
+            tasks={reports.filter((r: any) =>
+              !r.assignedToId ||
+              r.assignedToId === currentUser.id ||
+              (collectors.length > 0 && r.assignedToId === collectors[0]?.id)
+            )}
             collectorName={currentUser.name}
             onTaskUpdated={loadData}
           />

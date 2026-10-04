@@ -104,14 +104,55 @@ export function LoginForm() {
         </Link>
       </div>
 
-      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 text-[11px] text-slate-400 space-y-1.5">
+      <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 text-[11px] text-slate-400 space-y-2.5">
         <div className="flex items-center gap-1.5 font-semibold text-slate-300">
           <Recycle className="w-3.5 h-3.5 text-emerald-400" />
-          Demo accounts (seeded)
+          Quick 1-Click Demo Login:
         </div>
-        <div><span className="text-emerald-400 font-mono">citizen@ecobin.org</span> — password123</div>
-        <div><span className="text-sky-400 font-mono">collector@ecobin.org</span> — password123</div>
-        <div><span className="text-amber-400 font-mono">admin@ecobin.org</span> — password123</div>
+        <div className="grid grid-cols-3 gap-2 pt-1">
+          <button
+            type="button"
+            onClick={async () => {
+              setEmail('citizen@ecobin.org');
+              setPassword('password123');
+              setLoading(true);
+              const result = await signIn('credentials', { email: 'citizen@ecobin.org', password: 'password123', redirect: false });
+              if (result?.error) { setError('Login failed'); setLoading(false); }
+              else { router.push('/citizen'); router.refresh(); }
+            }}
+            className="px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-semibold text-center transition-all"
+          >
+            👤 Citizen
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              setEmail('collector@ecobin.org');
+              setPassword('password123');
+              setLoading(true);
+              const result = await signIn('credentials', { email: 'collector@ecobin.org', password: 'password123', redirect: false });
+              if (result?.error) { setError('Login failed'); setLoading(false); }
+              else { router.push('/collector'); router.refresh(); }
+            }}
+            className="px-2 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500/20 font-semibold text-center transition-all"
+          >
+            🚚 Collector
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              setEmail('admin@ecobin.org');
+              setPassword('password123');
+              setLoading(true);
+              const result = await signIn('credentials', { email: 'admin@ecobin.org', password: 'password123', redirect: false });
+              if (result?.error) { setError('Login failed'); setLoading(false); }
+              else { router.push('/admin'); router.refresh(); }
+            }}
+            className="px-2 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-semibold text-center transition-all"
+          >
+            🛡️ Admin
+          </button>
+        </div>
       </div>
     </form>
   );
