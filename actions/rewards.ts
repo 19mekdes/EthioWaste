@@ -29,7 +29,7 @@ export async function getRewardsLeaderboard() {
   }
 }
 
-/** Returns the specified or authenticated user's own points balance + transaction history. */
+
 export async function getUserTransactions(targetUserId?: string) {
   let userId = targetUserId;
   let defaultPoints = 0;
@@ -64,7 +64,7 @@ export async function getUserTransactions(targetUserId?: string) {
 }
 
 export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
-  // Identity from the session — cannot redeem for another user
+
   const user = await requireRole([Role.CITIZEN]);
 
   try {
@@ -74,7 +74,7 @@ export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
       throw new Error(`Insufficient Eco-Points. Required: ${rewardCost}, Available: ${dbUser.ecoPoints}`);
     }
 
-    // Atomic transaction: deduct points & record redemption
+
     const [updatedUser, transaction] = await db.$transaction([
       db.user.update({
         where: { id: user.id },
@@ -92,13 +92,12 @@ export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
 
     revalidatePath('/citizen');
 
-    // Refresh the session JWT so the header counter shows the fresh balance.
-    // auth().update() exists at runtime in beta.25 but isn't on the exported type.
+
     try {
       await (auth as any)().update({ ecoPoints: updatedUser.ecoPoints });
     } catch (e) {
       console.error('Session points refresh failed:', e);
-      // Non-critical — the dashboard re-reads points from the DB anyway
+
     }
 
     return { success: true, newPoints: updatedUser.ecoPoints, transaction };
