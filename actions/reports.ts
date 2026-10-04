@@ -48,7 +48,7 @@ export async function createWasteReport(data: {
   longitude: number;
   address?: string;
 }) {
-  // Identity comes from the session — never trust a client-supplied id
+
   const user = await requireRole([Role.CITIZEN]);
 
   try {
@@ -78,18 +78,7 @@ export async function createWasteReport(data: {
   }
 }
 
-/**
- * Updates a report's status.
- *
- * Security: collectors may only act on their assigned tasks — unassigned
- * PENDING tasks can be claimed (auto-assigned) when starting work. Admins
- * can act on anything.
- *
- * REWARDS ENGINE (requirement #5): when a task transitions to RESOLVED,
- * the reporting citizen is atomically credited Eco-Points inside a single
- * $transaction with the status update + ledger entry. A conditional
- * updateMany guard makes the award race-safe against double-crediting.
- */
+
 export async function updateReportStatus(
   reportId: string,
   status: ReportStatus,
@@ -116,12 +105,12 @@ export async function updateReportStatus(
         select: { assignedToId: true, status: true },
       });
       if (!report) throw new Error('Report not found');
-      // Rejected reports can never be reopened by field actions
+
       if (report.status === 'REJECTED') {
         throw new Error('This report was rejected and cannot be reopened.');
       }
 
-      // Collectors cannot mutate another collector's assigned task
+
       if (!isAdmin && report.assignedToId && report.assignedToId !== user.id) {
         throw new Error('This task is assigned to another collector.');
       }
@@ -130,7 +119,7 @@ export async function updateReportStatus(
         where: { id: reportId },
         data: {
           status,
-          // Claim unassigned tasks when a collector starts work
+
           ...(!isAdmin && status === 'IN_PROGRESS' && !report.assignedToId
             ? { assignedToId: user.id }
             : {}),
@@ -143,7 +132,7 @@ export async function updateReportStatus(
       return { success: true, report: updated };
     }
 
-    // Atomic resolution + Eco-Points credit for the reporting citizen
+
     const result = await db.$transaction(async (tx) => {
       const existing = await tx.wasteReport.findUnique({
         where: { id: reportId },
@@ -151,25 +140,24 @@ export async function updateReportStatus(
       });
 
       if (!existing) throw new Error('Report not found');
-      // Rejected reports can never be reopened by field actions
+
       if (existing.status === 'REJECTED') {
         throw new Error('This report was rejected and cannot be reopened.');
       }
 
-      // Collectors cannot resolve another collector's assigned task
+
       if (!isAdmin && existing.assignedToId && existing.assignedToId !== user.id) {
         throw new Error('This task is assigned to another collector.');
       }
 
-      // Race-safe: only the first writer can transition an open report to RESOLVED.
-      // REJECTED reports are excluded so a rejected report can never award points.
+
       const transition = await tx.wasteReport.updateMany({
         where: { id: reportId, status: { in: ['PENDING', 'IN_PROGRESS'] } },
         data: {
           status: 'RESOLVED',
           resolvedAt: new Date(),
           ...(cleanupImageUrl ? { cleanupImageUrl } : {}),
-          // Claim unassigned tasks on resolution too
+
           ...(!isAdmin && !existing.assignedToId ? { assignedToId: user.id } : {}),
         },
       });
