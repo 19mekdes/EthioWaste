@@ -38,9 +38,8 @@ export function AnalyticsOverview({ stats, reports }: AnalyticsOverviewProps) {
 
   return (
     <div className="space-y-6">
-      {/* 4 Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Total Reports Card */}
+
         <div className="glass-card p-5 border-emerald-500/20 relative overflow-hidden">
           <div className="flex items-center justify-between gap-2 mb-2">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Waste Reports</span>
@@ -55,7 +54,6 @@ export function AnalyticsOverview({ stats, reports }: AnalyticsOverviewProps) {
           </div>
         </div>
 
-        {/* Resolution Rate Card */}
         <div className="glass-card p-5 border-sky-500/20 relative overflow-hidden">
           <div className="flex items-center justify-between gap-2 mb-2">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Resolution Rate</span>
@@ -68,8 +66,6 @@ export function AnalyticsOverview({ stats, reports }: AnalyticsOverviewProps) {
             {stats.resolvedReports} of {stats.totalReports} issues resolved
           </div>
         </div>
-
-        {/* Active Field Fleet Card */}
         <div className="glass-card p-5 border-amber-500/20 relative overflow-hidden">
           <div className="flex items-center justify-between gap-2 mb-2">
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Active Field Staff</span>
@@ -97,8 +93,6 @@ export function AnalyticsOverview({ stats, reports }: AnalyticsOverviewProps) {
           </div>
         </div>
       </div>
-
-      {/* Regional Issue Heatmap / Pins Map */}
       <div className="glass-card p-5 space-y-4">
         <div className="flex items-center justify-between">
           <div>

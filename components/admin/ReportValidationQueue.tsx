@@ -82,17 +82,15 @@ export function ReportValidationQueue({ reports, collectors, onRefresh }: Report
         <div className="flex items-center gap-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
           <button
             onClick={() => setFilter('PENDING')}
-            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${
-              filter === 'PENDING' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${filter === 'PENDING' ? 'bg-amber-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             Pending Review ({reports.filter((r) => r.status === 'PENDING').length})
           </button>
           <button
             onClick={() => setFilter('ALL')}
-            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${
-              filter === 'ALL' ? 'bg-slate-800 text-slate-200' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${filter === 'ALL' ? 'bg-slate-800 text-slate-200' : 'text-slate-400 hover:text-slate-200'
+              }`}
           >
             All Reports ({reports.length})
           </button>
