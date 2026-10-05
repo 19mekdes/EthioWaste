@@ -11,9 +11,7 @@ export default async function DashboardLayout({
   const user = await getCurrentUser();
   if (!user) redirect('/login');
 
-  // The session JWT can lag behind DB writes (admin validation, cleanup
-  // resolution) — read the fresh balance for citizens so the header counter
-  // stays accurate.
+
   let ecoPoints = user.ecoPoints;
   if (user.role === 'CITIZEN') {
     const fresh = await db.user.findUnique({
