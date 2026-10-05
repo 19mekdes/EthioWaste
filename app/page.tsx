@@ -64,8 +64,6 @@ export default function Home() {
   useEffect(() => {
     loadData();
   }, [currentUser]);
-
-  // When role changes via top bar, update active view to match
   const handleRoleChange = (user: ActiveUser) => {
     setCurrentUser(user);
     if (user.role === 'COLLECTOR') setActiveTab('COLLECTOR');
@@ -134,10 +132,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-brand-dark flex flex-col">
-      {/* 1. Sticky Demo Role Switcher */}
-      <RoleSwitcher currentRole={currentUser.role} onRoleChange={handleRoleChange} />
 
-      {/* 2. Platform Navigation Header */}
+      <RoleSwitcher currentRole={currentUser.role} onRoleChange={handleRoleChange} />
       <Header
         user={currentUser}
         onOpenReportModal={() => setShowReportModal(true)}
@@ -149,7 +145,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto text-center space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
             <Sparkles className="w-3.5 h-3.5 animate-pulse" />
-            
+
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent max-w-4xl mx-auto leading-tight">
@@ -164,11 +160,10 @@ export default function Home() {
           <div className="flex flex-wrap items-center justify-center gap-2 pt-4">
             <button
               onClick={() => setActiveTab('MAP')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'MAP'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'MAP'
                   ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <MapPin className="w-4 h-4 text-emerald-300" />
               <span>Live City Map</span>
@@ -184,11 +179,10 @@ export default function Home() {
 
             <button
               onClick={() => setActiveTab('CENTERS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'CENTERS'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'CENTERS'
                   ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <Recycle className="w-4 h-4 text-emerald-400" />
               <span>Recycling Centers</span>
@@ -196,11 +190,10 @@ export default function Home() {
 
             <button
               onClick={() => setActiveTab('PICKUP')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'PICKUP'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'PICKUP'
                   ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <Truck className="w-4 h-4 text-sky-400" />
               <span>Bulk Pickup</span>
@@ -208,11 +201,10 @@ export default function Home() {
 
             <button
               onClick={() => setActiveTab('REWARDS')}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'REWARDS'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'REWARDS'
                   ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <Award className="w-4 h-4 text-amber-400" />
               <span>Eco-Rewards ({currentUser.ecoPoints} PTS)</span>
@@ -230,11 +222,10 @@ export default function Home() {
                 });
                 setActiveTab('COLLECTOR');
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'COLLECTOR'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'COLLECTOR'
                   ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <Truck className="w-4 h-4 text-sky-400" />
               <span>Collector Mode</span>
@@ -252,11 +243,10 @@ export default function Home() {
                 });
                 setActiveTab('ADMIN');
               }}
-              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${
-                activeTab === 'ADMIN'
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === 'ADMIN'
                   ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/20'
                   : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
-              }`}
+                }`}
             >
               <Shield className="w-4 h-4 text-amber-400" />
               <span>Municipal Admin</span>

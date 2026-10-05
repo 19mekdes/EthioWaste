@@ -75,7 +75,7 @@ export function CitizenHub({ user, initialData }: CitizenHubProps) {
       label: 'Eco-Rewards',
       icon: Award,
       activeClass: 'bg-amber-500 text-white shadow-lg shadow-amber-500/20',
-      badge: data.points, // fresh DB balance, not the possibly-stale session value
+      badge: data.points,
     },
   ];
 
@@ -127,8 +127,8 @@ export function CitizenHub({ user, initialData }: CitizenHubProps) {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 ${activeTab === tab.id
-                ? tab.activeClass
-                : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
+              ? tab.activeClass
+              : 'bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-700'
               }`}
           >
             <tab.icon className="w-4 h-4" />

@@ -99,11 +99,10 @@ export function TaskRouteMap({ tasks, collectorName = 'Marcus Vance', onTaskUpda
             <button
               key={st}
               onClick={() => setFilterStatus(st)}
-              className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${
-                filterStatus === st
+              className={`text-xs px-3 py-1.5 rounded-lg font-bold transition-all ${filterStatus === st
                   ? 'bg-sky-500 text-white shadow-md shadow-sky-500/20'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-              }`}
+                }`}
             >
               {st.replace('_', ' ')}
             </button>
@@ -113,7 +112,7 @@ export function TaskRouteMap({ tasks, collectorName = 'Marcus Vance', onTaskUpda
 
       {/* Map & Task Queue Split */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Interactive Route Map */}
+
         <div className="lg:col-span-2 space-y-4">
           <InteractiveMap
             markers={mapMarkers}
@@ -145,11 +144,10 @@ export function TaskRouteMap({ tasks, collectorName = 'Marcus Vance', onTaskUpda
                 <div
                   key={task.id}
                   onClick={() => setSelectedTaskId(task.id)}
-                  className={`glass-card p-4 cursor-pointer transition-all duration-200 ${
-                    isSelected
+                  className={`glass-card p-4 cursor-pointer transition-all duration-200 ${isSelected
                       ? 'border-sky-500 bg-sky-950/20 shadow-lg shadow-sky-500/10'
                       : 'hover:border-slate-700'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold uppercase ${getSeverityBadge(task.severity)}`}>
