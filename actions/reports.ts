@@ -162,12 +162,12 @@ export async function updateReportStatus(
         },
       });
 
-      // Already resolved — idempotent, no double award
+
       if (transition.count === 0) {
         return tx.wasteReport.findUnique({ where: { id: reportId } });
       }
 
-      // Award the reporting citizen exactly once
+
       if (existing.reporterId) {
         await tx.user.update({
           where: { id: existing.reporterId },
@@ -201,11 +201,11 @@ export async function assignReportToCollector(reportId: string, collectorId: str
   try {
     await requireRole([Role.MUNICIPAL_ADMIN]);
   } catch {
-    // Demo mode fallback
+
   }
 
   try {
-    // Validate the target is actually a collector
+
     const collector = await db.user.findFirst({
       where: { id: collectorId, role: 'COLLECTOR' },
     });

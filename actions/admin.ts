@@ -77,11 +77,11 @@ export async function validateAndApproveReport(reportId: string, pointsAwarded: 
   try {
     await requireRole([Role.MUNICIPAL_ADMIN]);
   } catch {
-    // Demo mode fallback
+
   }
 
   try {
-    // Atomic + idempotent: only award points on the first validation
+
     const result = await db.$transaction(async (tx) => {
       const report = await tx.wasteReport.findUnique({
         where: { id: reportId },
@@ -89,18 +89,18 @@ export async function validateAndApproveReport(reportId: string, pointsAwarded: 
       });
       if (!report) throw new Error('Report not found');
 
-      // Race-safe guard: only the first writer can validate a PENDING report
+
       const transition = await tx.wasteReport.updateMany({
         where: { id: reportId, status: 'PENDING' },
         data: { status: 'IN_PROGRESS' },
       });
 
-      // Already validated (IN_PROGRESS/RESOLVED) — idempotent, no double award
+
       if (transition.count === 0) {
         return { report, awarded: false, updatedPoints: report.reporter?.ecoPoints ?? 0 };
       }
 
-      // First-time validation → award Eco-Points + ledger entry
+
       const updatedUser = await tx.user.update({
         where: { id: report.reporterId },
         data: { ecoPoints: { increment: pointsAwarded } },
@@ -132,7 +132,7 @@ export async function rejectReport(reportId: string) {
   try {
     await requireRole([Role.MUNICIPAL_ADMIN]);
   } catch {
-    // Demo mode fallback
+
   }
 
   try {

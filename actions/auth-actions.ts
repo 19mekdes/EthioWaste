@@ -11,10 +11,7 @@ export type RegisterState = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/**
- * Server Action — validates input, creates a new CITIZEN account.
- * The client then auto-signs the user in.
- */
+
 export async function registerUser(prevState: RegisterState, formData: FormData): Promise<RegisterState> {
   const name = String(formData.get("name") || "").trim();
   const email = String(formData.get("email") || "").trim().toLowerCase();
