@@ -49,19 +49,19 @@ export function RecyclingRecordDetail({ record }: RecyclingRecordDetailProps) {
 
   const mapMarkers: MapMarker[] = task
     ? [
-        {
-          id: task.id,
-          title: `${record.material} Source`,
-          description: task.address || 'Pickup origin',
-          category: record.material,
-          severity: 'MEDIUM',
-          status: record.status,
-          latitude: task.latitude,
-          longitude: task.longitude,
-          address: task.address || undefined,
-          type: 'PICKUP',
-        },
-      ]
+      {
+        id: task.id,
+        title: `${record.material} Source`,
+        description: task.address || 'Pickup origin',
+        category: record.material,
+        severity: 'MEDIUM',
+        status: record.status,
+        latitude: task.latitude,
+        longitude: task.longitude,
+        address: task.address || undefined,
+        type: 'PICKUP',
+      },
+    ]
     : [];
 
   const handleAccept = async () => {
@@ -209,7 +209,7 @@ export function RecyclingRecordDetail({ record }: RecyclingRecordDetailProps) {
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Material Info & Origin */}
+
         <div className="lg:col-span-2 space-y-6">
           {/* Information Card */}
           <div className="glass-card p-6 border-slate-800 bg-slate-900/40 space-y-4">
@@ -302,7 +302,7 @@ export function RecyclingRecordDetail({ record }: RecyclingRecordDetailProps) {
 
         {/* Right 1 Col: Citizen Info & Processing Actions */}
         <div className="space-y-6">
-          {/* Citizen Info Panel */}
+
           <div className="glass-card p-5 border-slate-800 bg-slate-900/40 space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-emerald-400" />
