@@ -34,7 +34,7 @@ export async function createPickupSchedule(data: {
   preferredTimeSlot: string;
   notes?: string;
 }) {
-  // Identity from session — citizens can only book for themselves
+
   const user = await requireRole([Role.CITIZEN]);
 
   try {

@@ -12,13 +12,30 @@ generator client {
 enum Role {
   CITIZEN
   COLLECTOR
+  RECYCLING_ORGANIZATION
   MUNICIPAL_ADMIN
+}
+
+enum WasteCategory {
+  ORGANIC
+  PLASTIC
+  PAPER
+  CARDBOARD
+  GLASS
+  METAL
+  ELECTRONIC
+  HAZARDOUS
+  MIXED
+  OTHER
 }
 
 enum ReportStatus {
   PENDING
+  VERIFIED
+  ASSIGNED
   IN_PROGRESS
-  RESOLVED
+  COLLECTED
+  COMPLETED
   REJECTED
 }
 
@@ -29,20 +46,44 @@ enum ReportSeverity {
   CRITICAL
 }
 
-enum WasteCategory {
-  PLASTIC
-  E_WASTE
-  ORGANIC
-  HAZARDOUS
-  BULK
-  GENERAL
+enum CollectionRequestStatus {
+  PENDING
+  APPROVED
+  ASSIGNED
+  IN_PROGRESS
+  COLLECTED
+  COMPLETED
+  REJECTED
 }
 
-enum PickupStatus {
-  SCHEDULED
+enum CollectionTaskStatus {
+  ASSIGNED
   IN_PROGRESS
+  COLLECTED
   COMPLETED
   CANCELLED
+}
+
+enum RecyclingStatus {
+  PENDING
+  ACCEPTED
+  PROCESSING
+  RECYCLED
+}
+
+enum ComplaintStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED
+  REJECTED
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  TASK
+  SYSTEM
 }
 
 enum RewardTransactionType {
@@ -51,52 +92,147 @@ enum RewardTransactionType {
 }
 
 model User {
-  id                 String              @id @default(cuid())
-  name               String
-  email              String              @unique
-  password           String
-  role               Role                @default(CITIZEN)
-  ecoPoints          Int                 @default(0)
-  avatarUrl          String?
-  reports            WasteReport[]       @relation("ReportedBy")
-  assignedTasks      WasteReport[]       @relation("AssignedTo")
-  pickupSchedules    PickupSchedule[]
-  rewardTransactions RewardTransaction[]
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
+  id                    String                 @id @default(cuid())
+  name                  String
+  email                 String                 @unique
+  password              String
+  role                  Role                   @default(CITIZEN)
+  ecoPoints             Int                    @default(0)
+  avatarUrl             String?
+  phone                 String?
+  address               String?
+  reports               WasteReport[]          @relation("ReportedBy")
+  assignedReports       WasteReport[]          @relation("AssignedToReport")
+  collectionRequests    CollectionRequest[]    @relation("RequestedBy")
+  assignedReqCollectors CollectionRequest[]    @relation("AssignedRequestCollector")
+  assignedTasks         CollectionTask[]       @relation("AssignedTaskCollector")
+  recyclingOrganization RecyclingOrganization?
+  pickupSchedules       PickupSchedule[]
+  rewardTransactions    RewardTransaction[]
+  notifications         Notification[]
+  feedbackSubmitted     Feedback[]
+  complaints            Complaint[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @default(now()) @updatedAt
 }
 
 model WasteReport {
-  id              String         @id @default(cuid())
-  title           String
-  description     String
-  category        WasteCategory  @default(GENERAL)
-  severity        ReportSeverity @default(MEDIUM)
-  imageUrl        String
-  cleanupImageUrl String?
-  status          ReportStatus   @default(PENDING)
-  latitude        Float
-  longitude       Float
-  address         String?
-  reporterId      String
-  reporter        User           @relation("ReportedBy", fields: [reporterId], references: [id], onDelete: Cascade)
-  assignedToId    String?
-  assignedTo      User?          @relation("AssignedTo", fields: [assignedToId], references: [id], onDelete: SetNull)
-  resolvedAt      DateTime?
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id               String          @id @default(cuid())
+  title            String
+  description      String
+  category         WasteCategory   @default(MIXED)
+  severity         ReportSeverity  @default(MEDIUM)
+  imageUrl         String
+  cleanupImageUrl  String?
+  status           ReportStatus    @default(PENDING)
+  latitude         Float
+  longitude        Float
+  address          String?
+  isIllegalDumping Boolean         @default(false)
+  reporterId       String
+  reporter         User            @relation("ReportedBy", fields: [reporterId], references: [id], onDelete: Cascade)
+  assignedToId     String?
+  assignedTo       User?           @relation("AssignedToReport", fields: [assignedToId], references: [id], onDelete: SetNull)
+  collectionTaskId String?         @unique
+  collectionTask   CollectionTask? @relation("ReportTask", fields: [collectionTaskId], references: [id], onDelete: SetNull)
+  resolvedAt       DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
+}
+
+model CollectionRequest {
+  id                  String                  @id @default(cuid())
+  citizenId           String
+  citizen             User                    @relation("RequestedBy", fields: [citizenId], references: [id], onDelete: Cascade)
+  wasteType           WasteCategory           @default(MIXED)
+  estimatedQuantity   String?
+  description         String?
+  address             String
+  latitude            Float
+  longitude           Float
+  preferredDate       DateTime
+  preferredTimeSlot   String?
+  priority            ReportSeverity          @default(MEDIUM)
+  status              CollectionRequestStatus @default(PENDING)
+  assignedCollectorId String?
+  assignedCollector   User?                   @relation("AssignedRequestCollector", fields: [assignedCollectorId], references: [id], onDelete: SetNull)
+  collectionTaskId    String?                 @unique
+  collectionTask      CollectionTask?         @relation("RequestTask", fields: [collectionTaskId], references: [id], onDelete: SetNull)
+  createdAt           DateTime                @default(now())
+  updatedAt           DateTime                @default(now()) @updatedAt
+}
+
+model CollectionTask {
+  id                String               @id @default(cuid())
+  requestId         String?              @unique
+  request           CollectionRequest?   @relation("RequestTask")
+  reportId          String?              @unique
+  report            WasteReport?         @relation("ReportTask")
+  collectorId       String
+  collector         User                 @relation("AssignedTaskCollector", fields: [collectorId], references: [id], onDelete: Cascade)
+  address           String
+  latitude          Float
+  longitude         Float
+  scheduledDate     DateTime
+  status            CollectionTaskStatus @default(ASSIGNED)
+  startedAt         DateTime?
+  completedAt       DateTime?
+  proofImageUrl     String?
+  notes             String?
+  recyclingRecordId String?              @unique
+  recyclingRecord   RecyclingRecord?     @relation("TaskRecyclingRecord", fields: [recyclingRecordId], references: [id], onDelete: SetNull)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @default(now()) @updatedAt
+}
+
+model RecyclingOrganization {
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name              String
+  description       String?
+  address           String
+  city              String?           @default("Addis Ababa")
+  latitude          Float
+  longitude         Float
+  contactPhone      String?
+  contactEmail      String?
+  acceptedMaterials String
+  status            String            @default("ACTIVE")
+  recyclingRecords  RecyclingRecord[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @default(now()) @updatedAt
+}
+
+model RecyclingRecord {
+  id             String                @id @default(cuid())
+  organizationId String
+  organization   RecyclingOrganization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  collectionTask CollectionTask?       @relation("TaskRecyclingRecord")
+  material       WasteCategory
+  quantity       Float
+  unit           String                @default("kg")
+  status         RecyclingStatus       @default(PENDING)
+  notes          String?
+  processedAt    DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @default(now()) @updatedAt
 }
 
 model RecyclingCenter {
   id                String   @id @default(cuid())
   name              String
+  description       String?
   address           String
+  city              String?  @default("Addis Ababa")
   latitude          Float
   longitude         Float
   acceptedMaterials String
   contactPhone      String?
   operatingHours    String?  @default("8:00 AM - 6:00 PM")
+  status            String   @default("ACTIVE")
   createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now()) @updatedAt
 }
 
 model PickupSchedule {
@@ -110,9 +246,43 @@ model PickupSchedule {
   scheduledDate     DateTime
   preferredTimeSlot String
   notes             String?
-  status            PickupStatus  @default(SCHEDULED)
+  status            String        @default("SCHEDULED")
   createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  updatedAt         DateTime      @default(now()) @updatedAt
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+}
+
+model Feedback {
+  id                  String   @id @default(cuid())
+  citizenId           String
+  citizen             User     @relation(fields: [citizenId], references: [id], onDelete: Cascade)
+  collectionRequestId String?
+  rating              Int
+  comment             String
+  createdAt           DateTime @default(now())
+}
+
+model Complaint {
+  id               String          @id @default(cuid())
+  citizenId        String
+  citizen          User            @relation(fields: [citizenId], references: [id], onDelete: Cascade)
+  category         String
+  description      String
+  relatedRequestId String?
+  status           ComplaintStatus @default(OPEN)
+  adminResponse    String?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now()) @updatedAt
 }
 
 model RewardTransaction {

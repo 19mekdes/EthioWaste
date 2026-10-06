@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useActionState } from 'react';
 import { signIn } from 'next-auth/react';
 import { registerUser } from '@/actions/auth-actions';
-import { Mail, Lock, User, Loader2, UserPlus, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User, Phone, Loader2, UserPlus, AlertCircle, CheckCircle2 } from 'lucide-react';
 
 export function RegisterForm() {
   const router = useRouter();
@@ -15,7 +15,6 @@ export function RegisterForm() {
 
   const [state, formAction, pending] = useActionState(registerUser, {});
   const [autoSigningIn, setAutoSigningIn] = useState(false);
-
 
   React.useEffect(() => {
     if (state.success && !autoSigningIn) {
@@ -36,11 +35,11 @@ export function RegisterForm() {
     }
   }, [state.success, autoSigningIn, router]);
 
-  const fieldError = (key: 'name' | 'email' | 'password') =>
+  const fieldError = (key: 'name' | 'email' | 'phone' | 'password' | 'confirmPassword') =>
     state.fieldErrors?.[key]?.[0];
 
   return (
-    <form action={formAction} className="space-y-5">
+    <form action={formAction} className="space-y-4">
       {state.error && (
         <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
           <AlertCircle className="w-4 h-4 shrink-0" />
@@ -56,7 +55,7 @@ export function RegisterForm() {
       )}
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+        <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
           <User className="w-3.5 h-3.5 text-emerald-400" />
           Full Name
         </label>
@@ -75,7 +74,7 @@ export function RegisterForm() {
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+        <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
           <Mail className="w-3.5 h-3.5 text-emerald-400" />
           Email Address
         </label>
@@ -94,7 +93,25 @@ export function RegisterForm() {
       </div>
 
       <div>
-        <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
+        <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+          <Phone className="w-3.5 h-3.5 text-sky-400" />
+          Phone Number (Optional)
+        </label>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          placeholder="+251 911 234 567"
+          className="w-full glass-input"
+          autoComplete="tel"
+        />
+        {fieldError('phone') && (
+          <p className="text-[11px] text-rose-400 mt-1">{fieldError('phone')}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
           <Lock className="w-3.5 h-3.5 text-amber-400" />
           Password
         </label>
@@ -110,6 +127,26 @@ export function RegisterForm() {
         />
         {fieldError('password') && (
           <p className="text-[11px] text-rose-400 mt-1">{fieldError('password')}</p>
+        )}
+      </div>
+
+      <div>
+        <label className="block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5">
+          <Lock className="w-3.5 h-3.5 text-amber-400" />
+          Confirm Password
+        </label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          placeholder="Re-enter your password"
+          className="w-full glass-input"
+          required
+          minLength={8}
+          autoComplete="new-password"
+        />
+        {fieldError('confirmPassword') && (
+          <p className="text-[11px] text-rose-400 mt-1">{fieldError('confirmPassword')}</p>
         )}
       </div>
 

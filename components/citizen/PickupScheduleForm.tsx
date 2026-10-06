@@ -12,9 +12,9 @@ interface PickupScheduleFormProps {
 }
 
 export function PickupScheduleForm({ onSuccess, onClose }: PickupScheduleFormProps) {
-  const [wasteType, setWasteType] = useState<WasteCategory>('BULK');
-  const [address, setAddress] = useState('350 W 57th St, Apt 14B, New York, NY 10019');
-  const [scheduledDate, setScheduledDate] = useState('2026-08-05');
+  const [wasteType, setWasteType] = useState<WasteCategory>('CARDBOARD');
+  const [address, setAddress] = useState('Bole Medhanealem Road, Addis Ababa');
+  const [scheduledDate, setScheduledDate] = useState('2026-10-10');
   const [preferredTimeSlot, setPreferredTimeSlot] = useState('Morning (9:00 AM - 12:00 PM)');
   const [notes, setNotes] = useState('');
   const [loading, setLoading] = useState(false);
@@ -40,8 +40,8 @@ export function PickupScheduleForm({ onSuccess, onClose }: PickupScheduleFormPro
     const res = await createPickupSchedule({
       wasteType,
       address,
-      latitude: 40.7680,
-      longitude: -73.9850,
+      latitude: 8.9950,
+      longitude: 38.7860,
       scheduledDate,
       preferredTimeSlot,
       notes,
@@ -100,13 +100,15 @@ export function PickupScheduleForm({ onSuccess, onClose }: PickupScheduleFormPro
             <label className="block text-xs font-semibold text-slate-300 mb-1">Waste Type</label>
             <select
               value={wasteType}
-              onChange={(e) => setWasteType(e.target.value as any)}
+              onChange={(e) => setWasteType(e.target.value as WasteCategory)}
               className="w-full glass-input"
             >
-              <option value="BULK">Bulk Furniture & Mattresses</option>
-              <option value="E_WASTE">E-Waste & Appliances</option>
+              <option value="CARDBOARD">Cardboard & Paper Packaging</option>
+              <option value="PLASTIC">Bulk Plastics & Containers</option>
+              <option value="ELECTRONIC">E-Waste & Electronics</option>
               <option value="HAZARDOUS">Batteries & Household Chemicals</option>
               <option value="ORGANIC">Yard Trimmings & Large Organics</option>
+              <option value="MIXED">Mixed Waste</option>
             </select>
           </div>
 
@@ -119,7 +121,7 @@ export function PickupScheduleForm({ onSuccess, onClose }: PickupScheduleFormPro
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="Street address, unit, zip code"
+              placeholder="Street address, sub-city, Addis Ababa"
               className="w-full glass-input"
               required
             />
@@ -163,7 +165,7 @@ export function PickupScheduleForm({ onSuccess, onClose }: PickupScheduleFormPro
             <label className="block text-xs font-semibold text-slate-300 mb-1">Access Notes / Item Details</label>
             <textarea
               rows={2}
-              placeholder="e.g. Leave near driveway gate; 2 mattresses and a sofa..."
+              placeholder="e.g. Leave near driveway gate; 2 boxes of cardboard packaging..."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="w-full glass-input text-xs"

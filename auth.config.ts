@@ -1,10 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
 
-/**
- * Edge-safe Auth.js v5 configuration shared between the Node runtime
- * (lib/auth.ts) and the Edge middleware. Must NOT import Prisma, bcrypt
- * or any Node-only module — middleware runs on the Edge runtime.
- */
 export const authConfig = {
   pages: {
     signIn: "/login",
@@ -15,8 +10,6 @@ export const authConfig = {
   providers: [],
   callbacks: {
     async jwt({ token, user, trigger, session }) {
-      // `user` is typed as User | AdapterUser in beta.25; our custom fields
-      // only exist on the authorize() return value, so cast is required.
       const u = user as any;
       if (u) {
         token.id = u.id;
@@ -46,7 +39,8 @@ export const authConfig = {
 } satisfies NextAuthConfig;
 
 export const ROLE_HOME: Record<string, string> = {
-  CITIZEN: "/citizen",
-  COLLECTOR: "/collector",
-  MUNICIPAL_ADMIN: "/admin",
+  CITIZEN: "/dashboard/citizen",
+  COLLECTOR: "/dashboard/collector",
+  RECYCLING_ORGANIZATION: "/dashboard/recycling",
+  MUNICIPAL_ADMIN: "/dashboard/admin",
 };

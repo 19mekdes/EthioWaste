@@ -24,8 +24,8 @@ interface RecyclingCenterMapProps {
 
 export function RecyclingCenterMap({
   centers,
-  userLat = 40.7580,
-  userLng = -73.9855,
+  userLat = 9.0107,
+  userLng = 38.7612,
 }: RecyclingCenterMapProps) {
   const [selectedMaterial, setSelectedMaterial] = useState<string>('ALL');
   const [selectedCenterId, setSelectedCenterId] = useState<string | undefined>(undefined);

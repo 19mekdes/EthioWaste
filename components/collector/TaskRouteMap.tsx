@@ -119,8 +119,8 @@ export function TaskRouteMap({ tasks, collectorName = 'Marcus Vance', onTaskUpda
             selectedMarkerId={selectedTaskId}
             onMarkerClick={(m) => setSelectedTaskId(m.id)}
             height="520px"
-            centerLat={40.7580}
-            centerLng={-73.9855}
+            centerLat={9.0107}
+            centerLng={38.7612}
             zoom={12}
           />
         </div>

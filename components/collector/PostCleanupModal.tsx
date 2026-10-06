@@ -33,7 +33,7 @@ export function PostCleanupModal({ reportId, reportTitle, onSuccess, onClose }: 
     setLoading(true);
     setError('');
 
-    const res = await updateReportStatus(reportId, 'RESOLVED', cleanupImageUrl);
+    const res = await updateReportStatus(reportId, 'COMPLETED', cleanupImageUrl);
     setLoading(false);
 
     if (res.success) {
@@ -85,7 +85,7 @@ export function PostCleanupModal({ reportId, reportTitle, onSuccess, onClose }: 
             </button>
             <button type="submit" disabled={loading} className="glass-button-primary text-xs">
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
-              <span>Verify & Resolve Task (+50 PTS to Citizen)</span>
+              <span>Verify & Complete Task (+50 PTS to Citizen)</span>
             </button>
           </div>
         </form>

@@ -37,8 +37,8 @@ export default function InteractiveMap({
   onMarkerClick,
   onLocationSelect,
   height = '500px',
-  centerLat = 40.7450,
-  centerLng = -73.9850,
+  centerLat = 9.0107,
+  centerLng = 38.7612,
   zoom = 13,
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
@@ -65,7 +65,7 @@ export default function InteractiveMap({
         // Add OpenStreetMap Dark theme tile layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
-          attribution: '&copy; OpenStreetMap contributors | EcoBin Platform',
+          attribution: '&copy; OpenStreetMap contributors | EcoBin Platform Ethiopia',
         }).addTo(map);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -91,10 +91,18 @@ export default function InteractiveMap({
           let iconHtml = `<div class="w-4 h-4 rounded-full bg-sky-500 border-2 border-white shadow-lg"></div>`;
 
           if (m.type === 'CENTER') {
+            // 🟢 Recycling Centers
             markerColor = '#10b981';
             iconHtml = `
-              <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm transform transition-transform hover:scale-110">
-                ♻️
+              <div class="w-9 h-9 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm transform transition-transform hover:scale-110" title="Recycling Center">
+                🟢
+              </div>`;
+          } else if (m.type === 'PICKUP') {
+            // 🟡 Collection Requests
+            markerColor = '#f59e0b';
+            iconHtml = `
+              <div class="w-9 h-9 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm transform transition-transform hover:scale-110" title="Collection Request">
+                🟡
               </div>`;
           } else if (m.type === 'NEW_PIN') {
             markerColor = '#f59e0b';
@@ -104,18 +112,21 @@ export default function InteractiveMap({
               </div>`;
           } else {
             // Waste Report markers
-            if (m.status === 'RESOLVED') {
-              markerColor = '#10b981';
-              iconHtml = `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg border-2 border-slate-900 text-xs">✓</div>`;
-            } else if (m.status === 'IN_PROGRESS') {
+            if (m.status === 'RESOLVED' || m.status === 'COMPLETED' || m.status === 'COLLECTED') {
+              // 🔵 Completed Collections
+              markerColor = '#3b82f6';
+              iconHtml = `<div class="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm transform transition-transform hover:scale-110" title="Completed Collection">🔵</div>`;
+            } else if (m.status === 'IN_PROGRESS' || m.status === 'ASSIGNED') {
               markerColor = '#06b6d4';
-              iconHtml = `<div class="w-8 h-8 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg border-2 border-slate-900 text-xs animate-pulse">🚚</div>`;
-            } else if (m.severity === 'CRITICAL') {
-              markerColor = '#f43f5e';
-              iconHtml = `<div class="w-9 h-9 rounded-full bg-rose-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-xs animate-bounce">⚠️</div>`;
+              iconHtml = `<div class="w-9 h-9 rounded-full bg-cyan-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm animate-pulse" title="In Progress">🚚</div>`;
+            } else if (m.severity === 'CRITICAL' || m.severity === 'HIGH') {
+              // 🔴 Waste Reports
+              markerColor = '#ef4444';
+              iconHtml = `<div class="w-9 h-9 rounded-full bg-red-600 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm animate-bounce" title="Waste Report">🔴</div>`;
             } else {
-              markerColor = '#f59e0b';
-              iconHtml = `<div class="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center shadow-lg border-2 border-slate-900 text-xs">🗑️</div>`;
+              // 🔴 Waste Reports
+              markerColor = '#ef4444';
+              iconHtml = `<div class="w-9 h-9 rounded-full bg-red-500 text-white flex items-center justify-center shadow-xl border-2 border-slate-900 font-bold text-sm" title="Waste Report">🔴</div>`;
             }
           }
 

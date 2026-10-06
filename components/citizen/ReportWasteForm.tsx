@@ -1,10 +1,11 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapPin, AlertOctagon, Tag, FileText, Send, CheckCircle2, Loader2, X, LocateFixed } from 'lucide-react';
+import { MapPin, AlertOctagon, Tag, CheckCircle2, Loader2, X, LocateFixed, Send } from 'lucide-react';
 import InteractiveMap, { MapMarker } from '@/components/map/InteractiveMap';
 import { createWasteReport } from '@/actions/reports';
 import { ImageUploadField } from '@/components/ui/ImageUploadField';
+import { WasteCategory, ReportSeverity } from '@prisma/client';
 
 interface ReportWasteFormProps {
   userId?: string;
@@ -22,12 +23,13 @@ const sampleImages = [
 export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState<'PLASTIC' | 'E_WASTE' | 'ORGANIC' | 'HAZARDOUS' | 'BULK' | 'GENERAL'>('PLASTIC');
-  const [severity, setSeverity] = useState<'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL'>('HIGH');
+  const [category, setCategory] = useState<WasteCategory>('PLASTIC');
+  const [severity, setSeverity] = useState<ReportSeverity>('HIGH');
   const [imageUrl, setImageUrl] = useState('');
-  const [lat, setLat] = useState(40.7580);
-  const [lng, setLng] = useState(-73.9855);
-  const [address, setAddress] = useState('Times Square & 42nd St, New York, NY');
+  const [lat, setLat] = useState(8.9950);
+  const [lng, setLng] = useState(38.7860);
+  const [address, setAddress] = useState('Bole Medhanealem Plaza, Addis Ababa');
+  const [isIllegalDumping, setIsIllegalDumping] = useState(false);
   const [locating, setLocating] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -43,7 +45,6 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
     },
   ];
 
-  /** GPS DETECTION — pulls the user's current coordinates from the device. */
   const handleUseMyLocation = () => {
     if (!('geolocation' in navigator)) {
       setError('Geolocation is not supported on this device. Pin the location on the map instead.');
@@ -58,7 +59,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
         const { latitude, longitude } = pos.coords;
         setLat(Math.round(latitude * 10000) / 10000);
         setLng(Math.round(longitude * 10000) / 10000);
-        setAddress(`My current location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`);
+        setAddress(`GPS Location (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`);
         setLocating(false);
       },
       (err) => {
@@ -93,6 +94,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
       latitude: lat,
       longitude: lng,
       address,
+      isIllegalDumping,
     });
 
     setLoading(false);
@@ -121,7 +123,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
           🚨
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-100">Report Waste Issue</h2>
+          <h2 className="text-xl font-bold text-slate-100">Report Waste Issue / Illegal Dumping</h2>
           <p className="text-xs text-slate-400">Submit overflowing bins or illegal dumping to earn Eco-Points</p>
         </div>
       </div>
@@ -150,7 +152,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
               <label className="block text-xs font-semibold text-slate-300 mb-1">Issue Title</label>
               <input
                 type="text"
-                placeholder="e.g. Overflowing plastic bin near Central Park entrance"
+                placeholder="e.g. Overflowing plastic bin near Bole Plaza"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 className="w-full glass-input"
@@ -171,6 +173,20 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
             </div>
           </div>
 
+          {/* Illegal Dumping Checkbox */}
+          <div className="flex items-center gap-2 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+            <input
+              type="checkbox"
+              id="illegalDumping"
+              checked={isIllegalDumping}
+              onChange={(e) => setIsIllegalDumping(e.target.checked)}
+              className="w-4 h-4 rounded accent-rose-500"
+            />
+            <label htmlFor="illegalDumping" className="text-xs font-medium text-slate-200 cursor-pointer">
+              Report as Illegal Dumping Site (High priority response)
+            </label>
+          </div>
+
           {/* Category & Severity Selectors */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
@@ -180,15 +196,19 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
               </label>
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value as any)}
+                onChange={(e) => setCategory(e.target.value as WasteCategory)}
                 className="w-full glass-input"
               >
-                <option value="PLASTIC">Plastic & Containers</option>
-                <option value="E_WASTE">E-Waste & Electronics</option>
+                <option value="PLASTIC">Plastic & Bottles</option>
+                <option value="PAPER">Paper</option>
+                <option value="CARDBOARD">Cardboard & Packaging</option>
+                <option value="GLASS">Glass</option>
+                <option value="METAL">Metal & Aluminum</option>
+                <option value="ELECTRONIC">Electronic Waste (E-Waste)</option>
                 <option value="ORGANIC">Organic & Food Waste</option>
-                <option value="HAZARDOUS">Hazardous & Chemicals</option>
-                <option value="BULK">Bulk Furniture/Appliances</option>
-                <option value="GENERAL">General Municipal Waste</option>
+                <option value="HAZARDOUS">Hazardous & Chemical</option>
+                <option value="MIXED">Mixed Municipal Waste</option>
+                <option value="OTHER">Other</option>
               </select>
             </div>
 
@@ -199,7 +219,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
               </label>
               <select
                 value={severity}
-                onChange={(e) => setSeverity(e.target.value as any)}
+                onChange={(e) => setSeverity(e.target.value as ReportSeverity)}
                 className="w-full glass-input"
               >
                 <option value="LOW">Low (Minor littering)</option>
@@ -210,7 +230,7 @@ export function ReportWasteForm({ onSuccess, onClose }: ReportWasteFormProps) {
             </div>
           </div>
 
-          {/* Photo Upload (Cloudinary w/ local fallback) */}
+          {/* Photo Upload */}
           <ImageUploadField
             label="Waste Issue Photo"
             value={imageUrl}

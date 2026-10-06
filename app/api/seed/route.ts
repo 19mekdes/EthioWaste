@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const hashedPassword = await bcrypt.hash('password123', 10);
 
-    // Ensure seed data exists
+
     let citizen = await db.user.findUnique({ where: { email: 'citizen@ecobin.org' } });
     if (!citizen) {
       citizen = await db.user.create({

@@ -158,12 +158,12 @@ export function CitizenHub({ user, initialData }: CitizenHubProps) {
               Report Waste Here
             </button>
           </div>
-          <InteractiveMap markers={mapMarkers} height="550px" centerLat={40.7580} centerLng={-73.9855} zoom={13} />
+          <InteractiveMap markers={mapMarkers} height="550px" centerLat={9.0107} centerLng={38.7612} zoom={13} />
         </div>
       )}
 
       {activeTab === 'CENTERS' && (
-        <RecyclingCenterMap centers={data.centers} userLat={40.7580} userLng={-73.9855} />
+        <RecyclingCenterMap centers={data.centers} userLat={9.0107} userLng={38.7612} />
       )}
 
       {activeTab === 'PICKUP' && (

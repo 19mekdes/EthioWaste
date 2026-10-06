@@ -3,13 +3,15 @@
 import { db } from '@/lib/db';
 import { Role } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
-import { requireRole } from '@/lib/session';
+import { requireRole, requireUser } from '@/lib/session';
 import { auth } from '@/lib/auth';
 
 export async function getRewardsLeaderboard() {
   try {
+    await requireUser();
+
     const topCitizens = await db.user.findMany({
-      where: { role: 'CITIZEN' },
+      where: { role: Role.CITIZEN },
       select: {
         id: true,
         name: true,
@@ -25,27 +27,21 @@ export async function getRewardsLeaderboard() {
 
     return { success: true, leaderboard: topCitizens };
   } catch (error: any) {
-    return { success: false, error: error.message, leaderboard: [] };
+    return { success: false, error: error.message || 'Unauthorized', leaderboard: [] };
   }
 }
 
-
 export async function getUserTransactions(targetUserId?: string) {
-  let userId = targetUserId;
-  let defaultPoints = 0;
-
-  if (!userId) {
-    try {
-      const user = await requireRole([Role.CITIZEN]);
-      userId = user.id;
-      defaultPoints = user.ecoPoints;
-    } catch {
-      const dbCitizen = await db.user.findFirst({ where: { role: Role.CITIZEN } });
-      userId = dbCitizen?.id || 'citizen-demo-1';
-    }
-  }
-
   try {
+    const user = await requireUser();
+    let userId = user.id;
+
+    // Only Admin can inspect another user's transactions
+    if (targetUserId && targetUserId !== user.id) {
+      await requireRole([Role.MUNICIPAL_ADMIN]);
+      userId = targetUserId;
+    }
+
     const [transactions, dbUser] = await Promise.all([
       db.rewardTransaction.findMany({
         where: { userId },
@@ -57,14 +53,13 @@ export async function getUserTransactions(targetUserId?: string) {
       }),
     ]);
 
-    return { success: true, transactions, points: dbUser?.ecoPoints ?? defaultPoints };
+    return { success: true, transactions, points: dbUser?.ecoPoints ?? 0 };
   } catch (error: any) {
-    return { success: false, error: error.message, transactions: [], points: defaultPoints };
+    return { success: false, error: error.message || 'Unauthorized', transactions: [], points: 0 };
   }
 }
 
 export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
-
   const user = await requireRole([Role.CITIZEN]);
 
   try {
@@ -73,7 +68,6 @@ export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
     if (dbUser.ecoPoints < rewardCost) {
       throw new Error(`Insufficient Eco-Points. Required: ${rewardCost}, Available: ${dbUser.ecoPoints}`);
     }
-
 
     const [updatedUser, transaction] = await db.$transaction([
       db.user.update({
@@ -92,17 +86,15 @@ export async function redeemEcoReward(rewardCost: number, rewardTitle: string) {
 
     revalidatePath('/citizen');
 
-
     try {
       await (auth as any)().update({ ecoPoints: updatedUser.ecoPoints });
     } catch (e) {
       console.error('Session points refresh failed:', e);
-
     }
 
     return { success: true, newPoints: updatedUser.ecoPoints, transaction };
   } catch (error: any) {
     console.error('Failed to redeem reward:', error);
-    return { success: false, error: error.message };
+    return { success: false, error: error.message || 'Failed to redeem reward' };
   }
 }

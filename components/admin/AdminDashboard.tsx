@@ -3,20 +3,11 @@
 import React, { useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { AnalyticsOverview } from '@/components/admin/AnalyticsOverview';
+import { AnalyticsOverview, ExtendedAdminStats } from '@/components/admin/AnalyticsOverview';
 import { ReportValidationQueue, AdminReportItem } from '@/components/admin/ReportValidationQueue';
 
 export interface AdminDashboardData {
-  stats: {
-    totalReports: number;
-    resolvedReports: number;
-    pendingReports: number;
-    inProgressReports: number;
-    totalCitizens: number;
-    totalCollectors: number;
-    resolutionRate: number;
-    totalPointsDistributed: number;
-  };
+  stats: ExtendedAdminStats;
   reports: AdminReportItem[];
   collectors: any[];
 }
@@ -72,5 +63,3 @@ export function AdminDashboardSkeleton() {
     </div>
   );
 }
-
-
