@@ -1,101 +1,387 @@
-# Smart Waste Management and Recycling Platform (Addis Ababa)
+# EcoBin – Smart Waste Management and Recycling Platform
 
-An architectural separation of the **Smart Waste Management and Recycling Platform** into two independent applications:
+EcoBin is a smart waste management and recycling platform designed to improve waste collection, recycling coordination, citizen participation, and municipal waste management in Ethiopian cities.
 
-1. **`frontend/`** — Single Page Application built with **React.js**, **TypeScript**, **Tailwind CSS**, and **Vite**.
-2. **`backend/`** — REST API server built with **Node.js**, **Express.js**, **TypeScript**, and **Prisma ORM** connected to the existing **SQLite** database (`dev.db`).
+The platform connects **citizens, waste collectors, recycling organizations, and municipal administrators** through a centralized system for reporting waste, requesting collection, managing collection tasks, processing recyclable materials, handling complaints, and monitoring waste management activities.
+
+> **GitHub Repository:** EthioWaste
+> **Application Name:** EcoBin
 
 ---
 
-## 🏗️ Architecture Overview
+## Project Overview
 
-```
-Smart West Management and Recycling Platform/
+Waste management is an important challenge in many Ethiopian cities. Traditional waste reporting and collection processes can be difficult to coordinate because citizens, collectors, recycling organizations, and municipal authorities may not have a centralized platform for communication and management.
+
+EcoBin provides a digital platform where:
+
+* Citizens can report waste and request collection services.
+* Collectors can manage and complete assigned collection tasks.
+* Recycling organizations can receive and process recyclable materials.
+* Municipal administrators can monitor operations and manage the entire system.
+* Citizens can receive notifications and earn Eco-Points.
+* Municipal administrators can analyze waste collection and recycling activities.
+
+The goal is to support cleaner cities, better waste collection, increased recycling, and improved community participation.
+
+---
+
+## 🎯 Objectives
+
+The main objectives of EcoBin are to:
+
+* Improve waste reporting and collection management.
+* Connect citizens with waste collection services.
+* Help municipal administrators monitor waste management activities.
+* Improve coordination between collectors and recycling organizations.
+* Support recycling and proper waste categorization.
+* Provide centralized complaint and feedback management.
+* Encourage citizen participation through Eco-Points and rewards.
+* Provide analytics for municipal waste management decisions.
+* Support better waste management practices in Ethiopian cities.
+
+---
+
+## 🏗️ Architecture
+
+The project is organized into two independent applications:
+
+### Frontend
+
+Built with:
+
+* React.js
+* TypeScript
+* Tailwind CSS
+* Vite
+
+### Backend
+
+Built with:
+
+* Node.js
+* Express.js
+* TypeScript
+* Prisma ORM
+* SQLite
+
+### Project Structure
+
+```text
+Smart Waste Management and Recycling Platform/
+│
 ├── backend/
 │   ├── prisma/
-│   │   ├── schema.prisma       # Preserved SQLite database schema
-│   │   └── dev.db              # Intact SQLite database with real data
+│   │   ├── schema.prisma
+│   │   └── dev.db
+│   │
 │   ├── src/
-│   │   ├── controllers/        # Express request controllers
-│   │   ├── middleware/         # JWT authentication & role-based RBAC middleware
-│   │   ├── routes/             # RESTful API route definitions (/api/v1)
-│   │   ├── services/           # Business logic & database operations
-│   │   ├── utils/              # Status state transitions & helper functions
-│   │   ├── db.ts               # Prisma Client singleton
-│   │   └── server.ts           # Express App Entry Point (Port 5000)
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── routes/
+│   │   ├── services/
+│   │   ├── utils/
+│   │   ├── db.ts
+│   │   └── server.ts
+│   │
 │   ├── package.json
 │   └── tsconfig.json
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/         # Reusable UI & role sidebars
-│   │   ├── contexts/           # AuthContext & Session Provider
-│   │   ├── layouts/            # Citizen, Collector, Recycling & Admin Layouts
-│   │   ├── pages/              # Role-based workflow pages & Public Landing
-│   │   ├── services/           # Frontend API client modules
-│   │   ├── types/              # Shared TypeScript definitions
-│   │   ├── App.tsx             # React Router routing & Protected Routes
-│   │   ├── main.tsx            # Vite entry point
-│   │   └── index.css           # Tailwind CSS directives
+│   │   ├── components/
+│   │   ├── contexts/
+│   │   ├── layouts/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── types/
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   │
 │   ├── package.json
 │   ├── vite.config.ts
 │   └── tsconfig.json
 │
-└── package.json                # Root orchestration scripts
+└── package.json
 ```
 
 ---
 
-## ⚡ Quick Start
+# 🚀 Main Features
 
-### 1. Prerequisites
-- **Node.js** (v18 or higher)
-- **npm** or **yarn**
+## 🧑 Citizen
 
-### 2. Backend Setup (`http://localhost:5000`)
+Citizens can:
+
+* Create an account and log in securely.
+* Report waste in their area.
+* Select waste categories.
+* Submit waste collection requests.
+* Track submitted reports and requests.
+* View request and collection status.
+* View recycling centers.
+* Receive notifications.
+* Submit complaints.
+* Provide feedback.
+* View and earn Eco-Points.
+* Manage their profile.
+
+---
+
+## 🚛 Waste Collector
+
+Collectors can:
+
+* Log in to the platform.
+* View assigned collection tasks.
+* View task details and locations.
+* Start assigned collection tasks.
+* Update collection progress.
+* Mark waste as collected.
+* Provide collection proof.
+* Complete collection tasks.
+* View collection history.
+* Manage their profile.
+
+---
+
+## ♻️ Recycling Organization
+
+Recycling organizations can:
+
+* Log in to the platform.
+* Manage their organization profile.
+* View recyclable materials assigned to them.
+* Receive recyclable materials.
+* Accept recyclable materials.
+* Process received recyclable materials.
+* Record recycled quantities.
+* Track recycling activities.
+* View recycling history.
+
+---
+
+## 🏛️ Municipal Administrator
+
+Municipal administrators can:
+
+* Log in securely.
+* Manage system users.
+* Manage citizens and collectors.
+* Manage recycling organizations.
+* Review waste reports.
+* Verify waste reports.
+* Approve or reject collection requests.
+* Assign collectors to collection tasks.
+* Reassign collection tasks when necessary.
+* Manage recycling centers.
+* Monitor collection activities.
+* Manage complaints.
+* Review citizen feedback.
+* Monitor recycling activities.
+* View system analytics and reports.
+
+---
+
+# 👥 User Roles
+
+EcoBin supports four main user roles:
+
+| Role                        | Responsibilities                                                                                                    |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Citizen**                 | Report waste, request collection, track requests, submit complaints and feedback, and manage Eco-Points.            |
+| **Waste Collector**         | View assigned tasks, collect waste, update task status, provide collection proof, and complete tasks.               |
+| **Recycling Organization**  | Receive recyclable materials, accept materials, process waste, and record recycled quantities.                      |
+| **Municipal Administrator** | Manage users, reports, requests, collectors, recycling organizations, complaints, feedback, centers, and analytics. |
+
+---
+
+# 🗑️ Waste Categories
+
+EcoBin supports different waste categories:
+
+* Organic
+* Plastic
+* Paper
+* Cardboard
+* Glass
+* Metal
+* Electronic
+* Hazardous
+* Mixed
+* Other
+
+---
+
+# 🔄 Waste Collection Workflow
+
+Waste collection follows a controlled workflow:
+
+```text
+PENDING
+   ↓
+VERIFIED
+   ↓
+ASSIGNED
+   ↓
+IN_PROGRESS
+   ↓
+COLLECTED
+   ↓
+COMPLETED
+```
+
+This workflow helps administrators and collectors track the complete lifecycle of a waste collection request.
+
+---
+
+# 📍 Map and Eco-Points
+
+### Map
+
+The platform uses a map centered on:
+
+```text
+Addis Ababa, Ethiopia
+Coordinates: 8.9806, 38.7578
+```
+
+The map can be used to display recycling centers and waste-related locations.
+
+### Eco-Points
+
+Citizens can earn Eco-Points through activities such as verified waste reports and completed collection activities.
+
+Eco-Points are stored as part of the user's account information.
+
+---
+
+# 🗄️ Database
+
+EcoBin currently uses:
+
+**SQLite**
+
+with the Prisma ORM.
+
+The database is located at:
+
+```text
+backend/prisma/dev.db
+```
+
+> **Important:** Do not reset or change the database engine without updating the project architecture and migration strategy.
+
+---
+
+# ⚡ Getting Started
+
+## 1. Prerequisites
+
+Install:
+
+* Node.js v18 or higher
+* npm
+
+---
+
+## 2. Clone the Repository
+
+```bash
+git clone https://github.com/19mekdes/EthioWaste.git
+cd EthioWaste
+```
+
+---
+
+## 3. Install Backend Dependencies
+
 ```bash
 cd backend
 npm install
 npx prisma generate
+```
+
+Start the backend:
+
+```bash
 npm run dev
 ```
 
-### 3. Frontend Setup (`http://localhost:5173`)
+The backend runs on:
+
+```text
+http://localhost:5000
+```
+
+---
+
+## 4. Install Frontend Dependencies
+
+Open another terminal:
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 4. Concurrent Orchestration (from Root Directory)
+The frontend runs on:
+
+```text
+http://localhost:5173
+```
+
+---
+
+## 5. Root Commands
+
+From the root directory, the project can also provide scripts for running and building the applications:
+
 ```bash
-# Start backend server
 npm run dev:backend
-
-# Start frontend application
 npm run dev:frontend
-
-# Build both applications for production
 npm run build:backend
 npm run build:frontend
 ```
 
 ---
 
-## 🔐 Seed Accounts & Role Workflows
+# 🔐 Role-Based Access
 
-The platform contains 4 role-based user workflows initialized in `backend/prisma/dev.db`:
+EcoBin implements role-based access control so that each user can access only the functionality appropriate to their role.
 
-| Role | Email | Password | Access / Core Features |
-| :--- | :--- | :--- | :--- |
-| **Citizen** | `citizen@ecobin.org` | `password123` | Waste report creation (GPS + photos), collection booking, Eco-Points balance, complaints, ratings, recycling centers map |
-| **Collector** | `collector@ecobin.org` | `password123` | Task dispatches, pickup route map, en-route status updates, proof photo uploads, completion records |
-| **Recycling Org** | `recycling@ecobin.org` | `password123` | Shipment intake logs, material tonnage tracking (Plastic, Glass, Metal, Organic), digital audit certificates |
-| **Municipal Admin** | `admin@ecobin.org` | `password123` | Waste report verification, collector fleet assignment, user role management, city drop-off hubs, complaints resolution, analytics |
+```text
+User Login
+     ↓
+Authentication
+     ↓
+Identify User Role
+     ↓
+┌──────────┬───────────┬──────────────┬───────────────┐
+│ Citizen  │ Collector │ Recycling Org│ Municipal Admin│
+└──────────┴───────────┴──────────────┴───────────────┘
+     ↓          ↓             ↓                ↓
+  Citizen    Collection    Recycling        Management
+  Dashboard    Tasks        Dashboard        Dashboard
+```
 
 ---
 
-## 🌍 Map & Eco-Points Specifications
-- **Map Center**: Defaulted to Addis Ababa, Ethiopia (`[8.9806, 38.7578]`).
-- **Eco-Points**: Calculated directly from database records (`ecoPoints` field on User model), awarded upon report verification and collection completions.
-- **Database Engine**: **SQLite** (DO NOT reset or change database engine).
+# 👨‍💻 Team Members
+
+| No. | Name                 | CTC     | Role               |
+| --: | -------------------- | ------- | ------------------ |
+|   1 | **Mekdes Wale**      | 566-26  | Backend Developer  |
+|   2 | **Kanariya Habtamu** | 1783-26 | Frontend Developer |
+
+---
+
+# 📌 Project Information
+
+**Project Name:** EcoBin
+**Repository:** EthioWaste
+**Domain:** Smart Waste Management and Recycling
+**Target:** Ethiopian Cities
+**Primary Location:** Addis Ababa, Ethiopia
