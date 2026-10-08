@@ -100,3 +100,23 @@ export async function createCollectionRequest(
 
   return request;
 }
+
+export async function cancelCollectionRequest(id: string, user: UserPayload) {
+  const request = await db.collectionRequest.findUnique({ where: { id } });
+  if (!request) throw new Error('Request not found');
+
+  if (user.role === Role.CITIZEN && request.citizenId !== user.id) {
+    throw new Error('Unauthorized');
+  }
+
+  if (request.status !== CollectionRequestStatus.PENDING) {
+    throw new Error(`Cannot cancel collection request in status ${request.status}. Only PENDING requests can be cancelled.`);
+  }
+
+  const updated = await db.collectionRequest.update({
+    where: { id },
+    data: { status: CollectionRequestStatus.REJECTED },
+  });
+
+  return updated;
+}

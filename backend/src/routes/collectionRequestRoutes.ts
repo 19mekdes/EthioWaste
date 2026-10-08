@@ -10,5 +10,6 @@ router.use(requireAuth);
 router.get('/', collectionRequestController.getRequests);
 router.get('/:id', collectionRequestController.getRequestById);
 router.post('/', requireRole([Role.CITIZEN]), collectionRequestController.createRequest);
+router.patch('/:id/cancel', requireRole([Role.CITIZEN]), collectionRequestController.cancelRequest);
 
 export default router;
