@@ -18,16 +18,16 @@ export function CollectorSidebar({ unreadNotificationsCount = 0 }: CollectorSide
   const pathname = location.pathname;
 
   const navItems = [
-    { href: '/dashboard/collector', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard/collector/tasks', label: 'My Tasks', icon: Truck },
-    { href: '/dashboard/collector/history', label: 'Task History', icon: History },
+    { href: '/collector/overview', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/collector/tasks', label: 'My Tasks', icon: Truck },
+    { href: '/collector/history', label: 'Task History', icon: History },
     {
-      href: '/dashboard/collector/notifications',
+      href: '/collector/notifications',
       label: 'Notifications',
       icon: Bell,
       badge: unreadNotificationsCount > 0 ? unreadNotificationsCount : undefined,
     },
-    { href: '/dashboard/collector/profile', label: 'Profile', icon: User },
+    { href: '/collector/profile', label: 'Profile', icon: User },
   ];
 
   return (
@@ -42,7 +42,7 @@ export function CollectorSidebar({ unreadNotificationsCount = 0 }: CollectorSide
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== '/dashboard/collector' && pathname.startsWith(item.href));
+              (item.href !== '/collector/overview' && pathname.startsWith(item.href));
 
             return (
               <Link
@@ -79,7 +79,7 @@ export function CollectorSidebar({ unreadNotificationsCount = 0 }: CollectorSide
         </p>
         <div className="space-y-2 pt-1">
           <Link
-            to="/dashboard/collector/tasks"
+            to="/collector/tasks"
             className="w-full glass-button-primary text-xs py-2 justify-center bg-purple-600 text-white font-bold"
           >
             View Active Tasks

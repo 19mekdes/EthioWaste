@@ -20,17 +20,17 @@ export function RecyclingSidebar({ unreadNotificationsCount = 0 }: RecyclingSide
   const pathname = location.pathname;
 
   const navItems = [
-    { href: '/dashboard/recycling', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard/recycling/materials', label: 'Available Materials', icon: Boxes },
-    { href: '/dashboard/recycling/records', label: 'Recycling Records', icon: FileCheck2 },
-    { href: '/dashboard/recycling/history', label: 'Processing History', icon: History },
+    { href: '/recycling/overview', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/recycling/materials', label: 'Available Materials', icon: Boxes },
+    { href: '/recycling/records', label: 'Recycling Records', icon: FileCheck2 },
+    { href: '/recycling/history', label: 'Processing History', icon: History },
     {
-      href: '/dashboard/recycling/notifications',
+      href: '/recycling/notifications',
       label: 'Notifications',
       icon: Bell,
       badge: unreadNotificationsCount > 0 ? unreadNotificationsCount : undefined,
     },
-    { href: '/dashboard/recycling/profile', label: 'Facility Profile', icon: Building2 },
+    { href: '/recycling/profile', label: 'Facility Profile', icon: Building2 },
   ];
 
   return (
@@ -45,7 +45,7 @@ export function RecyclingSidebar({ unreadNotificationsCount = 0 }: RecyclingSide
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== '/dashboard/recycling' && pathname.startsWith(item.href));
+              (item.href !== '/recycling/overview' && pathname.startsWith(item.href));
 
             return (
               <Link
@@ -82,7 +82,7 @@ export function RecyclingSidebar({ unreadNotificationsCount = 0 }: RecyclingSide
         </p>
         <div className="space-y-2 pt-1">
           <Link
-            to="/dashboard/recycling/materials"
+            to="/recycling/materials"
             className="w-full glass-button-primary text-xs py-2 justify-center bg-emerald-600 text-white font-bold"
           >
             Receive Incoming Waste

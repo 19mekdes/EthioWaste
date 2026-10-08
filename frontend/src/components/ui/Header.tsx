@@ -30,14 +30,14 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: '/dashboard/citizen', label: 'Overview', icon: LayoutDashboard, roles: ['CITIZEN'] },
-  { href: '/dashboard/citizen/reports', label: 'My Reports', icon: FileText, roles: ['CITIZEN'] },
-  { href: '/dashboard/citizen/requests', label: 'My Requests', icon: Truck, roles: ['CITIZEN'] },
-  { href: '/dashboard/citizen/notifications', label: 'Notifications', icon: Bell, roles: ['CITIZEN'] },
-  { href: '/dashboard/citizen/complaints', label: 'Complaints', icon: MessageSquare, roles: ['CITIZEN'] },
-  { href: '/dashboard/collector', label: 'Collector Tasks', icon: Truck, roles: ['COLLECTOR'] },
-  { href: '/dashboard/recycling', label: 'Recycling Portal', icon: Factory, roles: ['RECYCLING_ORGANIZATION'] },
-  { href: '/dashboard/admin', label: 'Admin Dashboard', icon: Shield, roles: ['MUNICIPAL_ADMIN'] },
+  { href: '/citizen/overview', label: 'Overview', icon: LayoutDashboard, roles: ['CITIZEN'] },
+  { href: '/citizen/my-reports', label: 'My Reports', icon: FileText, roles: ['CITIZEN'] },
+  { href: '/citizen/my-requests', label: 'My Requests', icon: Truck, roles: ['CITIZEN'] },
+  { href: '/citizen/notifications', label: 'Notifications', icon: Bell, roles: ['CITIZEN'] },
+  { href: '/citizen/complaints', label: 'Complaints', icon: MessageSquare, roles: ['CITIZEN'] },
+  { href: '/collector/overview', label: 'Collector Tasks', icon: Truck, roles: ['COLLECTOR'] },
+  { href: '/recycling/overview', label: 'Recycling Portal', icon: Factory, roles: ['RECYCLING_ORGANIZATION'] },
+  { href: '/admin/overview', label: 'Admin Dashboard', icon: Shield, roles: ['MUNICIPAL_ADMIN'] },
 ];
 
 export function Header({ unreadCount = 0 }: HeaderProps) {
@@ -58,7 +58,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
     <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
         {/* Brand Logo */}
-        <Link to={user?.role === 'CITIZEN' ? '/dashboard/citizen' : user?.role === 'COLLECTOR' ? '/dashboard/collector' : user?.role === 'RECYCLING_ORGANIZATION' ? '/dashboard/recycling' : user?.role === 'MUNICIPAL_ADMIN' ? '/dashboard/admin' : '/'} className="flex items-center gap-3 group">
+        <Link to={user?.role === 'CITIZEN' ? '/citizen/overview' : user?.role === 'COLLECTOR' ? '/collector/overview' : user?.role === 'RECYCLING_ORGANIZATION' ? '/recycling/overview' : user?.role === 'MUNICIPAL_ADMIN' ? '/admin/overview' : '/'} className="flex items-center gap-3 group">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
               <Recycle className="w-6 h-6 text-emerald-400" />
@@ -77,7 +77,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
         {/* Navigation Links — Filtered by Active Role */}
         <nav className="hidden md:flex items-center gap-1 font-medium text-xs lg:text-sm">
           {visibleLinks.map((l) => {
-            const active = pathname === l.href || (l.href !== '/dashboard/citizen' && pathname.startsWith(l.href));
+            const active = pathname === l.href || (l.href.includes('/overview') ? false : pathname.startsWith(l.href));
             return (
               <Link
                 key={l.label}

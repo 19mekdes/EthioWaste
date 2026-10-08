@@ -22,20 +22,20 @@ export function CitizenSidebar({ unreadNotificationsCount = 0 }: CitizenSidebarP
   const pathname = location.pathname;
 
   const navItems = [
-    { href: '/dashboard/citizen', label: 'Overview', icon: LayoutDashboard },
-    { href: '/dashboard/citizen/report-waste', label: 'Report Waste', icon: AlertTriangle, highlight: true },
-    { href: '/dashboard/citizen/reports', label: 'My Reports', icon: FileText },
-    { href: '/dashboard/citizen/collection-request', label: 'Request Collection', icon: PlusCircle },
-    { href: '/dashboard/citizen/requests', label: 'My Requests', icon: ListOrdered },
-    { href: '/dashboard/citizen/centers', label: 'Collection Points', icon: MapPin },
+    { href: '/citizen/overview', label: 'Overview', icon: LayoutDashboard },
+    { href: '/citizen/report-waste', label: 'Report Waste', icon: AlertTriangle, highlight: true },
+    { href: '/citizen/my-reports', label: 'My Reports', icon: FileText },
+    { href: '/citizen/request-collection', label: 'Request Collection', icon: PlusCircle },
+    { href: '/citizen/my-requests', label: 'My Requests', icon: ListOrdered },
+    { href: '/citizen/centers', label: 'Collection Points', icon: MapPin },
     {
-      href: '/dashboard/citizen/notifications',
+      href: '/citizen/notifications',
       label: 'Notifications',
       icon: Bell,
       badge: unreadNotificationsCount > 0 ? unreadNotificationsCount : undefined,
     },
-    { href: '/dashboard/citizen/complaints', label: 'Complaints', icon: MessageSquare },
-    { href: '/dashboard/citizen/feedback', label: 'Feedback', icon: Star },
+    { href: '/citizen/complaints', label: 'Complaints', icon: MessageSquare },
+    { href: '/citizen/feedback', label: 'Feedback', icon: Star },
   ];
 
   return (
@@ -97,13 +97,13 @@ export function CitizenSidebar({ unreadNotificationsCount = 0 }: CitizenSidebarP
         </p>
         <div className="space-y-2 pt-1">
           <Link
-            to="/dashboard/citizen/report-waste"
+            to="/citizen/report-waste"
             className="w-full glass-button-primary text-xs py-2 justify-center"
           >
             Report Waste Issue
           </Link>
           <Link
-            to="/dashboard/citizen/collection-request"
+            to="/citizen/request-collection"
             className="w-full glass-button-secondary text-xs py-2 justify-center"
           >
             Request Collection

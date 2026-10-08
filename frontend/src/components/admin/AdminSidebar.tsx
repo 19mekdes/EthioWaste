@@ -20,17 +20,17 @@ export function AdminSidebar() {
   const pathname = location.pathname;
 
   const navItems = [
-    { href: '/dashboard/admin', label: 'Dashboard', icon: LayoutDashboard },
-    { href: '/dashboard/admin/reports', label: 'Waste Reports', icon: FileText },
-    { href: '/dashboard/admin/requests', label: 'Collection Requests', icon: Truck },
-    { href: '/dashboard/admin/tasks', label: 'Collection Tasks', icon: ListCheck },
-    { href: '/dashboard/admin/users', label: 'Users', icon: Users },
-    { href: '/dashboard/admin/collectors', label: 'Collectors', icon: UserCheck },
-    { href: '/dashboard/admin/recycling-organizations', label: 'Recycling Orgs', icon: Factory },
-    { href: '/dashboard/admin/centers', label: 'Recycling Centers', icon: MapPin },
-    { href: '/dashboard/admin/complaints', label: 'Complaints', icon: MessageSquare },
-    { href: '/dashboard/admin/feedback', label: 'Feedback', icon: Star },
-    { href: '/dashboard/admin/analytics', label: 'Reports & Analytics', icon: BarChart3 },
+    { href: '/admin/overview', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/admin/reports', label: 'Waste Reports', icon: FileText },
+    { href: '/admin/requests', label: 'Collection Requests', icon: Truck },
+    { href: '/admin/tasks', label: 'Collection Tasks', icon: ListCheck },
+    { href: '/admin/users', label: 'Users', icon: Users },
+    { href: '/admin/collectors', label: 'Collectors', icon: UserCheck },
+    { href: '/admin/recycling-orgs', label: 'Recycling Orgs', icon: Factory },
+    { href: '/admin/centers', label: 'Recycling Centers', icon: MapPin },
+    { href: '/admin/complaints', label: 'Complaints', icon: MessageSquare },
+    { href: '/admin/feedback', label: 'Feedback', icon: Star },
+    { href: '/admin/analytics', label: 'Reports & Analytics', icon: BarChart3 },
   ];
 
   return (
@@ -45,7 +45,7 @@ export function AdminSidebar() {
           {navItems.map((item) => {
             const isActive =
               pathname === item.href ||
-              (item.href !== '/dashboard/admin' && pathname.startsWith(item.href));
+              (item.href !== '/admin/overview' && pathname.startsWith(item.href));
 
             return (
               <Link
@@ -77,7 +77,7 @@ export function AdminSidebar() {
         </p>
         <div className="space-y-2 pt-1">
           <Link
-            to="/dashboard/admin/requests"
+            to="/admin/requests"
             className="w-full glass-button-primary text-xs py-2 justify-center bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold"
           >
             Dispatch Work Queue
