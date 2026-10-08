@@ -159,11 +159,14 @@ git clone https://github.com/19mekdes/EthioWaste.git
 
 Navigate into the project directory:
 cd EthioWaste
+
 2. Install Backend Dependencies
+   
 3.Install Frontend Dependencies
 4. Start
    npm run dev both the backend and frontend
 
 
-   name                       CTC
-   1.  Mekdes Wale           566-26
+   Name                       CTC                  role
+   1.  Mekdes Wale           566-26              Backend Developer
+   2.  Kanariya Habtamu     1783-26              Frontend Developer
