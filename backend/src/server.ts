@@ -12,7 +12,14 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 // CORS configuration
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman) or any localhost port
+      if (!origin || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
+        callback(null, true);
+      } else {
+        callback(null, true); // Permissive in dev mode
+      }
+    },
     credentials: true,
   })
 );
