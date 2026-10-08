@@ -1,0 +1,78 @@
+@import "leaflet/dist/leaflet.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 7%;
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    @apply bg-brand-dark text-slate-100 font-sans antialiased min-h-screen selection:bg-eco-500 selection:text-white;
+  }
+}
+
+.glass-card {
+  @apply bg-slate-900/70 backdrop-blur-xl border border-slate-800/80 shadow-2xl rounded-2xl;
+}
+
+.glass-card-hover {
+  @apply glass-card hover:border-eco-500/40 hover:shadow-eco-500/10 transition-all duration-300;
+}
+
+.glass-input {
+  @apply bg-slate-950/80 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-eco-500 focus:ring-1 focus:ring-eco-500 transition-all;
+}
+
+.glass-button-primary {
+  @apply bg-gradient-to-r from-eco-600 to-emerald-500 hover:from-eco-500 hover:to-emerald-400 text-white font-semibold rounded-xl px-5 py-2.5 shadow-lg shadow-eco-600/20 hover:shadow-eco-500/30 transition-all duration-200 active:scale-95 flex items-center justify-center gap-2;
+}
+
+.glass-button-secondary {
+  @apply bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 text-slate-200 font-medium rounded-xl px-4 py-2.5 transition-all active:scale-95 flex items-center justify-center gap-2;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  background-color: #0f172a !important;
+  z-index: 1;
+}
+
+.leaflet-tile {
+  filter: brightness(0.85) contrast(1.1) hue-rotate(180deg) invert(1) saturate(0.8);
+}
+
+.leaflet-popup-content-wrapper {
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155;
+  border-radius: 0.75rem !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background: #0f172a !important;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #090d16;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
