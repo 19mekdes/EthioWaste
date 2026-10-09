@@ -13,11 +13,11 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps, curl, postman) or any localhost port
+
       if (!origin || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) {
         callback(null, true);
       } else {
-        callback(null, true); // Permissive in dev mode
+        callback(null, true);
       }
     },
     credentials: true,
@@ -27,7 +27,6 @@ app.use(
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Healthcheck route
 app.get('/health', (req: Request, res: Response) => {
   res.json({ success: true, status: 'Healthy', timestamp: new Date().toISOString() });
 });
