@@ -5,10 +5,8 @@ import * as centerController from '../controllers/centerController.js';
 
 const router = Router();
 
-// Public endpoint for viewing recycling centers
 router.get('/', centerController.getCenters);
 
-// Admin-only management endpoints
 router.post('/', requireAuth, requireRole([Role.MUNICIPAL_ADMIN]), centerController.createCenter);
 router.patch('/:id', requireAuth, requireRole([Role.MUNICIPAL_ADMIN]), centerController.updateCenter);
 router.delete('/:id', requireAuth, requireRole([Role.MUNICIPAL_ADMIN]), centerController.deleteCenter);
