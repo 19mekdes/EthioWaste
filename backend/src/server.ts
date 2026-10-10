@@ -31,7 +31,6 @@ app.get('/health', (req: Request, res: Response) => {
   res.json({ success: true, status: 'Healthy', timestamp: new Date().toISOString() });
 });
 
-// Versioned API routes
 app.use('/api/v1', apiRouter);
 
 // Centralized error handler middleware

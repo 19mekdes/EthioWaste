@@ -16,7 +16,6 @@ export async function requireAuth(req: AuthenticatedRequest, res: Response, next
     const token = authHeader.split(' ')[1];
     const decoded = jwt.verify(token, JWT_SECRET) as UserPayload;
 
-    // Fetch fresh user from DB to ensure status & ecoPoints are current
     const freshUser = await db.user.findUnique({
       where: { id: decoded.id },
       select: {

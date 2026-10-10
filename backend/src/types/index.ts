@@ -9,7 +9,6 @@ export interface UserPayload {
   ecoPoints: number;
   avatarUrl?: string | null;
 }
-
 export interface AuthenticatedRequest extends Request {
   user?: UserPayload;
 }
