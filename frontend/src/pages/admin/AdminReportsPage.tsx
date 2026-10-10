@@ -14,7 +14,6 @@ export const AdminReportsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
 
-  // Selected report for modal or action
   const [selectedReport, setSelectedReport] = useState<WasteReport | null>(null);
   const [assignedCollectorId, setAssignedCollectorId] = useState<string>('');
   const [updating, setUpdating] = useState(false);
@@ -71,11 +70,10 @@ export const AdminReportsPage: React.FC = () => {
               <button
                 key={st}
                 onClick={() => setFilterStatus(st)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
-                  filterStatus === st
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${filterStatus === st
                     ? 'bg-amber-500 text-slate-950 shadow'
                     : 'text-slate-400 hover:text-white'
-                }`}
+                  }`}
               >
                 {st}
               </button>
