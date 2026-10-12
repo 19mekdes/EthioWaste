@@ -29,10 +29,22 @@ export async function request<T = any>(
 
   try {
     const response = await fetch(`${API_URL}${endpoint}`, config);
-    const result = await response.json();
+
+    let result: any = null;
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+      try {
+        result = await response.json();
+      } catch (parseErr: any) {
+        result = { error: parseErr.message, message: 'Invalid JSON response from server' };
+      }
+    } else {
+      const text = await response.text();
+      result = { error: text, message: `Server error (${response.status}): ${text.slice(0, 150)}` };
+    }
 
     if (!response.ok) {
-      const err = new Error(result.message || result.error || `HTTP Error ${response.status}`);
+      const err = new Error(result?.message || result?.error || `HTTP Error ${response.status}`);
       (err as any).response = { data: result, status: response.status };
       throw err;
     }

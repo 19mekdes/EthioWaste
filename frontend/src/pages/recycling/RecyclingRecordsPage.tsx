@@ -25,7 +25,7 @@ export const RecyclingRecordsPage: React.FC = () => {
       const data = await recyclingService.getMyRecords();
       setRecords(data);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to fetch processing records.');
+      setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to fetch processing records.');
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export const RecyclingRecordsPage: React.FC = () => {
       fetchRecords();
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to log recycling record.');
+      setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to log recycling record.');
     } finally {
       setSubmitting(false);
     }
@@ -101,7 +101,8 @@ export const RecyclingRecordsPage: React.FC = () => {
                   <option value="PLASTIC">Plastic</option>
                   <option value="GLASS">Glass</option>
                   <option value="METAL">Metal / Scrap</option>
-                  <option value="PAPER_CARD">Paper & Cardboard</option>
+                  <option value="PAPER">Paper</option>
+                  <option value="CARDBOARD">Cardboard</option>
                   <option value="ELECTRONIC">Electronic Waste</option>
                   <option value="ORGANIC">Organic Material</option>
                 </select>
@@ -181,12 +182,12 @@ export const RecyclingRecordsPage: React.FC = () => {
                     <div>
                       <div className="flex items-center gap-3">
                         <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                          {r.materialType}
+                          {r.materialType || r.material}
                         </span>
-                        <span className="font-bold text-white text-base">{r.quantityKg} kg</span>
+                        <span className="font-bold text-white text-base">{(r.quantityKg ?? r.quantity ?? 0)} kg</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-1">
-                        Source: {r.source || 'N/A'}
+                        Source: {r.source || 'Direct Facility Intake'}
                       </p>
                       <span className="text-[11px] text-slate-500 flex items-center gap-1 mt-1">
                         <Calendar className="w-3 h-3 text-slate-500" /> Recorded on {new Date(r.createdAt).toLocaleString()}

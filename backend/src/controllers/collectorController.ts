@@ -55,11 +55,49 @@ export async function markCollected(req: AuthenticatedRequest, res: Response) {
 export async function completeTask(req: AuthenticatedRequest, res: Response) {
   try {
     const id = String(req.params.id);
-    const { proofImageUrl, notes } = req.body;
-    const task = await collectorService.completeCollectionTask(id, req.user!.id, proofImageUrl, notes);
+    const { proofImageUrl, notes, photos } = req.body;
+    const finalProof = proofImageUrl || (Array.isArray(photos) && photos.length > 0 ? photos[0] : undefined);
+    const task = await collectorService.completeCollectionTask(id, req.user!.id, finalProof, notes);
     return res.json({ success: true, data: task });
   } catch (error: any) {
-    return res.status(400).json({ success: false, message: error.message || 'Failed to complete task' });
+    return res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to complete task',
+      error: error.message || 'Failed to complete task',
+    });
+  }
+}
+
+export async function updateTaskStatus(req: AuthenticatedRequest, res: Response) {
+  try {
+    const id = String(req.params.id);
+    const { status, photos, proofImageUrl, notes } = req.body;
+    const finalProof = proofImageUrl || (Array.isArray(photos) && photos.length > 0 ? photos[0] : undefined);
+
+    let updatedTask;
+    const targetStatus = String(status || '').toUpperCase();
+
+    if (targetStatus === 'IN_PROGRESS') {
+      updatedTask = await collectorService.startCollectionTask(id, req.user!.id);
+    } else if (targetStatus === 'COLLECTED') {
+      updatedTask = await collectorService.markCollectionAsCollected(id, req.user!.id, finalProof, notes);
+    } else if (targetStatus === 'COMPLETED') {
+      updatedTask = await collectorService.completeCollectionTask(id, req.user!.id, finalProof, notes);
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: `Unsupported status transition: ${status}`,
+        error: `Unsupported status transition: ${status}`,
+      });
+    }
+
+    return res.json({ success: true, data: updatedTask });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to update task status',
+      error: error.message || 'Failed to update task status',
+    });
   }
 }
 

@@ -33,7 +33,7 @@ export const CollectorTasksPage: React.FC = () => {
       await collectorService.updateTaskStatus(taskId, newStatus);
       fetchTasks();
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to update task status.');
+      alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to update task status.');
     }
   };
 
@@ -94,10 +94,10 @@ export const CollectorTasksPage: React.FC = () => {
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-3">
                     <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                      {task.wasteType}
+                      {(task as any).wasteType || (task as any).request?.wasteType || (task as any).report?.category || 'General Waste'}
                     </span>
                     <span className="text-xs font-semibold text-slate-400">
-                      Qty: {task.estimatedQuantity}
+                      Qty: {(task as any).estimatedQuantity || (task as any).request?.estimatedQuantity || 'Standard Load'}
                     </span>
                     <span className="text-xs font-bold text-slate-300">
                       Status: {task.status}
@@ -110,7 +110,7 @@ export const CollectorTasksPage: React.FC = () => {
 
                   <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400">
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-teal-400" /> Date: {new Date(task.preferredDate).toLocaleDateString()}
+                      <Calendar className="w-3.5 h-3.5 text-teal-400" /> Date: {new Date((task as any).scheduledDate || (task as any).preferredDate || (task as any).createdAt).toLocaleDateString()}
                     </span>
                     {task.preferredTime && (
                       <span className="flex items-center gap-1">

@@ -23,11 +23,16 @@ export const CollectorTaskDetailPage: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await collectorService.getAssignedTasks();
-        const found = data.find((t: any) => t.id === id);
+        let found: any = null;
+        try {
+          found = await collectorService.getTaskById(id);
+        } catch {
+          const data = await collectorService.getAssignedTasks();
+          found = data.find((t: any) => t.id === id);
+        }
         setTask(found || null);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load task details.');
+        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to load task details.');
       } finally {
         setLoading(false);
       }
@@ -42,7 +47,7 @@ export const CollectorTaskDetailPage: React.FC = () => {
       await collectorService.updateTaskStatus(id, newStatus, proofPhotos);
       navigate('/collector/tasks');
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to update task status.');
+      alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to update task status.');
     } finally {
       setUpdating(false);
     }
@@ -91,10 +96,10 @@ export const CollectorTaskDetailPage: React.FC = () => {
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-700 pb-4">
             <div>
               <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">
-                {task.wasteType} Waste Collection
+                {(task as any).wasteType || (task as any).request?.wasteType || (task as any).report?.category || 'General'} Waste Collection
               </span>
               <h1 className="text-2xl font-bold text-white mt-1">
-                Estimated Volume: {task.estimatedQuantity}
+                Estimated Volume: {(task as any).estimatedQuantity || (task as any).request?.estimatedQuantity || 'Standard Load'}
               </h1>
             </div>
             <div className="flex items-center gap-3">
@@ -121,19 +126,23 @@ export const CollectorTaskDetailPage: React.FC = () => {
                   <Calendar className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                   <div>
                     <span className="text-slate-400 text-xs block">Scheduled Date</span>
-                    <span className="font-medium text-white">{new Date(task.preferredDate).toLocaleDateString()}</span>
+                    <span className="font-medium text-white">{new Date((task as any).scheduledDate || (task as any).preferredDate || (task as any).createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
 
-                {task.citizen && (
+                {((task as any).citizen || (task as any).request?.citizen || (task as any).report?.reporter) && (
                   <div className="flex items-start gap-3 bg-slate-900/60 p-3 rounded-xl border border-slate-700/40">
                     <User className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <span className="text-slate-400 text-xs block">Citizen Contact</span>
-                      <span className="font-bold text-white block">{task.citizen.name}</span>
-                      <span className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
-                        <Phone className="w-3 h-3 text-emerald-400" /> {task.citizen.phone}
+                      <span className="text-slate-400 text-xs block">Contact Person</span>
+                      <span className="font-bold text-white block">
+                        {(task as any).citizen?.name || (task as any).request?.citizen?.name || (task as any).report?.reporter?.name}
                       </span>
+                      {((task as any).citizen?.phone || (task as any).request?.citizen?.phone || (task as any).report?.reporter?.phone) && (
+                        <span className="text-xs text-slate-400 flex items-center gap-1 mt-0.5">
+                          <Phone className="w-3 h-3 text-emerald-400" /> {(task as any).citizen?.phone || (task as any).request?.citizen?.phone || (task as any).report?.reporter?.phone}
+                        </span>
+                      )}
                     </div>
                   </div>
                 )}

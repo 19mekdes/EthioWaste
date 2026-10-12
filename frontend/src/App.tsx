@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthProvider';
+import { useAuth } from './contexts/AuthContext';
 
 // Public Pages
 import { HomePage } from './pages/HomePage';
