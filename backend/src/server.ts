@@ -32,7 +32,7 @@ app.get('/health', (req: Request, res: Response) => {
 
 app.use('/api/v1', apiRouter);
 
-// 404 handler for unknown API routes to prevent HTML responses
+
 app.use('/api/v1', (req: Request, res: Response) => {
   res.status(404).json({
     success: false,
@@ -40,8 +40,6 @@ app.use('/api/v1', (req: Request, res: Response) => {
     error: `API endpoint not found: ${req.method} ${req.originalUrl}`,
   });
 });
-
-// Centralized error handler middleware
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Server Error:', err);
   const status = err.status || 500;
