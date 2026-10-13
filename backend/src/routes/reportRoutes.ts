@@ -8,6 +8,7 @@ const router = Router();
 router.use(requireAuth);
 
 router.get('/', reportController.getReports);
+router.get('/my-reports', reportController.getMyReports);
 router.get('/:id', reportController.getReportById);
 router.post('/', requireRole([Role.CITIZEN]), reportController.createReport);
 router.patch('/:id/status', requireRole([Role.COLLECTOR, Role.MUNICIPAL_ADMIN]), reportController.updateReportStatus);

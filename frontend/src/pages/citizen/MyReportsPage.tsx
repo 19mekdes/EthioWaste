@@ -7,23 +7,27 @@ import { FileText, PlusCircle, Search, MapPin, Calendar, Tag } from 'lucide-reac
 export const MyReportsPage: React.FC = () => {
   const [reports, setReports] = useState<WasteReport[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
 
-  useEffect(() => {
-    async function loadReports() {
-      setLoading(true);
-      try {
-        const res = await reportService.getMyReports();
-        setReports(Array.isArray(res) ? res : (res as any)?.data || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+  const loadReports = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.getMyReports();
+      setReports(Array.isArray(res) ? res : (res as any)?.data || []);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.response?.data?.message || err.message || 'Failed to load waste reports.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadReports();
   }, []);
 
@@ -156,7 +160,21 @@ export const MyReportsPage: React.FC = () => {
       </div>
 
       {/* Reports List */}
-      {filteredReports.length === 0 ? (
+      {error ? (
+        <div className="glass-card p-12 text-center border-rose-500/30 bg-rose-500/10 space-y-3 rounded-2xl">
+          <FileText className="w-12 h-12 text-rose-400 mx-auto" />
+          <h3 className="text-base font-bold text-rose-200">Unable to Load Reports</h3>
+          <p className="text-xs text-rose-300 max-w-sm mx-auto">{error}</p>
+          <div className="pt-2">
+            <button
+              onClick={loadReports}
+              className="px-4 py-2 bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold rounded-xl text-xs inline-flex"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      ) : filteredReports.length === 0 ? (
         <div className="glass-card p-12 text-center border-slate-800 space-y-3">
           <FileText className="w-12 h-12 text-slate-600 mx-auto" />
           <h3 className="text-base font-bold text-slate-200">No Reports Found</h3>

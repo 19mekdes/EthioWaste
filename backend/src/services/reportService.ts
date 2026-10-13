@@ -46,6 +46,36 @@ export async function getWasteReports(
   return reports;
 }
 
+export async function getMyWasteReports(
+  user: UserPayload,
+  options?: {
+    status?: ReportStatus;
+    category?: WasteCategory;
+  }
+) {
+  const where: any = {
+    reporterId: user.id,
+  };
+
+  if (options?.status) where.status = options.status;
+  if (options?.category) where.category = options.category;
+
+  const reports = await db.wasteReport.findMany({
+    where,
+    include: {
+      reporter: {
+        select: { id: true, name: true, email: true, avatarUrl: true },
+      },
+      assignedTo: {
+        select: { id: true, name: true, email: true, avatarUrl: true },
+      },
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return reports;
+}
+
 export async function getWasteReportById(id: string, user: UserPayload) {
   const report = await db.wasteReport.findUnique({
     where: { id },
