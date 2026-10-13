@@ -46,7 +46,7 @@ export const AdminReportsPage: React.FC = () => {
       setSelectedReport(null);
       fetchData();
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to update report status.');
+      alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to update report status.');
     } finally {
       setUpdating(false);
     }

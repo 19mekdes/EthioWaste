@@ -46,7 +46,7 @@ export const AdminRequestsPage: React.FC = () => {
       setSelectedRequest(null);
       fetchData();
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to dispatch collector.');
+      alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to dispatch collector.');
     } finally {
       setUpdating(false);
     }

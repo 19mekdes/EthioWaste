@@ -58,16 +58,17 @@ export async function createReport(req: AuthenticatedRequest, res: Response) {
 export async function updateReportStatus(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
-    const { status, cleanupImageUrl, pointsAwarded } = req.body;
+    const { status, cleanupImageUrl, pointsAwarded, assignedCollectorId } = req.body;
     const report = await reportService.updateReportStatus(
       String(id),
       req.user!,
       status,
       cleanupImageUrl,
-      pointsAwarded
+      pointsAwarded,
+      assignedCollectorId
     );
     return res.json({ success: true, data: report });
   } catch (error: any) {
-    return res.status(400).json({ success: false, message: error.message || 'Failed to update report status' });
+    return res.status(400).json({ success: false, message: error.message || 'Failed to update report status', error: error.message || 'Failed to update report status' });
   }
 }

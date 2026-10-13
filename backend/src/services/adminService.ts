@@ -265,8 +265,8 @@ export async function assignCollectorToRequest(requestId: string, collectorId: s
 
   if (!request) throw new Error('Collection request not found.');
 
-  if (!['APPROVED', 'ASSIGNED'].includes(request.status)) {
-    throw new Error(`Collector assignment is only allowed after a request has been APPROVED. Current status is ${request.status}.`);
+  if (['COMPLETED', 'REJECTED'].includes(request.status)) {
+    throw new Error(`Cannot assign a collector to a request that is already ${request.status}.`);
   }
 
   const collector = await db.user.findFirst({
@@ -277,45 +277,41 @@ export async function assignCollectorToRequest(requestId: string, collectorId: s
   if (!collector) throw new Error('Selected user is not a valid collector.');
 
   const result = await db.$transaction(async (tx: any) => {
-    const updatedReq = await tx.collectionRequest.update({
-      where: { id: requestId },
-      data: {
-        assignedCollectorId: collector.id,
-        status: CollectionRequestStatus.ASSIGNED,
-      },
-    });
-
     const task = await tx.collectionTask.upsert({
       where: { requestId },
       create: {
         requestId,
         collectorId: collector.id,
-        address: request.address,
-        latitude: request.latitude,
-        longitude: request.longitude,
-        scheduledDate: request.preferredDate,
+        address: request.address || 'Designated Pickup Location',
+        latitude: request.latitude ?? 8.9806,
+        longitude: request.longitude ?? 38.7578,
+        scheduledDate: request.preferredDate || new Date(),
         status: CollectionTaskStatus.ASSIGNED,
       },
       update: {
         collectorId: collector.id,
-        address: request.address,
-        latitude: request.latitude,
-        longitude: request.longitude,
-        scheduledDate: request.preferredDate,
+        address: request.address || 'Designated Pickup Location',
+        latitude: request.latitude ?? 8.9806,
+        longitude: request.longitude ?? 38.7578,
+        scheduledDate: request.preferredDate || new Date(),
         status: CollectionTaskStatus.ASSIGNED,
       },
     });
 
-    await tx.collectionRequest.update({
+    const updatedReq = await tx.collectionRequest.update({
       where: { id: requestId },
-      data: { collectionTaskId: task.id },
+      data: {
+        assignedCollectorId: collector.id,
+        status: CollectionRequestStatus.ASSIGNED,
+        collectionTaskId: task.id,
+      },
     });
 
     await tx.notification.create({
       data: {
         userId: request.citizenId,
         title: 'Collector Assigned!',
-        message: `Collector ${collector.name} has been assigned to your ${request.wasteType} collection request.`,
+        message: `Collector ${collector.name} has been dispatched to your ${request.wasteType} collection request.`,
         type: 'INFO',
       },
     });

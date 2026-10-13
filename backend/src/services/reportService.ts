@@ -149,14 +149,15 @@ export async function updateReportStatus(
   user: UserPayload,
   status: ReportStatus,
   cleanupImageUrl?: string,
-  pointsAwarded: number = 50
+  pointsAwarded: number = 50,
+  assignedCollectorId?: string
 ) {
   const isAdmin = user.role === Role.MUNICIPAL_ADMIN;
 
   if (status !== 'COMPLETED') {
     const report = await db.wasteReport.findUnique({
       where: { id: reportId },
-      select: { assignedToId: true, status: true },
+      select: { id: true, assignedToId: true, status: true, title: true, address: true },
     });
     if (!report) throw new Error('Report not found');
 
@@ -168,15 +169,26 @@ export async function updateReportStatus(
       throw new Error('This task is assigned to another collector.');
     }
 
+    const assignedId = (isAdmin && assignedCollectorId)
+      ? assignedCollectorId
+      : (!isAdmin && status === 'IN_PROGRESS' && !report.assignedToId ? user.id : undefined);
+
     const updated = await db.wasteReport.update({
       where: { id: reportId },
       data: {
         status,
-        ...(!isAdmin && status === 'IN_PROGRESS' && !report.assignedToId
-          ? { assignedToId: user.id }
-          : {}),
+        ...(assignedId ? { assignedToId: assignedId } : {}),
       },
     });
+
+    if (assignedId && assignedId !== report.assignedToId) {
+      await createNotification(
+        assignedId,
+        'Assigned to Waste Incident',
+        `You have been assigned to waste incident "${report.title}" at ${report.address || 'designated location'}.`,
+        'TASK'
+      );
+    }
 
     return updated;
   }
