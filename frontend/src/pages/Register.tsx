@@ -44,9 +44,14 @@ export function Register() {
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-12 font-sans">
       <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-3xl p-8 shadow-2xl space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
-            <Recycle className="w-6 h-6 text-emerald-400" />
-          </div>
+          <Link
+            to="/"
+            title="Go back to Home Page"
+            aria-label="Back to home page"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2 hover:bg-emerald-500/20 hover:border-emerald-500/40 hover:scale-105 active:scale-95 transition-all cursor-pointer group shadow-sm hover:shadow-emerald-500/20"
+          >
+            <Recycle className="w-6 h-6 text-emerald-400 group-hover:rotate-180 transition-transform duration-500" />
+          </Link>
           <h2 className="text-2xl font-bold text-white tracking-tight">Create Your Account</h2>
           <p className="text-xs text-slate-400">Join EcoBin to report waste, earn Eco-Points, and keep Addis Ababa clean</p>
         </div>
