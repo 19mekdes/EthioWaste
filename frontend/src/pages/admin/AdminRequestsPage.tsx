@@ -134,11 +134,11 @@ export const AdminRequestsPage: React.FC = () => {
 
         {/* Modal for Assigning Collector */}
         {selectedRequest && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-700 pb-4">
-                <h3 className="text-xl font-bold text-white">Dispatch Collector</h3>
-                <button onClick={() => setSelectedRequest(null)} className="text-slate-400 hover:text-white font-bold">✕</button>
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-lg w-full shadow-2xl space-y-5 sm:space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-700 pb-3 sm:pb-4">
+                <h3 className="text-lg sm:text-xl font-bold text-white">Dispatch Collector</h3>
+                <button onClick={() => setSelectedRequest(null)} className="text-slate-400 hover:text-white font-bold p-1">✕</button>
               </div>
 
               <form onSubmit={handleAssignCollector} className="space-y-4">
@@ -154,7 +154,7 @@ export const AdminRequestsPage: React.FC = () => {
                   <select
                     value={assignedCollectorId}
                     onChange={(e) => setAssignedCollectorId(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     required
                   >
                     <option value="">-- Choose Collector --</option>
@@ -166,18 +166,18 @@ export const AdminRequestsPage: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-700">
+                <div className="flex justify-end gap-2 sm:gap-3 pt-4 border-t border-slate-700">
                   <button
                     type="button"
                     onClick={() => setSelectedRequest(null)}
-                    className="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold"
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating}
-                    className="px-6 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md"
+                    className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md"
                   >
                     Confirm Dispatch
                   </button>

@@ -74,11 +74,10 @@ export const AdminFeedbackPage: React.FC = () => {
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-4 h-4 ${
-                          i < f.rating
+                        className={`w-4 h-4 ${i < f.rating
                             ? 'text-amber-400 fill-amber-400'
                             : 'text-slate-600'
-                        }`}
+                          }`}
                       />
                     ))}
                   </div>

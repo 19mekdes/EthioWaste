@@ -56,16 +56,16 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
 
   return (
     <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo */}
-        <Link to={user?.role === 'CITIZEN' ? '/citizen/overview' : user?.role === 'COLLECTOR' ? '/collector/overview' : user?.role === 'RECYCLING_ORGANIZATION' ? '/recycling/overview' : user?.role === 'MUNICIPAL_ADMIN' ? '/admin/overview' : '/'} className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+        <Link to={user?.role === 'CITIZEN' ? '/citizen/overview' : user?.role === 'COLLECTOR' ? '/collector/overview' : user?.role === 'RECYCLING_ORGANIZATION' ? '/recycling/overview' : user?.role === 'MUNICIPAL_ADMIN' ? '/admin/overview' : '/'} className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+          <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform shrink-0">
             <div className="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
-              <Recycle className="w-6 h-6 text-emerald-400" />
+              <Recycle className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
             </div>
           </div>
           <div>
-            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+            <span className="text-lg sm:text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
               EcoBin
             </span>
             <span className="hidden sm:inline-block ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
@@ -86,7 +86,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
                   active ? 'text-emerald-400 bg-emerald-500/10 font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
                 }`}
               >
-                <l.icon className="w-4 h-4" />
+                <l.icon className="w-4 h-4 shrink-0" />
                 <span>{l.label}</span>
                 {l.href.includes('notifications') && unreadCount > 0 && (
                   <span className="ml-1 text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-rose-500 text-white animate-pulse">
@@ -98,22 +98,22 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
           })}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {!user ? (
             <>
               <Link
                 to="/login"
-                className="px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white transition-all flex items-center gap-1.5"
+                className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold text-slate-300 border border-slate-800 hover:border-slate-700 hover:text-white transition-all flex items-center gap-1 sm:gap-1.5"
               >
-                <LogIn className="w-3.5 h-3.5 text-emerald-400" />
+                <LogIn className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                 <span>Login</span>
               </Link>
 
               <Link
                 to="/register"
-                className="px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-white hover:bg-emerald-600 shadow-sm shadow-emerald-500/20 transition-all flex items-center gap-1.5"
+                className="px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-sm shadow-emerald-500/20 transition-all flex items-center gap-1 sm:gap-1.5"
               >
-                <UserPlus className="w-3.5 h-3.5" />
+                <UserPlus className="w-3.5 h-3.5 shrink-0" />
                 <span>Register</span>
               </Link>
             </>
@@ -121,8 +121,8 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
             <>
               {/* Citizen Points Badge */}
               {user.role === 'CITIZEN' && (
-                <div className="hidden sm:flex items-center gap-2 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/30 px-3 py-1.5 rounded-full shadow-inner shadow-amber-500/10">
-                  <Award className="w-4 h-4 text-amber-400 animate-bounce" />
+                <div className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-amber-500/10 to-yellow-500/10 border border-amber-500/30 px-2.5 py-1 rounded-full shadow-inner shadow-amber-500/10 shrink-0">
+                  <Award className="w-3.5 h-3.5 text-amber-400 animate-bounce shrink-0" />
                   <span className="text-amber-300 font-bold text-xs tracking-wide">
                     {user.ecoPoints} <span className="text-[10px] font-normal text-amber-400/80">PTS</span>
                   </span>
@@ -130,11 +130,11 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
               )}
 
               {/* User Profile Avatar & Sign Out */}
-              <div className="flex items-center gap-2 pl-2 border-l border-slate-800">
+              <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-2 border-l border-slate-800">
                 <img
                   src={user.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80'}
                   alt={user.name}
-                  className="w-8 h-8 rounded-full object-cover border border-slate-700 ring-2 ring-emerald-500/30"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-slate-700 ring-2 ring-emerald-500/30 shrink-0"
                 />
                 <div className="hidden lg:block text-left">
                   <div className="text-xs font-semibold text-slate-200 line-clamp-1">{user.name}</div>
@@ -145,7 +145,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
                   title="Sign out"
                   className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <LogOut className="w-4 h-4 shrink-0" />
                 </button>
               </div>
             </>
@@ -154,7 +154,8 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            aria-label="Toggle navigation menu"
+            className="md:hidden p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -163,24 +164,66 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 space-y-2 text-sm">
-          {visibleLinks.map((l) => (
-            <Link
-              key={l.href}
-              to={l.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block py-2 text-slate-200 hover:text-emerald-400 font-medium"
-            >
-              {l.label}
-            </Link>
-          ))}
-          {user && (
-            <button
-              onClick={handleLogout}
-              className="block py-2 text-rose-400 font-medium w-full text-left"
-            >
-              Sign out
-            </button>
+        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 space-y-2 text-sm shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+          {!user ? (
+            <div className="space-y-2 pt-1 pb-2">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-slate-200 hover:text-emerald-400 font-medium"
+              >
+                Home
+              </Link>
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-2"
+              >
+                <LogIn className="w-4 h-4" /> Sign In
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block py-2 text-cyan-400 hover:text-cyan-300 font-semibold flex items-center gap-2"
+              >
+                <UserPlus className="w-4 h-4" /> Create Account
+              </Link>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between pb-2 border-b border-slate-800 text-xs">
+                <div className="text-slate-300 font-medium truncate">
+                  Logged in as <span className="text-emerald-400 font-bold">{user.name}</span>
+                </div>
+                {user.role === 'CITIZEN' && (
+                  <span className="text-amber-400 font-bold flex items-center gap-1 shrink-0">
+                    <Award className="w-3.5 h-3.5" /> {user.ecoPoints} PTS
+                  </span>
+                )}
+              </div>
+              <div className="py-1 space-y-1">
+                {visibleLinks.map((l) => (
+                  <Link
+                    key={l.href}
+                    to={l.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-2.5 py-2 px-2.5 rounded-lg text-slate-200 hover:text-emerald-400 hover:bg-slate-800/60 font-medium transition"
+                  >
+                    <l.icon className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>{l.label}</span>
+                  </Link>
+                ))}
+              </div>
+              <div className="pt-2 border-t border-slate-800">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 py-2 px-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 font-medium w-full text-left transition"
+                >
+                  <LogOut className="w-4 h-4 shrink-0" />
+                  <span>Sign out</span>
+                </button>
+              </div>
+            </>
           )}
         </div>
       )}

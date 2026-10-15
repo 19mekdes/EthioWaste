@@ -100,58 +100,60 @@ export const AdminUsersPage: React.FC = () => {
           </div>
         ) : (
           <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
-                  <th className="p-4">User Name</th>
-                  <th className="p-4">Email / Phone</th>
-                  <th className="p-4">Sub-City Zone</th>
-                  <th className="p-4">Eco-Points</th>
-                  <th className="p-4">Role</th>
-                  <th className="p-4">Role Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
-                {filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-700/30 transition">
-                    <td className="p-4 font-bold text-white flex items-center gap-3">
-                      <div className="p-2 rounded-full bg-slate-700 text-amber-400 font-bold text-xs w-8 h-8 flex items-center justify-center">
-                        {u.name.substring(0, 2).toUpperCase()}
-                      </div>
-                      <span>{u.name}</span>
-                    </td>
-                    <td className="p-4 text-xs text-slate-300">
-                      <div>{u.email}</div>
-                      <div className="text-slate-500 mt-0.5">{u.phone || 'N/A'}</div>
-                    </td>
-                    <td className="p-4 text-xs text-slate-300">{u.subCity || 'Addis Ababa'}</td>
-                    <td className="p-4 font-bold text-amber-400">{u.ecoPoints || 0} pts</td>
-                    <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
-                        u.role === 'MUNICIPAL_ADMIN' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' :
-                        u.role === 'COLLECTOR' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' :
-                        u.role === 'RECYCLING_ORGANIZATION' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' :
-                        'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
-                      }`}>
-                        {u.role}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <select
-                        value={u.role}
-                        onChange={(e) => handleRoleChange(u.id, e.target.value)}
-                        className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-100 focus:outline-none"
-                      >
-                        <option value="CITIZEN">CITIZEN</option>
-                        <option value="COLLECTOR">COLLECTOR</option>
-                        <option value="RECYCLING_ORGANIZATION">RECYCLING_ORGANIZATION</option>
-                        <option value="MUNICIPAL_ADMIN">MUNICIPAL_ADMIN</option>
-                      </select>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[700px]">
+                <thead>
+                  <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
+                    <th className="p-4">User Name</th>
+                    <th className="p-4">Email / Phone</th>
+                    <th className="p-4">Sub-City Zone</th>
+                    <th className="p-4">Eco-Points</th>
+                    <th className="p-4">Role</th>
+                    <th className="p-4">Role Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
+                  {filteredUsers.map((u) => (
+                    <tr key={u.id} className="hover:bg-slate-700/30 transition">
+                      <td className="p-4 font-bold text-white flex items-center gap-3">
+                        <div className="p-2 rounded-full bg-slate-700 text-amber-400 font-bold text-xs w-8 h-8 flex items-center justify-center">
+                          {u.name.substring(0, 2).toUpperCase()}
+                        </div>
+                        <span>{u.name}</span>
+                      </td>
+                      <td className="p-4 text-xs text-slate-300">
+                        <div>{u.email}</div>
+                        <div className="text-slate-500 mt-0.5">{u.phone || 'N/A'}</div>
+                      </td>
+                      <td className="p-4 text-xs text-slate-300">{u.subCity || 'Addis Ababa'}</td>
+                      <td className="p-4 font-bold text-amber-400">{u.ecoPoints || 0} pts</td>
+                      <td className="p-4">
+                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                          u.role === 'MUNICIPAL_ADMIN' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/30' :
+                          u.role === 'COLLECTOR' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/30' :
+                          u.role === 'RECYCLING_ORGANIZATION' ? 'bg-purple-500/10 text-purple-400 border border-purple-500/30' :
+                          'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30'
+                        }`}>
+                          {u.role}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <select
+                          value={u.role}
+                          onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                          className="bg-slate-900 border border-slate-700 rounded-lg px-2.5 py-1 text-xs text-slate-100 focus:outline-none"
+                        >
+                          <option value="CITIZEN">CITIZEN</option>
+                          <option value="COLLECTOR">COLLECTOR</option>
+                          <option value="RECYCLING_ORGANIZATION">RECYCLING_ORGANIZATION</option>
+                          <option value="MUNICIPAL_ADMIN">MUNICIPAL_ADMIN</option>
+                        </select>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

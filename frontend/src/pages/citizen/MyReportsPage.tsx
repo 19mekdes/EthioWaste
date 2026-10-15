@@ -64,18 +64,18 @@ export const MyReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="glass-card p-6 bg-slate-900/60 border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-card p-4 sm:p-6 bg-slate-900/60 border-slate-800 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
-            <FileText className="w-6 h-6 text-emerald-400" />
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+            <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 shrink-0" />
             My Waste Reports
           </h1>
           <p className="text-xs text-slate-400">
             Track all submitted waste and illegal dumping issues in Addis Ababa and monitor verification status.
           </p>
         </div>
-        <Link to="/citizen/report-waste" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-          <PlusCircle className="w-4 h-4" />
+        <Link to="/citizen/report-waste" className="w-full sm:w-auto justify-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition shrink-0">
+          <PlusCircle className="w-4 h-4 shrink-0" />
           Submit New Report
         </Link>
       </div>
@@ -208,7 +208,7 @@ export const MyReportsPage: React.FC = () => {
                   <div className="space-y-1 min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-bold text-slate-100 truncate">{report.title || `${report.wasteType || report.category || 'Waste'} Site`}</span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${getStatusBadgeStyle(report.status)}`}>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${getStatusBadgeStyle(report.status)}`}>
                         {report.status}
                       </span>
                     </div>

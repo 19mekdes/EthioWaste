@@ -41,8 +41,8 @@ export function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-12 font-sans">
-      <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-3xl p-8 shadow-2xl space-y-6">
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans">
+      <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-3xl p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
         <div className="text-center space-y-2">
           <Link
             to="/"

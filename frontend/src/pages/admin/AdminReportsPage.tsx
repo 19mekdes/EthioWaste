@@ -160,13 +160,13 @@ export const AdminReportsPage: React.FC = () => {
 
         {/* Modal for Managing Report */}
         {selectedReport && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 max-w-2xl w-full shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto">
-              <div className="flex items-center justify-between border-b border-slate-700 pb-4">
-                <h3 className="text-xl font-bold text-white">Review Waste Report #{selectedReport.id.substring(0, 8)}</h3>
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
+            <div className="bg-slate-800 border border-slate-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-2xl w-full shadow-2xl space-y-5 sm:space-y-6 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center justify-between border-b border-slate-700 pb-3 sm:pb-4">
+                <h3 className="text-lg sm:text-xl font-bold text-white truncate pr-2">Review Report #{selectedReport.id.substring(0, 8)}</h3>
                 <button
                   onClick={() => setSelectedReport(null)}
-                  className="text-slate-400 hover:text-white text-lg font-bold"
+                  className="text-slate-400 hover:text-white text-lg font-bold p-1 shrink-0"
                 >
                   ✕
                 </button>
@@ -178,7 +178,7 @@ export const AdminReportsPage: React.FC = () => {
                   <span className="text-slate-300">Status: {selectedReport.status}</span>
                 </div>
 
-                <p className="text-slate-300 text-sm bg-slate-900/60 p-4 rounded-xl border border-slate-700/40">
+                <p className="text-slate-300 text-xs sm:text-sm bg-slate-900/60 p-3 sm:p-4 rounded-xl border border-slate-700/40">
                   {selectedReport.description}
                 </p>
 
@@ -206,7 +206,7 @@ export const AdminReportsPage: React.FC = () => {
                   <select
                     value={assignedCollectorId}
                     onChange={(e) => setAssignedCollectorId(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs sm:text-sm text-slate-100"
                   >
                     <option value="">-- Select Collector Fleet --</option>
                     {collectors.map((c) => (
@@ -218,11 +218,11 @@ export const AdminReportsPage: React.FC = () => {
                 </div>
 
                 {/* Status Action Buttons */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-slate-700">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 pt-4 border-t border-slate-700">
                   <button
                     onClick={() => handleUpdateStatus(selectedReport.id, 'VERIFIED')}
                     disabled={updating}
-                    className="py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs"
+                    className="py-2.5 px-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-[11px] sm:text-xs truncate"
                   >
                     Verify Report
                   </button>
@@ -230,7 +230,7 @@ export const AdminReportsPage: React.FC = () => {
                   <button
                     onClick={() => handleUpdateStatus(selectedReport.id, 'IN_PROGRESS')}
                     disabled={updating}
-                    className="py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold text-xs"
+                    className="py-2.5 px-2 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold text-[11px] sm:text-xs truncate"
                   >
                     Dispatch / Progress
                   </button>
@@ -238,7 +238,7 @@ export const AdminReportsPage: React.FC = () => {
                   <button
                     onClick={() => handleUpdateStatus(selectedReport.id, 'RESOLVED')}
                     disabled={updating}
-                    className="py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs"
+                    className="py-2.5 px-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-[11px] sm:text-xs truncate"
                   >
                     Mark Resolved
                   </button>
@@ -246,7 +246,7 @@ export const AdminReportsPage: React.FC = () => {
                   <button
                     onClick={() => handleUpdateStatus(selectedReport.id, 'REJECTED')}
                     disabled={updating}
-                    className="py-2.5 rounded-xl bg-red-500 hover:bg-red-400 text-white font-bold text-xs"
+                    className="py-2.5 px-2 rounded-xl bg-red-500 hover:bg-red-400 text-white font-bold text-[11px] sm:text-xs truncate"
                   >
                     Reject Report
                   </button>
