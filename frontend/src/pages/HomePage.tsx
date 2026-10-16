@@ -1,165 +1,424 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Recycle, 
-  Trash2, 
-  Truck, 
-  Building2, 
-  Award, 
-  MapPin, 
-  ShieldCheck, 
-  ArrowRight, 
+import {
+  Recycle,
+  Trash2,
+  Truck,
+  Building2,
+  ShieldCheck,
+  ArrowRight,
   CheckCircle2,
-  Leaf
+  Leaf,
+  MapPin,
+  ClipboardList,
+  Sprout,
 } from 'lucide-react';
+
+const services = [
+  {
+    icon: Trash2,
+    title: 'For Citizens',
+    description:
+      'Report waste in your neighborhood, request collections, and help keep your community clean.',
+    link: 'Create an account',
+    color: 'emerald',
+  },
+  {
+    icon: Truck,
+    title: 'For Collectors',
+    description:
+      'Manage collection requests, organize assigned tasks, and track waste collection activities.',
+    link: 'Join the platform',
+    color: 'teal',
+  },
+  {
+    icon: Building2,
+    title: 'For Recycling Organizations',
+    description:
+      'Connect with recyclable materials and coordinate recycling activities more efficiently.',
+    link: 'Explore the platform',
+    color: 'cyan',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'For City Administrators',
+    description:
+      'Oversee waste reports, coordinate services, and use platform data to support decisions.',
+    link: 'Sign in to continue',
+    color: 'amber',
+  },
+];
+
+const colorStyles: Record<string, string> = {
+  emerald: 'bg-emerald-400/10 text-emerald-400',
+  teal: 'bg-teal-400/10 text-teal-400',
+  cyan: 'bg-cyan-400/10 text-cyan-400',
+  amber: 'bg-amber-400/10 text-amber-400',
+};
+
+const steps = [
+  {
+    number: '01',
+    icon: ClipboardList,
+    title: 'Report the waste',
+    description:
+      'Citizens submit waste reports or collection requests through the platform.',
+  },
+  {
+    number: '02',
+    icon: Truck,
+    title: 'Coordinate collection',
+    description:
+      'Relevant teams can review requests and coordinate collection activities.',
+  },
+  {
+    number: '03',
+    icon: Sprout,
+    title: 'Support a cleaner city',
+    description:
+      'Better coordination helps communities work toward cleaner public spaces and responsible recycling.',
+  },
+];
 
 export const HomePage: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans">
-      {/* Navigation Bar */}
-      <header className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50 px-4 sm:px-6 py-3 sm:py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
-            <div className="bg-gradient-to-tr from-emerald-500 to-teal-400 p-2 sm:p-2.5 rounded-xl shadow-lg shadow-emerald-500/20 shrink-0">
-              <Recycle className="h-5 w-5 sm:h-6 sm:w-6 text-slate-950 font-bold" />
+    <div className="min-h-screen bg-slate-950 font-sans text-slate-100">
+      <h1 className="bg-red-600 p-4 text-white">
+  TEST: NEW HOMEPAGE
+</h1>
+      {/* Navigation */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+          <Link to="/" className="flex shrink-0 items-center gap-3">
+            <div className="rounded-xl bg-emerald-400 p-2.5">
+              <Recycle className="h-6 w-6 text-slate-950" />
             </div>
-            <div>
-              <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-emerald-400 to-teal-200 bg-clip-text text-transparent">
-                EcoSmart Addis
-              </span>
-              <span className="hidden sm:block text-xs text-slate-400 font-medium">Smart Waste & Recycling Platform</span>
-            </div>
-          </div>
 
-          <div className="flex items-center gap-2 sm:gap-4 shrink-0">
-            <Link 
+            <div>
+              <span className="text-lg font-extrabold tracking-tight text-white sm:text-xl">
+                EcoSmart <span className="text-emerald-400">Addis</span>
+              </span>
+              <span className="hidden text-xs text-slate-400 sm:block">
+                Smart Waste Management
+              </span>
+            </div>
+          </Link>
+
+          <nav className="flex items-center gap-2 sm:gap-5">
+            <a
+              href="#services"
+              className="hidden text-sm font-medium text-slate-300 transition hover:text-emerald-400 sm:inline"
+            >
+              Services
+            </a>
+
+            <a
+              href="#how-it-works"
+              className="hidden text-sm font-medium text-slate-300 transition hover:text-emerald-400 sm:inline"
+            >
+              How It Works
+            </a>
+
+            <Link
               to="/login"
-              className="text-xs sm:text-sm font-semibold text-slate-300 hover:text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition"
+              className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-200 transition hover:text-emerald-400"
             >
               Sign In
             </Link>
-            <Link 
+
+            <Link
               to="/register"
-              className="text-xs sm:text-sm font-semibold bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-emerald-500/25 transition transform hover:-translate-y-0.5"
+              className="rounded-lg bg-emerald-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition hover:bg-emerald-300"
             >
               Get Started
             </Link>
-          </div>
+          </nav>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="relative pt-12 sm:pt-20 pb-16 sm:pb-24 px-4 sm:px-6 overflow-hidden">
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs sm:text-sm font-medium mb-6 sm:mb-8">
-            <Leaf className="w-4 h-4 shrink-0" /> Addis Ababa Smart City Initiative
+      <main>
+        {/* Hero */}
+        <section className="relative isolate overflow-hidden">
+          <div className="pointer-events-none absolute -right-40 -top-20 -z-10 h-96 w-96 rounded-full bg-emerald-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -left-40 top-40 -z-10 h-80 w-80 rounded-full bg-teal-500/10 blur-3xl" />
+
+          <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2 lg:gap-16">
+            <div>
+              <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 px-4 py-2 text-sm font-medium text-emerald-300">
+                <MapPin className="h-4 w-4" />
+                Building a cleaner Addis Ababa
+              </div>
+
+              <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+                A smarter way to manage{' '}
+                <span className="text-emerald-400">waste.</span>
+              </h1>
+
+              <p className="mt-6 max-w-xl text-base leading-8 text-slate-300 sm:text-lg">
+                Connecting citizens, waste collectors, recycling organizations,
+                and city administrators through one platform for better waste
+                management and cleaner communities.
+              </p>
+
+              <div className="mt-9 flex flex-wrap gap-4">
+                <Link
+                  to="/register"
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-bold text-slate-950 transition hover:bg-emerald-300"
+                >
+                  Get Started
+                  <ArrowRight className="h-5 w-5" />
+                </Link>
+
+                <a
+                  href="#how-it-works"
+                  className="inline-flex items-center gap-2 rounded-xl border border-slate-700 px-6 py-3.5 font-semibold text-white transition hover:border-emerald-400/50 hover:bg-white/5"
+                >
+                  Learn How It Works
+                </a>
+              </div>
+
+              <div className="mt-9 flex flex-wrap gap-x-6 gap-y-3 text-sm text-slate-400">
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  Easier reporting
+                </span>
+                <span className="flex items-center gap-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  Better coordination
+                </span>
+              </div>
+            </div>
+
+            {/* Visual panel */}
+            <div className="relative mx-auto w-full max-w-lg">
+              <div className="absolute -inset-4 rounded-3xl bg-emerald-400/10 blur-2xl" />
+
+              <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-slate-900 p-6 shadow-2xl sm:p-8">
+                <div className="flex items-center justify-between border-b border-white/10 pb-5">
+                  <div>
+                    <p className="text-sm text-slate-400">Our shared goal</p>
+                    <h2 className="mt-1 text-xl font-bold text-white">
+                      Cleaner communities
+                    </h2>
+                  </div>
+
+                  <div className="rounded-2xl bg-emerald-400/10 p-3">
+                    <Leaf className="h-7 w-7 text-emerald-400" />
+                  </div>
+                </div>
+
+                <div className="mt-6 space-y-4">
+                  <div className="flex items-start gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-4">
+                    <div className="rounded-xl bg-emerald-400/10 p-3">
+                      <Trash2 className="h-6 w-6 text-emerald-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">
+                        Report waste
+                      </h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-400">
+                        Help identify waste that needs attention in your area.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-4">
+                    <div className="rounded-xl bg-teal-400/10 p-3">
+                      <Truck className="h-6 w-6 text-teal-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">
+                        Coordinate services
+                      </h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-400">
+                        Help collection teams manage requests and tasks.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4 rounded-2xl border border-white/5 bg-white/[0.03] p-4">
+                    <div className="rounded-xl bg-cyan-400/10 p-3">
+                      <Recycle className="h-6 w-6 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-white">
+                        Encourage recycling
+                      </h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-400">
+                        Support more responsible handling of recyclable waste.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-6 rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4 text-center">
+                  <p className="text-sm font-medium text-emerald-300">
+                    Better coordination. Cleaner surroundings. Shared
+                    responsibility.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
+        </section>
 
-          <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">
-            Transforming Waste Management with <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-cyan-400 bg-clip-text text-transparent">Smart Technology</span>
-          </h1>
+        {/* Services */}
+        <section
+          id="services"
+          className="border-y border-white/5 bg-slate-900/60 px-5 py-20 sm:px-8 sm:py-24"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto mb-12 max-w-2xl text-center">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">
+                One connected platform
+              </p>
 
-          <p className="text-base sm:text-xl text-slate-300 mb-8 sm:mb-10 max-w-3xl mx-auto leading-relaxed">
-            Connecting citizens, municipal collectors, recycling facilities, and city admins in real-time to build a cleaner, greener, and sustainable Addis Ababa.
-          </p>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                Designed for everyone involved
+              </h2>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <p className="mt-4 leading-7 text-slate-400">
+                Different roles, one shared mission: making waste management
+                more organized and effective.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {services.map((service) => {
+                const Icon = service.icon;
+
+                return (
+                  <article
+                    key={service.title}
+                    className="group flex flex-col rounded-2xl border border-slate-800 bg-slate-950/70 p-6 transition duration-300 hover:-translate-y-1 hover:border-emerald-400/30"
+                  >
+                    <div
+                      className={`mb-5 flex h-12 w-12 items-center justify-center rounded-xl ${colorStyles[service.color]}`}
+                    >
+                      <Icon className="h-6 w-6" />
+                    </div>
+
+                    <h3 className="text-lg font-bold text-white">
+                      {service.title}
+                    </h3>
+
+                    <p className="mt-3 flex-1 text-sm leading-7 text-slate-400">
+                      {service.description}
+                    </p>
+
+                    <Link
+                      to={
+                        service.color === 'amber' ? '/login' : '/register'
+                      }
+                      className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 transition hover:text-emerald-300"
+                    >
+                      {service.link}
+                      <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section
+          id="how-it-works"
+          className="px-5 py-20 sm:px-8 sm:py-24"
+        >
+          <div className="mx-auto max-w-7xl">
+            <div className="mx-auto mb-14 max-w-2xl text-center">
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-400">
+                Simple and connected
+              </p>
+
+              <h2 className="mt-4 text-3xl font-extrabold text-white sm:text-4xl">
+                How it works
+              </h2>
+
+              <p className="mt-4 leading-7 text-slate-400">
+                A coordinated approach helps communities report waste and
+                organize collection activities.
+              </p>
+            </div>
+
+            <div className="grid gap-10 md:grid-cols-3 md:gap-8">
+              {steps.map((step) => {
+                const Icon = step.icon;
+
+                return (
+                  <article key={step.number} className="relative text-center">
+                    <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10">
+                      <Icon className="h-7 w-7 text-emerald-400" />
+                    </div>
+
+                    <p className="text-sm font-bold tracking-widest text-emerald-400">
+                      STEP {step.number}
+                    </p>
+
+                    <h3 className="mt-3 text-xl font-bold text-white">
+                      {step.title}
+                    </h3>
+
+                    <p className="mx-auto mt-3 max-w-sm leading-7 text-slate-400">
+                      {step.description}
+                    </p>
+                  </article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* Call to action */}
+        <section className="px-5 pb-20 sm:px-8 sm:pb-24">
+          <div className="mx-auto max-w-7xl overflow-hidden rounded-3xl border border-emerald-400/20 bg-gradient-to-br from-emerald-400/10 via-slate-900 to-teal-400/5 px-6 py-12 text-center sm:px-12 sm:py-16">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-400/10">
+              <Recycle className="h-7 w-7 text-emerald-400" />
+            </div>
+
+            <h2 className="mx-auto mt-6 max-w-2xl text-3xl font-extrabold text-white sm:text-4xl">
+              A cleaner city starts with collective action.
+            </h2>
+
+            <p className="mx-auto mt-4 max-w-xl leading-7 text-slate-400">
+              Join the platform and take part in building a more organized,
+              responsible approach to waste management.
+            </p>
+
             <Link
               to="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl shadow-xl shadow-emerald-500/25 transition transform hover:-translate-y-0.5 text-sm sm:text-base"
+              className="mt-8 inline-flex items-center gap-2 rounded-xl bg-emerald-400 px-6 py-3.5 font-bold text-slate-950 transition hover:bg-emerald-300"
             >
-              Report Waste / Request Pickup <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
-            </Link>
-            <Link
-              to="/login"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold rounded-xl border border-slate-700 transition text-sm sm:text-base"
-            >
-              Access Dashboard
+              Join EcoSmart Addis
+              <ArrowRight className="h-5 w-5" />
             </Link>
           </div>
-        </div>
-      </section>
-
-      {/* Feature Cards Grid */}
-      <section className="py-16 px-6 bg-slate-900/50 border-t border-slate-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-white mb-4">Empowering Every Stakeholder</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">
-              Our end-to-end digital ecosystem streamlines municipal waste operations and rewards citizen participation.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl flex flex-col hover:border-emerald-500/40 transition">
-              <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl w-fit mb-4">
-                <Trash2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Citizens</h3>
-              <p className="text-slate-400 text-sm mb-4 flex-1">
-                Report illegal waste dump sites with GPS tagging and photos, request bulk waste collection, and earn redeemable Eco-Points.
-              </p>
-              <ul className="text-xs text-slate-300 space-y-2">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Interactive Addis Ababa Map</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Real-time status tracking</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl flex flex-col hover:border-emerald-500/40 transition">
-              <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl w-fit mb-4">
-                <Truck className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Collectors</h3>
-              <p className="text-slate-400 text-sm mb-4 flex-1">
-                Accept assigned pickup tasks, update collection progress in real time, and route directly to verified recycling centers.
-              </p>
-              <ul className="text-xs text-slate-300 space-y-2">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Task dispatch alerts</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Optimized route details</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl flex flex-col hover:border-emerald-500/40 transition">
-              <div className="p-3 bg-purple-500/10 text-purple-400 rounded-xl w-fit mb-4">
-                <Building2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Recycling Orgs</h3>
-              <p className="text-slate-400 text-sm mb-4 flex-1">
-                Log incoming recyclable shipments, record exact material weights (Plastic, Glass, Metal, Organic), and track processing capacity.
-              </p>
-              <ul className="text-xs text-slate-300 space-y-2">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Material categorization</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Digital audit trails</li>
-              </ul>
-            </div>
-
-            <div className="bg-slate-800/60 border border-slate-700/60 p-6 rounded-2xl flex flex-col hover:border-emerald-500/40 transition">
-              <div className="p-3 bg-amber-500/10 text-amber-400 rounded-xl w-fit mb-4">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-white mb-2">Municipal Admin</h3>
-              <p className="text-slate-400 text-sm mb-4 flex-1">
-                Manage user access, verify waste reports, dispatch collectors, monitor recycling metrics, and manage city center locations.
-              </p>
-              <ul className="text-xs text-slate-300 space-y-2">
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> City-wide analytics</li>
-                <li className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Automated dispatcher</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="mt-auto bg-slate-950 border-t border-slate-800 py-8 px-6 text-center text-slate-500 text-sm">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2 text-slate-400 font-semibold">
-            <Recycle className="w-5 h-5 text-emerald-400" /> Smart West Management & Recycling Platform
-          </div>
-          <div>
-            © {new Date().getFullYear()} Addis Ababa Environmental Protection Authority. All rights reserved.
+      <footer className="border-t border-white/10 bg-slate-950 px-5 py-8 sm:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <Link to="/" className="flex items-center gap-2">
+            <Recycle className="h-5 w-5 text-emerald-400" />
+            <span className="font-bold text-white">EcoSmart Addis</span>
+          </Link>
+
+          <p className="text-sm leading-6 text-slate-500">
+            Working together for cleaner communities and responsible waste
+            management.
+          </p>
+
+          <div className="flex gap-5 text-sm text-slate-400">
+            <Link to="/login" className="hover:text-emerald-400">
+              Sign In
+            </Link>
+            <Link to="/register" className="hover:text-emerald-400">
+              Register
+            </Link>
           </div>
         </div>
       </footer>
