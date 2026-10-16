@@ -54,15 +54,32 @@ export async function getRecordById(req: AuthenticatedRequest, res: Response) {
   }
 }
 
-export async function receiveTaskMaterial(req: AuthenticatedRequest, res: Response) {
+export async function createOrReceiveRecord(req: AuthenticatedRequest, res: Response) {
   try {
-    const { taskId, estimatedQuantity } = req.body;
-    const record = await recyclingService.receiveAndCreateRecyclingRecord(req.user!, taskId, estimatedQuantity);
+    const { taskId, estimatedQuantity, materialType, material, quantityKg, quantity, source, notes } = req.body;
+
+    if (taskId) {
+      const record = await recyclingService.receiveAndCreateRecyclingRecord(req.user!, taskId, estimatedQuantity);
+      return res.status(201).json({ success: true, data: record });
+    }
+
+    const record = await recyclingService.createDirectRecyclingRecord(req.user!, {
+      materialType: materialType || material,
+      quantityKg: quantityKg || quantity,
+      source,
+      notes,
+    });
     return res.status(201).json({ success: true, data: record });
   } catch (error: any) {
-    return res.status(400).json({ success: false, message: error.message || 'Failed to receive material' });
+    return res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to process recycling record',
+      error: error.message || 'Failed to process recycling record',
+    });
   }
 }
+
+export const receiveTaskMaterial = createOrReceiveRecord;
 
 export async function acceptRecord(req: AuthenticatedRequest, res: Response) {
   try {

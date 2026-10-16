@@ -47,7 +47,7 @@ export const RecyclingNotificationsPage: React.FC = () => {
   return (
     <RecyclingLayout title="Facility Alerts">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <div>
             <h2 className="text-xl font-bold text-white">Facility Alerts & Dispatches</h2>
             <p className="text-sm text-slate-400">Intake notifications and municipal recycling dispatches.</p>
@@ -55,7 +55,7 @@ export const RecyclingNotificationsPage: React.FC = () => {
           {notifications.some(n => !n.isRead) && (
             <button
               onClick={handleMarkAllAsRead}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition shrink-0"
             >
               <Check className="w-4 h-4 text-emerald-400" /> Mark All Read
             </button>

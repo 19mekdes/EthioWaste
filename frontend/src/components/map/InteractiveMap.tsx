@@ -150,10 +150,10 @@ export function InteractiveMap({
   return (
     <div className="relative w-full rounded-2xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950">
       <div ref={mapContainerRef} style={{ height }} className="w-full" />
-      <div className="absolute top-3 left-3 z-[1000] bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-semibold text-slate-300 shadow-lg flex items-center gap-2">
-        <Navigation className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-        <span>EcoBin Live GPS Map (Addis Ababa)</span>
-        <span className="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-mono">
+      <div className="absolute top-3 right-3 z-[1000] bg-slate-900/90 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl border border-slate-800 text-[11px] sm:text-xs font-semibold text-slate-300 shadow-lg flex items-center gap-1.5 sm:gap-2 max-w-[calc(100%-4rem)]">
+        <Navigation className="w-3.5 h-3.5 text-emerald-400 animate-pulse shrink-0" />
+        <span className="truncate">EcoBin GPS Map <span className="hidden sm:inline">(Addis Ababa)</span></span>
+        <span className="bg-emerald-500/20 text-emerald-400 px-1.5 sm:px-2 py-0.5 rounded-full text-[10px] font-mono shrink-0">
           {markers?.length || 0} Pins
         </span>
       </div>

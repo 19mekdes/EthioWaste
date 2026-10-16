@@ -41,17 +41,22 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-12 font-sans">
-      <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-3xl p-8 shadow-2xl space-y-6">
+    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans">
+      <div className="max-w-md w-full bg-slate-800/80 border border-slate-700/60 rounded-3xl p-5 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2">
-            <Recycle className="w-6 h-6 text-emerald-400" />
-          </div>
+          <Link
+            to="/"
+            title="Go back to Home Page"
+            aria-label="Back to home page"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-2 hover:bg-emerald-500/20 hover:border-emerald-500/40 hover:scale-105 active:scale-95 transition-all cursor-pointer group shadow-sm hover:shadow-emerald-500/20"
+          >
+            <Recycle className="w-6 h-6 text-emerald-400 group-hover:rotate-180 transition-transform duration-500" />
+          </Link>
           <h2 className="text-2xl font-bold text-white tracking-tight">Welcome Back to EcoBin</h2>
           <p className="text-xs text-slate-400">Sign in to manage waste reports, collections, and recycling operations</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           {error && (
             <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
               <AlertCircle className="w-4 h-4 shrink-0" />
@@ -61,7 +66,7 @@ export function Login() {
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5 text-emerald-400" />
+              <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               Email Address
             </label>
             <input
@@ -77,7 +82,7 @@ export function Login() {
 
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5">
-              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <Lock className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               Password
             </label>
             <input
@@ -96,7 +101,7 @@ export function Login() {
             disabled={loading}
             className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2"
           >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+            {loading ? <Loader2 className="w-4 h-4 animate-spin shrink-0" /> : <LogIn className="w-4 h-4 shrink-0" />}
             <span>Sign In to EcoBin</span>
           </button>
 
@@ -110,9 +115,9 @@ export function Login() {
             </Link>
           </div>
 
-          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-4 text-[11px] text-slate-400 space-y-2.5 pt-4">
+          <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3 sm:p-4 text-[11px] text-slate-400 space-y-2.5 pt-3 sm:pt-4">
             <div className="flex items-center gap-1.5 font-semibold text-slate-300">
-              <Recycle className="w-3.5 h-3.5 text-emerald-400" />
+              <Recycle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               Quick 1-Click Login:
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
@@ -123,7 +128,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('citizen@ecobin.org', 'password123');
                 }}
-                className="px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-semibold text-center transition-all text-xs"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 👤 Citizen
               </button>
@@ -134,7 +139,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('collector@ecobin.org', 'password123');
                 }}
-                className="px-2 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500/20 font-semibold text-center transition-all text-xs"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/30 hover:bg-sky-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 🚚 Collector
               </button>
@@ -145,7 +150,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('recycling@ecobin.org', 'password123');
                 }}
-                className="px-2 py-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30 hover:bg-teal-500/20 font-semibold text-center transition-all text-xs"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/30 hover:bg-teal-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 ♻️ Recycler
               </button>
@@ -156,7 +161,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('admin@ecobin.org', 'password123');
                 }}
-                className="px-2 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-semibold text-center transition-all text-xs"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/30 hover:bg-amber-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 🛡️ Admin
               </button>

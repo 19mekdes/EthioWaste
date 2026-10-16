@@ -14,6 +14,18 @@ export async function getRequests(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+export async function getMyRequests(req: AuthenticatedRequest, res: Response) {
+  try {
+    const status = req.query.status ? String(req.query.status) : undefined;
+    const requests = await collectionRequestService.getCollectionRequests(req.user!, {
+      status: status as any,
+    });
+    return res.json({ success: true, data: requests });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, message: error.message || 'Failed to fetch collection requests' });
+  }
+}
+
 export async function getRequestById(req: AuthenticatedRequest, res: Response) {
   try {
     const id = String(req.params.id);

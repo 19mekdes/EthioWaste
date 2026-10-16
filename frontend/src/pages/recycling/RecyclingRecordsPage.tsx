@@ -12,7 +12,7 @@ export const RecyclingRecordsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  // Form State
+  
   const [materialType, setMaterialType] = useState('PLASTIC');
   const [quantityKg, setQuantityKg] = useState<number>(100);
   const [source, setSource] = useState('Municipal Collector Dispatch');
@@ -25,7 +25,7 @@ export const RecyclingRecordsPage: React.FC = () => {
       const data = await recyclingService.getMyRecords();
       setRecords(data);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to fetch processing records.');
+      setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to fetch processing records.');
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ export const RecyclingRecordsPage: React.FC = () => {
       fetchRecords();
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to log recycling record.');
+      setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to log recycling record.');
     } finally {
       setSubmitting(false);
     }
@@ -101,7 +101,8 @@ export const RecyclingRecordsPage: React.FC = () => {
                   <option value="PLASTIC">Plastic</option>
                   <option value="GLASS">Glass</option>
                   <option value="METAL">Metal / Scrap</option>
-                  <option value="PAPER_CARD">Paper & Cardboard</option>
+                  <option value="PAPER">Paper</option>
+                  <option value="CARDBOARD">Cardboard</option>
                   <option value="ELECTRONIC">Electronic Waste</option>
                   <option value="ORGANIC">Organic Material</option>
                 </select>
@@ -176,26 +177,26 @@ export const RecyclingRecordsPage: React.FC = () => {
                 {records.map((r) => (
                   <div
                     key={r.id}
-                    className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-5 shadow-md flex items-center justify-between gap-4"
+                    className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 sm:p-5 shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4"
                   >
                     <div>
                       <div className="flex items-center gap-3">
-                        <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                          {r.materialType}
+                        <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30 shrink-0">
+                          {r.materialType || r.material}
                         </span>
-                        <span className="font-bold text-white text-base">{r.quantityKg} kg</span>
+                        <span className="font-bold text-white text-base">{(r.quantityKg ?? r.quantity ?? 0)} kg</span>
                       </div>
                       <p className="text-xs text-slate-400 mt-1">
-                        Source: {r.source || 'N/A'}
+                        Source: {r.source || 'Direct Facility Intake'}
                       </p>
                       <span className="text-[11px] text-slate-500 flex items-center gap-1 mt-1">
-                        <Calendar className="w-3 h-3 text-slate-500" /> Recorded on {new Date(r.createdAt).toLocaleString()}
+                        <Calendar className="w-3 h-3 text-slate-500 shrink-0" /> Recorded on {new Date(r.createdAt).toLocaleString()}
                       </span>
                     </div>
 
                     <Link
                       to={`/recycling/records/${r.id}`}
-                      className="px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold transition"
+                      className="w-full sm:w-auto text-center px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold transition shrink-0"
                     >
                       Audit View
                     </Link>

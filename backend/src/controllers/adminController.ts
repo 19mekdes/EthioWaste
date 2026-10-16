@@ -84,10 +84,13 @@ export async function assignCollectorToRequest(req: AuthenticatedRequest, res: R
   try {
     const id = String(req.params.id);
     const { collectorId } = req.body;
+    if (!collectorId) {
+      return res.status(400).json({ success: false, message: 'Collector ID is required', error: 'Collector ID is required' });
+    }
     const result = await adminService.assignCollectorToRequest(id, collectorId);
     return res.json({ success: true, data: result });
   } catch (error: any) {
-    return res.status(400).json({ success: false, message: error.message || 'Failed to assign collector to request' });
+    return res.status(400).json({ success: false, message: error.message || 'Failed to assign collector to request', error: error.message || 'Failed to assign collector to request' });
   }
 }
 

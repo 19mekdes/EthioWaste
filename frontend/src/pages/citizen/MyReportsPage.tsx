@@ -7,23 +7,27 @@ import { FileText, PlusCircle, Search, MapPin, Calendar, Tag } from 'lucide-reac
 export const MyReportsPage: React.FC = () => {
   const [reports, setReports] = useState<WasteReport[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('ALL');
   const [categoryFilter, setCategoryFilter] = useState<string>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'newest' | 'oldest'>('newest');
 
-  useEffect(() => {
-    async function loadReports() {
-      setLoading(true);
-      try {
-        const res = await reportService.getMyReports();
-        setReports(Array.isArray(res) ? res : (res as any)?.data || []);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
+  const loadReports = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await reportService.getMyReports();
+      setReports(Array.isArray(res) ? res : (res as any)?.data || []);
+    } catch (err: any) {
+      console.error(err);
+      setError(err?.response?.data?.message || err.message || 'Failed to load waste reports.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadReports();
   }, []);
 
@@ -60,18 +64,18 @@ export const MyReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="glass-card p-6 bg-slate-900/60 border-slate-800 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-card p-4 sm:p-6 bg-slate-900/60 border-slate-800 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
-          <h1 className="text-2xl font-extrabold text-white flex items-center gap-2">
-            <FileText className="w-6 h-6 text-emerald-400" />
+          <h1 className="text-xl sm:text-2xl font-extrabold text-white flex items-center gap-2">
+            <FileText className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400 shrink-0" />
             My Waste Reports
           </h1>
           <p className="text-xs text-slate-400">
             Track all submitted waste and illegal dumping issues in Addis Ababa and monitor verification status.
           </p>
         </div>
-        <Link to="/citizen/report-waste" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-          <PlusCircle className="w-4 h-4" />
+        <Link to="/citizen/report-waste" className="w-full sm:w-auto justify-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition shrink-0">
+          <PlusCircle className="w-4 h-4 shrink-0" />
           Submit New Report
         </Link>
       </div>
@@ -156,7 +160,21 @@ export const MyReportsPage: React.FC = () => {
       </div>
 
       {/* Reports List */}
-      {filteredReports.length === 0 ? (
+      {error ? (
+        <div className="glass-card p-12 text-center border-rose-500/30 bg-rose-500/10 space-y-3 rounded-2xl">
+          <FileText className="w-12 h-12 text-rose-400 mx-auto" />
+          <h3 className="text-base font-bold text-rose-200">Unable to Load Reports</h3>
+          <p className="text-xs text-rose-300 max-w-sm mx-auto">{error}</p>
+          <div className="pt-2">
+            <button
+              onClick={loadReports}
+              className="px-4 py-2 bg-rose-500 hover:bg-rose-400 text-slate-950 font-bold rounded-xl text-xs inline-flex"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      ) : filteredReports.length === 0 ? (
         <div className="glass-card p-12 text-center border-slate-800 space-y-3">
           <FileText className="w-12 h-12 text-slate-600 mx-auto" />
           <h3 className="text-base font-bold text-slate-200">No Reports Found</h3>
@@ -190,7 +208,7 @@ export const MyReportsPage: React.FC = () => {
                   <div className="space-y-1 min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
                       <span className="text-xs font-bold text-slate-100 truncate">{report.title || `${report.wasteType || report.category || 'Waste'} Site`}</span>
-                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${getStatusBadgeStyle(report.status)}`}>
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold shrink-0 ${getStatusBadgeStyle(report.status)}`}>
                         {report.status}
                       </span>
                     </div>

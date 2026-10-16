@@ -21,6 +21,21 @@ export async function getReports(req: AuthenticatedRequest, res: Response) {
   }
 }
 
+export async function getMyReports(req: AuthenticatedRequest, res: Response) {
+  try {
+    const status = req.query.status ? String(req.query.status) : undefined;
+    const category = req.query.category ? String(req.query.category) : undefined;
+
+    const reports = await reportService.getMyWasteReports(req.user!, {
+      status: status as any,
+      category: category as any,
+    });
+    return res.json({ success: true, data: reports });
+  } catch (error: any) {
+    return res.status(500).json({ success: false, message: error.message || 'Failed to fetch waste reports' });
+  }
+}
+
 export async function getReportById(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
@@ -43,16 +58,17 @@ export async function createReport(req: AuthenticatedRequest, res: Response) {
 export async function updateReportStatus(req: AuthenticatedRequest, res: Response) {
   try {
     const { id } = req.params;
-    const { status, cleanupImageUrl, pointsAwarded } = req.body;
+    const { status, cleanupImageUrl, pointsAwarded, assignedCollectorId } = req.body;
     const report = await reportService.updateReportStatus(
       String(id),
       req.user!,
       status,
       cleanupImageUrl,
-      pointsAwarded
+      pointsAwarded,
+      assignedCollectorId
     );
     return res.json({ success: true, data: report });
   } catch (error: any) {
-    return res.status(400).json({ success: false, message: error.message || 'Failed to update report status' });
+    return res.status(400).json({ success: false, message: error.message || 'Failed to update report status', error: error.message || 'Failed to update report status' });
   }
 }

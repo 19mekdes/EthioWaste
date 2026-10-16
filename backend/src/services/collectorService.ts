@@ -191,10 +191,7 @@ export async function markCollectionAsCollected(
     throw new Error(`Cannot mark as collected from status ${task.status}. Task must be IN_PROGRESS.`);
   }
 
-  const finalProofUrl = proofImageUrl || task.proofImageUrl;
-  if (!finalProofUrl) {
-    throw new Error('Collection proof photo is required to mark waste as collected.');
-  }
+  const finalProofUrl = proofImageUrl || task.proofImageUrl || null;
 
   const updatedTask = await db.$transaction(async (tx: any) => {
     const updated = await tx.collectionTask.update({
@@ -255,14 +252,11 @@ export async function completeCollectionTask(
     throw new Error('Task not found or unauthorized.');
   }
 
-  if (!isValidTaskTransition(task.status, CollectionTaskStatus.COMPLETED) || task.status !== CollectionTaskStatus.COLLECTED) {
-    throw new Error(`Cannot complete task from status ${task.status}. Task must be in COLLECTED status.`);
+  if (!isValidTaskTransition(task.status, CollectionTaskStatus.COMPLETED)) {
+    throw new Error(`Cannot complete task from status ${task.status}. Task must be in IN_PROGRESS or COLLECTED status.`);
   }
 
-  const finalProofUrl = proofImageUrl || task.proofImageUrl;
-  if (!finalProofUrl) {
-    throw new Error('Collection proof photo is required to complete the task.');
-  }
+  const finalProofUrl = proofImageUrl || task.proofImageUrl || null;
 
   const updatedTask = await db.$transaction(async (tx: any) => {
     const updated = await tx.collectionTask.update({

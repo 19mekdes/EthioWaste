@@ -26,6 +26,31 @@ export async function getOrCreateRecyclingOrg(userId: string, userName?: string,
   return org;
 }
 
+export function formatRecyclingRecord(record: any) {
+  if (!record) return record;
+
+  let source = 'Municipal Dispatch';
+  let cleanNotes = record.notes || '';
+
+  if (record.collectionTask) {
+    source = `Collection Task #${record.collectionTask.id.slice(-6)} (${record.collectionTask.address || 'Field Pickup'})`;
+  } else if (record.notes && record.notes.includes('[Source:')) {
+    const match = record.notes.match(/\[Source:\s*([^\]]+)\]/);
+    if (match) {
+      source = match[1].trim();
+      cleanNotes = record.notes.replace(/\[Source:\s*[^\]]+\]\s*/, '').trim();
+    }
+  }
+
+  return {
+    ...record,
+    materialType: record.material,
+    quantityKg: record.quantity,
+    source,
+    displayNotes: cleanNotes,
+  };
+}
+
 export async function getRecyclingDashboardStats(user: UserPayload) {
   const org = await getOrCreateRecyclingOrg(user.id, user.name, user.email);
 
@@ -81,7 +106,7 @@ export async function getRecyclingDashboardStats(user: UserPayload) {
       recyclingSuccessRate,
       availableTasksCount,
     },
-    recentRecords,
+    recentRecords: recentRecords.map(formatRecyclingRecord),
     org,
   };
 }
@@ -153,7 +178,7 @@ export async function getRecyclingRecords(user: UserPayload, options?: { status?
     orderBy: { updatedAt: 'desc' },
   });
 
-  return records;
+  return records.map(formatRecyclingRecord);
 }
 
 export async function getRecyclingRecordById(id: string, user: UserPayload) {
@@ -180,10 +205,83 @@ export async function getRecyclingRecordById(id: string, user: UserPayload) {
     throw new Error('Record not found');
   }
 
-  return record;
+  return formatRecyclingRecord(record);
+}
+
+export async function createDirectRecyclingRecord(
+  user: UserPayload,
+  data: {
+    materialType?: string;
+    material?: string;
+    quantityKg?: number;
+    quantity?: number;
+    source?: string;
+    notes?: string;
+  }
+) {
+  const org = await getOrCreateRecyclingOrg(user.id, user.name, user.email);
+
+  let rawCat = (data.materialType || data.material || 'MIXED').trim().toUpperCase();
+  if (rawCat === 'PAPER_CARD') {
+    rawCat = 'PAPER';
+  }
+
+  const validCategories = Object.values(WasteCategory) as string[];
+  const wasteCategory: WasteCategory = validCategories.includes(rawCat)
+    ? (rawCat as WasteCategory)
+    : WasteCategory.MIXED;
+
+  const acceptedList = org.acceptedMaterials
+    .split(',')
+    .map((s: string) => s.trim().toUpperCase());
+
+  if (
+    !acceptedList.includes(wasteCategory) &&
+    !acceptedList.includes('ALL') &&
+    !acceptedList.includes('MIXED')
+  ) {
+    throw new Error(
+      `Facility "${org.name}" is not configured to accept ${wasteCategory}. Authorized materials: ${org.acceptedMaterials}`
+    );
+  }
+
+  const qty = Number(data.quantityKg ?? data.quantity ?? 0);
+  if (!qty || qty <= 0) {
+    throw new Error('Please provide a valid material weight in kilograms (greater than 0).');
+  }
+
+  const sourceStr = data.source?.trim() || 'Direct Facility Intake';
+  const notesStr = data.notes?.trim() || '';
+  const fullNotes = notesStr ? `[Source: ${sourceStr}] ${notesStr}` : `[Source: ${sourceStr}]`;
+
+  const record = await db.recyclingRecord.create({
+    data: {
+      organizationId: org.id,
+      material: wasteCategory,
+      quantity: qty,
+      unit: 'kg',
+      status: RecyclingStatus.PENDING,
+      notes: fullNotes,
+    },
+    include: {
+      collectionTask: {
+        include: {
+          request: { select: { citizen: { select: { id: true, name: true, phone: true, email: true } } } },
+          report: { select: { reporter: { select: { id: true, name: true, phone: true, email: true } } } },
+        },
+      },
+      organization: true,
+    },
+  });
+
+  return formatRecyclingRecord(record);
 }
 
 export async function receiveAndCreateRecyclingRecord(user: UserPayload, taskId: string, estimatedQuantity?: number) {
+  if (!taskId) {
+    throw new Error('Task ID is required to receive material from collection.');
+  }
+
   const org = await getOrCreateRecyclingOrg(user.id, user.name, user.email);
 
   const task = await db.collectionTask.findUnique({
@@ -243,7 +341,7 @@ export async function receiveAndCreateRecyclingRecord(user: UserPayload, taskId:
     return record;
   });
 
-  return newRecord;
+  return formatRecyclingRecord(newRecord);
 }
 
 export async function acceptRecyclingRecord(user: UserPayload, recordId: string) {
@@ -289,7 +387,7 @@ export async function acceptRecyclingRecord(user: UserPayload, recordId: string)
     return updated;
   });
 
-  return updatedRecord;
+  return formatRecyclingRecord(updatedRecord);
 }
 
 export async function startRecyclingProcess(user: UserPayload, recordId: string) {
@@ -336,7 +434,7 @@ export async function startRecyclingProcess(user: UserPayload, recordId: string)
     return updated;
   });
 
-  return updatedRecord;
+  return formatRecyclingRecord(updatedRecord);
 }
 
 export async function completeRecycling(
@@ -397,7 +495,7 @@ export async function completeRecycling(
     return updated;
   });
 
-  return updatedRecord;
+  return formatRecyclingRecord(updatedRecord);
 }
 
 export async function getRecyclingHistory(user: UserPayload) {
@@ -419,7 +517,7 @@ export async function getRecyclingHistory(user: UserPayload) {
     orderBy: { updatedAt: 'desc' },
   });
 
-  return records;
+  return records.map(formatRecyclingRecord);
 }
 
 export async function getRecyclingOrgProfileData(user: UserPayload) {

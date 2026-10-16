@@ -9,6 +9,9 @@ router.use(requireAuth);
 
 router.get('/leaderboard', rewardController.getLeaderboard);
 router.get('/transactions', rewardController.getTransactions);
+router.get('/user-points', rewardController.getUserPoints);
+router.get('/available', rewardController.getAvailableRewards);
+router.get('/my-redemptions', rewardController.getMyRedemptions);
 router.post('/redeem', requireRole([Role.CITIZEN]), rewardController.redeemReward);
 
 export default router;

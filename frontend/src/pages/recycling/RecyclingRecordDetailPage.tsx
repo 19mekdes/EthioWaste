@@ -22,7 +22,7 @@ export const RecyclingRecordDetailPage: React.FC = () => {
         const data = await recyclingService.getRecordById(id);
         setRecord(data);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load record details.');
+        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to load record details.');
       } finally {
         setLoading(false);
       }
@@ -76,7 +76,7 @@ export const RecyclingRecordDetailPage: React.FC = () => {
                 Digital Audit Certificate
               </span>
               <h1 className="text-2xl font-bold text-white mt-1">
-                {record.materialType} Category Intake
+                {record.materialType || record.material} Category Intake
               </h1>
             </div>
             <span className="px-4 py-1.5 rounded-full text-sm font-bold bg-purple-500/10 text-purple-400 border border-purple-500/30 flex items-center gap-1.5">
@@ -89,14 +89,14 @@ export const RecyclingRecordDetailPage: React.FC = () => {
               <span className="text-xs text-slate-400 flex items-center gap-1.5">
                 <Scale className="w-4 h-4 text-purple-400" /> Recorded Weight
               </span>
-              <p className="text-2xl font-black text-white">{record.quantityKg} kg</p>
+              <p className="text-2xl font-black text-white">{record.quantityKg ?? record.quantity} kg</p>
             </div>
 
             <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
               <span className="text-xs text-slate-400 flex items-center gap-1.5">
                 <Building2 className="w-4 h-4 text-emerald-400" /> Source / Fleet Supplier
               </span>
-              <p className="text-lg font-bold text-white">{record.source || 'N/A'}</p>
+              <p className="text-lg font-bold text-white">{record.source || 'Direct Facility Intake'}</p>
             </div>
 
             <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">

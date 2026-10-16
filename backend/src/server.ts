@@ -32,7 +32,14 @@ app.get('/health', (req: Request, res: Response) => {
 
 app.use('/api/v1', apiRouter);
 
-// Centralized error handler middleware
+
+app.use('/api/v1', (req: Request, res: Response) => {
+  res.status(404).json({
+    success: false,
+    message: `API endpoint not found: ${req.method} ${req.originalUrl}`,
+    error: `API endpoint not found: ${req.method} ${req.originalUrl}`,
+  });
+});
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Server Error:', err);
   const status = err.status || 500;

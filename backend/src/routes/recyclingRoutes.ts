@@ -11,7 +11,7 @@ router.get('/dashboard-stats', recyclingController.getDashboardStats);
 router.get('/materials', recyclingController.getMaterials);
 router.patch('/materials', recyclingController.updateMaterials);
 router.get('/records', recyclingController.getRecords);
-router.post('/records', recyclingController.receiveTaskMaterial);
+router.post('/records', recyclingController.createOrReceiveRecord);
 router.get('/records/:id', recyclingController.getRecordById);
 router.post('/records/:id/accept', recyclingController.acceptRecord);
 router.post('/records/:id/process', recyclingController.startProcessing);

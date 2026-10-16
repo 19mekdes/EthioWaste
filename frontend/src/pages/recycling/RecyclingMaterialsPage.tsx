@@ -17,7 +17,7 @@ export const RecyclingMaterialsPage: React.FC = () => {
         const data = await recyclingService.getMyRecords();
         setRecords(data);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load material totals.');
+        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to load material totals.');
       } finally {
         setLoading(false);
       }
@@ -25,12 +25,15 @@ export const RecyclingMaterialsPage: React.FC = () => {
     fetchRecords();
   }, []);
 
-  const materialCategories = ['PLASTIC', 'GLASS', 'METAL', 'PAPER_CARD', 'ELECTRONIC', 'ORGANIC'];
+  const materialCategories = ['PLASTIC', 'GLASS', 'METAL', 'PAPER', 'CARDBOARD', 'ELECTRONIC', 'ORGANIC'];
 
   const getMaterialTotal = (type: string) => {
     return records
-      .filter(r => r.materialType === type)
-      .reduce((sum, r) => sum + (r.quantityKg || 0), 0);
+      .filter(r => {
+        const mat = r.materialType || r.material;
+        return mat === type || (type === 'PAPER' && mat === 'PAPER_CARD');
+      })
+      .reduce((sum, r) => sum + (r.quantityKg ?? r.quantity ?? 0), 0);
   };
 
   return (
@@ -56,7 +59,10 @@ export const RecyclingMaterialsPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {materialCategories.map((mat) => {
               const totalKg = getMaterialTotal(mat);
-              const count = records.filter(r => r.materialType === mat).length;
+              const count = records.filter(r => {
+                const matType = r.materialType || r.material;
+                return matType === mat || (mat === 'PAPER' && matType === 'PAPER_CARD');
+              }).length;
 
               return (
                 <div

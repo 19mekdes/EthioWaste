@@ -55,32 +55,34 @@ export const RecyclingHistoryPage: React.FC = () => {
           </div>
         ) : (
           <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
-                  <th className="p-4">Material Type</th>
-                  <th className="p-4">Weight (kg)</th>
-                  <th className="p-4">Source</th>
-                  <th className="p-4">Logged Date</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
-                {records.map((r) => (
-                  <tr key={r.id} className="hover:bg-slate-700/30 transition">
-                    <td className="p-4 font-bold text-white flex items-center gap-2">
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                        {r.materialType || r.material || 'GENERAL'}
-                      </span>
-                    </td>
-                    <td className="p-4 font-extrabold text-white">{(r.quantityKg || r.quantity || 0).toLocaleString()} kg</td>
-                    <td className="p-4 text-slate-400">{r.source || 'N/A'}</td>
-                    <td className="p-4 text-xs text-slate-400">
-                      {new Date(r.createdAt).toLocaleDateString()}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[550px]">
+                <thead>
+                  <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
+                    <th className="p-4">Material Type</th>
+                    <th className="p-4">Weight (kg)</th>
+                    <th className="p-4">Source</th>
+                    <th className="p-4">Logged Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
+                  {records.map((r) => (
+                    <tr key={r.id} className="hover:bg-slate-700/30 transition">
+                      <td className="p-4 font-bold text-white flex items-center gap-2">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
+                          {r.materialType || r.material || 'GENERAL'}
+                        </span>
+                      </td>
+                      <td className="p-4 font-extrabold text-white">{(r.quantityKg || r.quantity || 0).toLocaleString()} kg</td>
+                      <td className="p-4 text-slate-400">{r.source || 'N/A'}</td>
+                      <td className="p-4 text-xs text-slate-400">
+                        {new Date(r.createdAt).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
       </div>

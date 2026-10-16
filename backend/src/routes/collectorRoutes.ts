@@ -10,6 +10,8 @@ router.use(requireAuth, requireRole([Role.COLLECTOR]));
 router.get('/dashboard-stats', collectorController.getDashboardStats);
 router.get('/tasks', collectorController.getTasks);
 router.get('/tasks/:id', collectorController.getTaskById);
+router.patch('/tasks/:id/status', collectorController.updateTaskStatus);
+router.patch('/tasks/:id', collectorController.updateTaskStatus);
 router.post('/tasks/:id/start', collectorController.startTask);
 router.post('/tasks/:id/collect', collectorController.markCollected);
 router.post('/tasks/:id/complete', collectorController.completeTask);

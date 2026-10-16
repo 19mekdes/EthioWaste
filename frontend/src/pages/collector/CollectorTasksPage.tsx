@@ -33,7 +33,7 @@ export const CollectorTasksPage: React.FC = () => {
       await collectorService.updateTaskStatus(taskId, newStatus);
       fetchTasks();
     } catch (err: any) {
-      alert(err.response?.data?.error || 'Failed to update task status.');
+      alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to update task status.');
     }
   };
 
@@ -52,12 +52,12 @@ export const CollectorTasksPage: React.FC = () => {
             <p className="text-sm text-slate-400">View and update collection progress for assigned routes.</p>
           </div>
 
-          <div className="flex items-center gap-2 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+          <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-800 p-1.5 rounded-xl border border-slate-700 w-full sm:w-auto">
             {['ACTIVE', 'COMPLETED', 'ALL'].map((st) => (
               <button
                 key={st}
                 onClick={() => setFilter(st)}
-                className={`px-4 py-2 rounded-lg text-xs font-semibold transition ${
+                className={`flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-lg text-xs font-semibold text-center transition ${
                   filter === st
                     ? 'bg-emerald-500 text-slate-950 shadow'
                     : 'text-slate-400 hover:text-white'
@@ -94,10 +94,10 @@ export const CollectorTasksPage: React.FC = () => {
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-3">
                     <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
-                      {task.wasteType}
+                      {(task as any).wasteType || (task as any).request?.wasteType || (task as any).report?.category || 'General Waste'}
                     </span>
                     <span className="text-xs font-semibold text-slate-400">
-                      Qty: {task.estimatedQuantity}
+                      Qty: {(task as any).estimatedQuantity || (task as any).request?.estimatedQuantity || 'Standard Load'}
                     </span>
                     <span className="text-xs font-bold text-slate-300">
                       Status: {task.status}
@@ -110,7 +110,7 @@ export const CollectorTasksPage: React.FC = () => {
 
                   <div className="flex flex-wrap items-center gap-4 text-xs text-slate-400">
                     <span className="flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-teal-400" /> Date: {new Date(task.preferredDate).toLocaleDateString()}
+                      <Calendar className="w-3.5 h-3.5 text-teal-400" /> Date: {new Date((task as any).scheduledDate || (task as any).preferredDate || (task as any).createdAt).toLocaleDateString()}
                     </span>
                     {task.preferredTime && (
                       <span className="flex items-center gap-1">
@@ -120,11 +120,11 @@ export const CollectorTasksPage: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto justify-end border-t md:border-t-0 pt-4 md:pt-0 border-slate-700">
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full md:w-auto justify-end border-t md:border-t-0 pt-4 md:pt-0 border-slate-700">
                   {(task.status === 'ASSIGNED' || task.status === 'SCHEDULED') && (
                     <button
                       onClick={() => handleUpdateStatus(task.id, 'IN_PROGRESS')}
-                      className="px-4 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center gap-1.5"
+                      className="px-4 py-2 sm:py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
                     >
                       <Play className="w-4 h-4" /> Start Route
                     </button>
@@ -133,7 +133,7 @@ export const CollectorTasksPage: React.FC = () => {
                   {task.status === 'IN_PROGRESS' && (
                     <button
                       onClick={() => handleUpdateStatus(task.id, 'COMPLETED')}
-                      className="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center gap-1.5"
+                      className="px-4 py-2 sm:py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center justify-center gap-1.5 flex-1 sm:flex-none"
                     >
                       <CheckCircle2 className="w-4 h-4" /> Mark Complete
                     </button>
@@ -141,7 +141,7 @@ export const CollectorTasksPage: React.FC = () => {
 
                   <Link
                     to={`/collector/tasks/${task.id}`}
-                    className="px-4 py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold text-xs transition"
+                    className="px-4 py-2 sm:py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-100 font-semibold text-xs transition flex-1 sm:flex-none text-center"
                   >
                     Details & Map
                   </Link>

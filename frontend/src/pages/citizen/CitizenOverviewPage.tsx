@@ -75,16 +75,16 @@ export const CitizenOverviewPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Welcome Banner */}
-      <div className="glass-card p-6 bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 border border-emerald-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 rounded-2xl">
-        <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 font-black text-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
+      <div className="glass-card p-4 sm:p-6 bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 border border-emerald-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 rounded-2xl">
+        <div className="flex items-center gap-3 sm:gap-4">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 font-black text-lg sm:text-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
             {user?.name ? user.name.charAt(0) : 'U'}
           </div>
           <div>
-            <div className="text-xs text-emerald-400 font-bold uppercase tracking-wider mb-0.5">
+            <div className="text-[11px] sm:text-xs text-emerald-400 font-bold uppercase tracking-wider mb-0.5">
               Authenticated Citizen Portal
             </div>
-            <h1 className="text-2xl font-extrabold text-white">
+            <h1 className="text-xl sm:text-2xl font-extrabold text-white">
               Welcome back, {user?.name ? user.name.split(' ')[0] : 'Citizen'} 👋
             </h1>
             <p className="text-xs text-slate-400">
@@ -93,20 +93,20 @@ export const CitizenOverviewPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Link to="/citizen/report-waste" className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-            <AlertTriangle className="w-4 h-4 text-slate-950" />
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full md:w-auto">
+          <Link to="/citizen/report-waste" className="flex-1 sm:flex-none justify-center px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
             <span>Report Waste</span>
           </Link>
-          <Link to="/citizen/request-collection" className="px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-            <PlusCircle className="w-4 h-4 text-slate-950" />
-            <span>Request Collection</span>
+          <Link to="/citizen/request-collection" className="flex-1 sm:flex-none justify-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+            <PlusCircle className="w-4 h-4 text-slate-950 shrink-0" />
+            <span>Request Pickup</span>
           </Link>
         </div>
       </div>
 
       {/* Real Statistics Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         <div className="glass-card p-4 border border-slate-800 bg-slate-900/60 rounded-2xl">
           <div className="flex items-center justify-between text-slate-400 mb-2">
             <span className="text-xs font-semibold uppercase tracking-wider">Total Reports</span>

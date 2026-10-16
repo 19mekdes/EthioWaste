@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthProvider';
+import { useAuth } from './contexts/AuthContext';
 
 // Public Pages
 import { HomePage } from './pages/HomePage';
@@ -50,7 +51,7 @@ import { AdminComplaintsPage } from './pages/admin/AdminComplaintsPage';
 import { AdminFeedbackPage } from './pages/admin/AdminFeedbackPage';
 import { AdminAnalyticsPage } from './pages/admin/AdminAnalyticsPage';
 
-// Protected Route Wrapper
+
 const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: string[] }> = ({
   children,
   allowedRoles,
@@ -70,7 +71,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode; allowedRoles?: strin
   }
 
   if (allowedRoles && !allowedRoles.includes(user.role)) {
-    // Redirect based on role
+
     switch (user.role) {
       case 'CITIZEN':
         return <Navigate to="/citizen/overview" replace />;
@@ -385,8 +386,6 @@ export const App: React.FC = () => {
               </ProtectedRoute>
             }
           />
-
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>

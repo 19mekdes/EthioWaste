@@ -132,39 +132,41 @@ export const AdminOverviewPage: React.FC = () => {
             </div>
           ) : (
             <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
-                    <th className="p-4">Type</th>
-                    <th className="p-4">Address</th>
-                    <th className="p-4">Severity</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
-                  {recentReports.map((rep) => (
-                    <tr key={rep.id} className="hover:bg-slate-700/30 transition">
-                      <td className="p-4 font-bold text-white">{rep.wasteType}</td>
-                      <td className="p-4 text-xs text-slate-300 max-w-xs truncate">{rep.address}</td>
-                      <td className="p-4 text-xs font-bold text-amber-400">{rep.severity || 'MEDIUM'}</td>
-                      <td className="p-4">
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                          {rep.status}
-                        </span>
-                      </td>
-                      <td className="p-4">
-                        <Link
-                          to="/admin/reports"
-                          className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold transition"
-                        >
-                          Review
-                        </Link>
-                      </td>
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse min-w-[600px]">
+                  <thead>
+                    <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
+                      <th className="p-4">Type</th>
+                      <th className="p-4">Address</th>
+                      <th className="p-4">Severity</th>
+                      <th className="p-4">Status</th>
+                      <th className="p-4">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
+                    {recentReports.map((rep) => (
+                      <tr key={rep.id} className="hover:bg-slate-700/30 transition">
+                        <td className="p-4 font-bold text-white">{rep.wasteType}</td>
+                        <td className="p-4 text-xs text-slate-300 max-w-xs truncate">{rep.address}</td>
+                        <td className="p-4 text-xs font-bold text-amber-400">{rep.severity || 'MEDIUM'}</td>
+                        <td className="p-4">
+                          <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                            {rep.status}
+                          </span>
+                        </td>
+                        <td className="p-4">
+                          <Link
+                            to="/admin/reports"
+                            className="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-semibold transition"
+                          >
+                            Review
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>

@@ -18,7 +18,7 @@ export const RecyclingOverviewPage: React.FC = () => {
         const data = await recyclingService.getMyRecords();
         setRecords(data);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load recycling records.');
+        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to load recycling records.');
       } finally {
         setLoading(false);
       }
@@ -26,10 +26,10 @@ export const RecyclingOverviewPage: React.FC = () => {
     fetchOverview();
   }, []);
 
-  const totalWeightKg = records.reduce((acc, r) => acc + (r.quantityKg || 0), 0);
-  const plasticKg = records.filter(r => r.materialType === 'PLASTIC').reduce((acc, r) => acc + (r.quantityKg || 0), 0);
-  const glassKg = records.filter(r => r.materialType === 'GLASS').reduce((acc, r) => acc + (r.quantityKg || 0), 0);
-  const metalKg = records.filter(r => r.materialType === 'METAL').reduce((acc, r) => acc + (r.quantityKg || 0), 0);
+  const totalWeightKg = records.reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+  const plasticKg = records.filter(r => (r.materialType || r.material) === 'PLASTIC').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+  const glassKg = records.filter(r => (r.materialType || r.material) === 'GLASS').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+  const metalKg = records.filter(r => (r.materialType || r.material) === 'METAL').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
 
   return (
     <RecyclingLayout title="Facility Dashboard">
@@ -111,9 +111,9 @@ export const RecyclingOverviewPage: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-3">
                     <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                      {r.materialType}
+                      {r.materialType || r.material}
                     </span>
-                    <span className="font-bold text-white text-base">{r.quantityKg} kg</span>
+                    <span className="font-bold text-white text-base">{(r.quantityKg ?? r.quantity ?? 0)} kg</span>
                   </div>
                   <p className="text-xs text-slate-400 mt-1">
                     Source: {r.source || 'Municipal Dispatch'} | Processed on {new Date(r.createdAt).toLocaleDateString()}
