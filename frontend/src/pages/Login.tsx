@@ -49,35 +49,38 @@ export function Login() {
   };
 
   const labelClass =
-    'block text-xs font-semibold text-slate-700 mb-1.5 flex items-center gap-1.5';
+    'block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5';
 
   const inputClass =
-    'w-full bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500';
+    'w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all';
 
   return (
-    <div className="min-h-screen bg-[#F8FAF8] text-slate-800 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans">
-      <div className="max-w-md w-full bg-white border border-emerald-100 rounded-3xl p-5 sm:p-8 shadow-xl space-y-5 sm:space-y-6">
+    <div className="min-h-screen bg-brand-dark text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans relative overflow-hidden">
+      {/* Ambient background glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="max-w-md w-full glass-card p-6 sm:p-8 bg-slate-900/70 border border-slate-800/80 rounded-3xl shadow-2xl relative z-10 space-y-5 sm:space-y-6">
         <div className="text-center space-y-2">
           <Link
             to="/"
             title="Go back to Home Page"
             aria-label="Back to home page"
-            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 border border-emerald-100 mb-2 hover:bg-emerald-100 hover:border-emerald-200 hover:scale-105 active:scale-95 transition-all cursor-pointer group shadow-sm"
+            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 mb-2 shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer group"
           >
-            <Recycle className="w-6 h-6 text-emerald-500 group-hover:rotate-180 transition-transform duration-500" />
+            <Recycle className="w-6 h-6 text-slate-950 group-hover:rotate-180 transition-transform duration-500" />
           </Link>
 
-          <h2 className="text-2xl font-bold text-slate-800 tracking-tight">
+          <h2 className="text-2xl font-extrabold text-white tracking-tight">
             Welcome Back to EcoBin
           </h2>
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400">
             Sign in to manage waste reports, collections, and recycling operations
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
           {error && (
-            <div className="flex items-center gap-2 bg-rose-50 border border-rose-200 text-rose-700 p-3 rounded-xl text-xs">
+            <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -85,7 +88,7 @@ export function Login() {
 
           <div>
             <label className={labelClass}>
-              <Mail className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               Email Address
             </label>
             <input
@@ -101,7 +104,7 @@ export function Login() {
 
           <div>
             <label className={labelClass}>
-              <Lock className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <Lock className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               Password
             </label>
             <input
@@ -118,7 +121,7 @@ export function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-sm shadow-lg shadow-emerald-500/20 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60"
           >
             {loading ? (
               <Loader2 className="w-4 h-4 animate-spin shrink-0" />
@@ -128,19 +131,19 @@ export function Login() {
             <span>Sign In to EcoBin</span>
           </button>
 
-          <div className="text-center text-xs text-slate-500">
+          <div className="text-center text-xs text-slate-400">
             New to EcoBin?{' '}
             <Link
               to="/register"
-              className="text-emerald-600 font-semibold hover:text-emerald-700 hover:underline"
+              className="text-emerald-400 font-semibold hover:text-emerald-300 hover:underline"
             >
               Create an account
             </Link>
           </div>
 
-          <div className="bg-[#F8FAF8] border border-slate-200 rounded-xl p-3 sm:p-4 text-[11px] text-slate-600 space-y-2.5 pt-3 sm:pt-4">
-            <div className="flex items-center gap-1.5 font-semibold text-slate-700">
-              <Recycle className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+          <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-3 sm:p-4 text-[11px] text-slate-400 space-y-2.5 pt-3 sm:pt-4">
+            <div className="flex items-center gap-1.5 font-bold text-slate-300 text-xs">
+              <Recycle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               Quick 1-Click Login:
             </div>
 
@@ -152,7 +155,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('citizen@ecobin.org', 'password123');
                 }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 👤 Citizen
               </button>
@@ -164,7 +167,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('collector@ecobin.org', 'password123');
                 }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 🚚 Collector
               </button>
@@ -176,7 +179,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('recycling@ecobin.org', 'password123');
                 }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 hover:bg-teal-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 ♻️ Recycler
               </button>
@@ -188,7 +191,7 @@ export function Login() {
                   setPassword('password123');
                   executeLogin('admin@ecobin.org', 'password123');
                 }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
+                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
               >
                 🛡️ Admin
               </button>

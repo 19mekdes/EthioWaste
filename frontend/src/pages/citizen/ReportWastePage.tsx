@@ -5,6 +5,7 @@ import { reportService } from '../../services/reportService';
 import { WasteCategory, ReportSeverity } from '../../types';
 import { ImageUploadField } from '../../components/ui/ImageUploadField';
 import InteractiveMap, { MapMarker } from '../../components/map/InteractiveMap';
+import { CitizenLayout } from '../../layouts/CitizenLayout';
 import {
   MapPin,
   LocateFixed,
@@ -104,203 +105,205 @@ export const ReportWastePage: React.FC = () => {
   };
 
   const labelClass =
-    'block text-xs font-semibold text-slate-700 mb-1.5';
+    'block text-xs font-semibold text-slate-300 mb-1.5';
 
   const inputClass =
-    'w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500';
+    'w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500';
 
   const selectClass =
-    'w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500';
+    'w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500';
 
   return (
-    <div className="max-w-2xl mx-auto relative rounded-2xl bg-white border border-emerald-100 p-5 sm:p-6 shadow-xl">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center font-bold">
-          🚨
-        </div>
-        <div>
-          <h2 className="text-xl font-bold text-slate-800">
-            Report Waste Issue / Illegal Dumping
-          </h2>
-          <p className="text-xs text-slate-500">
-            Submit overflowing bins or illegal dumping in Addis Ababa to earn Eco-Points
-          </p>
-        </div>
-      </div>
-
-      {submitted ? (
-        <div className="py-12 text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center mx-auto animate-bounce">
-            <CheckCircle2 className="w-10 h-10" />
+    <CitizenLayout title="Report Waste Issue">
+      <div className="max-w-2xl mx-auto relative rounded-2xl glass-card bg-slate-900/80 border border-slate-800 p-5 sm:p-6 shadow-2xl">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center font-bold">
+            🚨
           </div>
-          <h3 className="text-xl font-bold text-slate-800">
-            Report Successfully Submitted!
-          </h3>
-          <p className="text-sm text-slate-600 max-w-md mx-auto">
-            Thank you for helping keep Addis Ababa clean! Municipal Admins will validate your report, and you will earn +50 Eco-Points once approved.
-          </p>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-5">
-          {error && (
-            <div className="bg-rose-50 border border-rose-200 text-rose-700 p-3 rounded-xl text-xs">
-              {error}
-            </div>
-          )}
-
-          <div className="space-y-4">
-            <div>
-              <label className={labelClass}>Issue Title</label>
-              <input
-                type="text"
-                placeholder="e.g. Overflowing plastic bin near Bole Medhanealem"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className={inputClass}
-                required
-              />
-            </div>
-
-            <div>
-              <label className={labelClass}>Detailed Description</label>
-              <textarea
-                rows={3}
-                placeholder="Describe the severity, hazardous items, or obstruction details..."
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className={inputClass}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 bg-[#F8FAF8] p-3 rounded-xl border border-slate-200">
-            <input
-              type="checkbox"
-              id="illegalDumping"
-              checked={isIllegalDumping}
-              onChange={(e) => setIsIllegalDumping(e.target.checked)}
-              className="w-4 h-4 rounded accent-emerald-600"
-            />
-            <label
-              htmlFor="illegalDumping"
-              className="text-xs font-medium text-slate-700 cursor-pointer"
-            >
-              Report as Illegal Dumping Site (High priority response)
-            </label>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className={`${labelClass} flex items-center gap-1.5`}>
-                <Tag className="w-3.5 h-3.5 text-emerald-600" />
-                Waste Category
-              </label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as WasteCategory)}
-                className={selectClass}
-              >
-                <option value="PLASTIC">Plastic & Bottles</option>
-                <option value="PAPER">Paper</option>
-                <option value="CARDBOARD">Cardboard & Packaging</option>
-                <option value="GLASS">Glass</option>
-                <option value="METAL">Metal & Aluminum</option>
-                <option value="ELECTRONIC">Electronic Waste (E-Waste)</option>
-                <option value="ORGANIC">Organic & Food Waste</option>
-                <option value="HAZARDOUS">Hazardous & Chemical</option>
-                <option value="MIXED">Mixed Municipal Waste</option>
-                <option value="OTHER">Other</option>
-              </select>
-            </div>
-
-            <div>
-              <label className={`${labelClass} flex items-center gap-1.5`}>
-                <AlertOctagon className="w-3.5 h-3.5 text-amber-500" />
-                Severity Level
-              </label>
-              <select
-                value={severity}
-                onChange={(e) => setSeverity(e.target.value as ReportSeverity)}
-                className={selectClass}
-              >
-                <option value="LOW">Low (Minor littering)</option>
-                <option value="MEDIUM">Medium (Full bin)</option>
-                <option value="HIGH">High (Overflowing onto sidewalk)</option>
-                <option value="CRITICAL">Critical (Hazardous/Traffic hazard)</option>
-              </select>
-            </div>
-          </div>
-
-          <ImageUploadField
-            label="Waste Issue Photo"
-            value={imageUrl}
-            onChange={setImageUrl}
-            presets={sampleImages}
-            previewHeight="h-36"
-          />
-
           <div>
-            <label className={`${labelClass} flex items-center gap-1.5`}>
-              <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-              Pin GPS Location (Addis Ababa)
-            </label>
+            <h2 className="text-xl font-bold text-white">
+              Report Waste Issue / Illegal Dumping
+            </h2>
+            <p className="text-xs text-slate-400">
+              Submit overflowing bins or illegal dumping in Addis Ababa to earn Eco-Points
+            </p>
+          </div>
+        </div>
 
-            <div className="flex flex-col sm:flex-row gap-2 mb-2">
-              <button
-                type="button"
-                onClick={handleUseMyLocation}
-                disabled={locating}
-                className="px-3 py-1.5 bg-white border border-slate-200 hover:bg-emerald-50 rounded-xl text-xs flex items-center justify-center gap-1.5 text-slate-700 transition-colors"
-              >
-                <LocateFixed className={`w-3.5 h-3.5 ${locating ? 'animate-spin' : ''}`} />
-                <span>
-                  {locating ? 'Detecting Location...' : 'Use My Current Location (GPS)'}
-                </span>
-              </button>
-              <p className="text-[11px] text-slate-500 sm:self-center">
-                or click anywhere on the map to set coordinates
-              </p>
+        {submitted ? (
+          <div className="py-12 text-center space-y-4">
+            <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto animate-bounce">
+              <CheckCircle2 className="w-10 h-10" />
+            </div>
+            <h3 className="text-xl font-bold text-white">
+              Report Successfully Submitted!
+            </h3>
+            <p className="text-sm text-slate-300 max-w-md mx-auto">
+              Thank you for helping keep Addis Ababa clean! Municipal Admins will validate your report, and you will earn +50 Eco-Points once approved.
+            </p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <div className="bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
+                {error}
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <div>
+                <label className={labelClass}>Issue Title</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Overflowing plastic bin near Bole Medhanealem"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  className={inputClass}
+                  required
+                />
+              </div>
+
+              <div>
+                <label className={labelClass}>Detailed Description</label>
+                <textarea
+                  rows={3}
+                  placeholder="Describe the severity, hazardous items, or obstruction details..."
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className={inputClass}
+                  required
+                />
+              </div>
             </div>
 
-            <InteractiveMap
-              markers={mapMarkers}
-              centerLat={lat}
-              centerLng={lng}
-              height="220px"
-              zoom={14}
-              onLocationSelect={(latitude, longitude) => {
-                setLat(Math.round(latitude * 10000) / 10000);
-                setLng(Math.round(longitude * 10000) / 10000);
-                setAddress(`Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
-              }}
+            <div className="flex items-center gap-2 bg-slate-950/60 p-3 rounded-xl border border-slate-800">
+              <input
+                type="checkbox"
+                id="illegalDumping"
+                checked={isIllegalDumping}
+                onChange={(e) => setIsIllegalDumping(e.target.checked)}
+                className="w-4 h-4 rounded accent-emerald-500"
+              />
+              <label
+                htmlFor="illegalDumping"
+                className="text-xs font-medium text-slate-300 cursor-pointer"
+              >
+                Report as Illegal Dumping Site (High priority response)
+              </label>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className={`${labelClass} flex items-center gap-1.5`}>
+                  <Tag className="w-3.5 h-3.5 text-emerald-400" />
+                  Waste Category
+                </label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as WasteCategory)}
+                  className={selectClass}
+                >
+                  <option value="PLASTIC">Plastic & Bottles</option>
+                  <option value="PAPER">Paper</option>
+                  <option value="CARDBOARD">Cardboard & Packaging</option>
+                  <option value="GLASS">Glass</option>
+                  <option value="METAL">Metal & Aluminum</option>
+                  <option value="ELECTRONIC">Electronic Waste (E-Waste)</option>
+                  <option value="ORGANIC">Organic & Food Waste</option>
+                  <option value="HAZARDOUS">Hazardous & Chemical</option>
+                  <option value="MIXED">Mixed Municipal Waste</option>
+                  <option value="OTHER">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className={`${labelClass} flex items-center gap-1.5`}>
+                  <AlertOctagon className="w-3.5 h-3.5 text-amber-400" />
+                  Severity Level
+                </label>
+                <select
+                  value={severity}
+                  onChange={(e) => setSeverity(e.target.value as ReportSeverity)}
+                  className={selectClass}
+                >
+                  <option value="LOW">Low (Minor littering)</option>
+                  <option value="MEDIUM">Medium (Full bin)</option>
+                  <option value="HIGH">High (Overflowing onto sidewalk)</option>
+                  <option value="CRITICAL">Critical (Hazardous/Traffic hazard)</option>
+                </select>
+              </div>
+            </div>
+
+            <ImageUploadField
+              label="Waste Issue Photo"
+              value={imageUrl}
+              onChange={setImageUrl}
+              presets={sampleImages}
+              previewHeight="h-36"
             />
 
-            <div className="mt-2 text-xs text-slate-600 flex items-center justify-between gap-2 flex-wrap">
-              <span>Pinned: {address}</span>
-              <span className="font-mono text-emerald-700">
-                {lat}, {lng}
-              </span>
-            </div>
-          </div>
+            <div>
+              <label className={`${labelClass} flex items-center gap-1.5`}>
+                <MapPin className="w-3.5 h-3.5 text-emerald-400" />
+                Pin GPS Location (Addis Ababa)
+              </label>
 
-          <div className="pt-2 flex justify-end gap-3">
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto disabled:opacity-60"
-            >
-              {loading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4" />
-              )}
-              <span>Submit Issue Report</span>
-            </button>
-          </div>
-        </form>
-      )}
-    </div>
+              <div className="flex flex-col sm:flex-row gap-2 mb-2">
+                <button
+                  type="button"
+                  onClick={handleUseMyLocation}
+                  disabled={locating}
+                  className="px-3 py-1.5 bg-slate-800 border border-slate-700 hover:bg-slate-700 rounded-xl text-xs flex items-center justify-center gap-1.5 text-slate-200 transition-colors"
+                >
+                  <LocateFixed className={`w-3.5 h-3.5 ${locating ? 'animate-spin' : ''}`} />
+                  <span>
+                    {locating ? 'Detecting Location...' : 'Use My Current Location (GPS)'}
+                  </span>
+                </button>
+                <p className="text-[11px] text-slate-500 sm:self-center">
+                  or click anywhere on the map to set coordinates
+                </p>
+              </div>
+
+              <InteractiveMap
+                markers={mapMarkers}
+                centerLat={lat}
+                centerLng={lng}
+                height="220px"
+                zoom={14}
+                onLocationSelect={(latitude, longitude) => {
+                  setLat(Math.round(latitude * 10000) / 10000);
+                  setLng(Math.round(longitude * 10000) / 10000);
+                  setAddress(`Coordinates: ${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+                }}
+              />
+
+              <div className="mt-2 text-xs text-slate-400 flex items-center justify-between gap-2 flex-wrap">
+                <span>Pinned: {address}</span>
+                <span className="font-mono text-emerald-400">
+                  {lat}, {lng}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end gap-3">
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg w-full sm:w-auto disabled:opacity-60"
+              >
+                {loading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                <span>Submit Issue Report</span>
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </CitizenLayout>
   );
 };
 

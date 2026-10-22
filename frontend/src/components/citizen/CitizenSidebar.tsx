@@ -76,19 +76,19 @@ export function CitizenSidebar({
             to={item.href}
             onClick={() => setMobileExpanded(false)}
             className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${isActive
-              ? 'bg-emerald-50 text-emerald-800 border border-emerald-200 shadow-sm'
+              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm'
               : item.highlight
-                ? 'text-amber-700 bg-amber-50 hover:bg-amber-100 border border-amber-200'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20'
+                : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
               }`}
           >
             <div className="flex items-center gap-2.5">
               <item.icon
                 className={`w-4 h-4 shrink-0 ${isActive
-                  ? 'text-emerald-700'
+                  ? 'text-emerald-400'
                   : item.highlight
-                    ? 'text-amber-600'
-                    : 'text-slate-500'
+                    ? 'text-amber-400'
+                    : 'text-slate-400'
                   }`}
               />
               <span>{item.label}</span>
@@ -112,17 +112,17 @@ export function CitizenSidebar({
         <button
           type="button"
           onClick={() => setMobileExpanded(!mobileExpanded)}
-          className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white border border-emerald-200 text-xs font-bold text-slate-700 shadow-sm"
+          className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 shadow-sm"
         >
           <div className="flex items-center gap-2">
-            <Recycle className="w-4 h-4 text-emerald-700 shrink-0" />
-            <span className="text-emerald-700 uppercase tracking-wider text-[11px]">
+            <Recycle className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span className="text-emerald-400 uppercase tracking-wider text-[11px]">
               Citizen Menu:
             </span>
-            <span className="text-slate-900">{currentItem.label}</span>
+            <span className="text-white">{currentItem.label}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-slate-500 text-[11px]">
+          <div className="flex items-center gap-1.5 text-slate-400 text-[11px]">
             {unreadNotificationsCount > 0 && (
               <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
                 {unreadNotificationsCount}
@@ -139,14 +139,14 @@ export function CitizenSidebar({
         </button>
 
         {mobileExpanded && (
-          <div className="mt-2 p-3 rounded-2xl bg-white border border-emerald-200 space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+          <div className="mt-2 p-3 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
             {renderNavLinks()}
 
-            <div className="pt-2 border-t border-slate-200 flex gap-2">
+            <div className="pt-2 border-t border-slate-800 flex gap-2">
               <Link
                 to="/citizen/report-waste"
                 onClick={() => setMobileExpanded(false)}
-                className="flex-1 py-2 text-center text-xs font-bold bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl"
+                className="flex-1 py-2 text-center text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl"
               >
                 Report Waste
               </Link>
@@ -154,7 +154,7 @@ export function CitizenSidebar({
               <Link
                 to="/citizen/request-collection"
                 onClick={() => setMobileExpanded(false)}
-                className="flex-1 py-2 text-center text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl"
+                className="flex-1 py-2 text-center text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl"
               >
                 Request Pickup
               </Link>
@@ -165,22 +165,22 @@ export function CitizenSidebar({
 
       {/* Desktop Persistent Sidebar */}
       <div className="hidden md:block space-y-6">
-        <div className="glass-card p-4 space-y-1.5 border border-slate-200 bg-white backdrop-blur-md rounded-2xl">
-          <div className="px-3 py-2 text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-2">
-            <Recycle className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+        <div className="glass-card p-4 space-y-1.5 border border-slate-800 bg-slate-900/60 backdrop-blur-md rounded-2xl">
+          <div className="px-3 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+            <Recycle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
             <span>Citizen Portal</span>
           </div>
 
           {renderNavLinks()}
         </div>
 
-        <div className="glass-card p-4 bg-gradient-to-br from-emerald-50 via-white to-white border border-emerald-200 rounded-2xl space-y-3">
-          <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider flex items-center gap-1.5">
+        <div className="glass-card p-4 bg-gradient-to-br from-emerald-950/30 via-slate-900/60 to-slate-900 border border-emerald-500/20 rounded-2xl space-y-3">
+          <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
             <PlusCircle className="w-3.5 h-3.5 shrink-0" />
             Quick Actions
           </h4>
 
-          <p className="text-[11px] text-slate-600 leading-relaxed">
+          <p className="text-[11px] text-slate-400 leading-relaxed">
             Spotted illegal dumping or need a bulk waste collection? Submit a
             report in under 60 seconds.
           </p>

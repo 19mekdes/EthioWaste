@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { reportService } from '../../services/reportService';
 import { WasteReport } from '../../types';
+import { CitizenLayout } from '../../layouts/CitizenLayout';
 import { FileText, PlusCircle, Search, MapPin, Calendar, Tag } from 'lucide-react';
 
 export const MyReportsPage: React.FC = () => {
@@ -62,7 +63,8 @@ export const MyReportsPage: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <CitizenLayout>
+      <div className="space-y-6">
       {/* Header Banner */}
       <div className="glass-card p-4 sm:p-6 bg-slate-900/60 border-slate-800 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
         <div>
@@ -260,7 +262,8 @@ export const MyReportsPage: React.FC = () => {
           ))}
         </div>
       )}
-    </div>
+      </div>
+    </CitizenLayout>
   );
 };
 
