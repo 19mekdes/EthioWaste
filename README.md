@@ -168,7 +168,7 @@ cd EthioWaste
    npm run dev both the backend and frontend
 
 
- Name............................CTC......................... role
+ Name...................................CTC........................... ....role
    1.  Mekdes Wale..............566-26.................Backend Developer
    2.  Kanariya Habtamu.........1783-26................Frontend Developer
 
