@@ -26,23 +26,23 @@ export const CitizenLayout: React.FC<LayoutProps> = ({ title, children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans">
-      <Header />
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          <CitizenSidebar />
-          <main className="flex-1 min-w-0">
-            {title && (
-              <div className="mb-6 border-b border-slate-800 pb-4">
-                <h1 className="text-2xl font-extrabold text-white tracking-tight">
-                  {title}
-                </h1>
-              </div>
-            )}
-            {children || <Outlet />}
-          </main>
-        </div>
+  <div className="min-h-screen bg-[#F8FAF8] font-sans text-slate-800">
+    <Header />
+    <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <div className="flex flex-col gap-5 md:flex-row md:gap-8">
+        <CitizenSidebar />
+        <main className="min-w-0 flex-1">
+          {title && (
+            <div className="mb-6 border-b border-slate-200 pb-4">
+              <h1 className="text-2xl font-bold tracking-tight text-slate-800">
+                {title}
+              </h1>
+            </div>
+          )}
+          {children || <Outlet />}
+        </main>
       </div>
     </div>
-  );
+  </div>
+);
 };
