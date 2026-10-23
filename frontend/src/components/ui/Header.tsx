@@ -55,7 +55,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
   };
 
   return (
-    <header className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80 sticky top-0 z-40">
+    <header className="sticky top-0 z-30 border-b border-slate-200 bg-white">
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-4">
         {/* Brand Logo */}
         <Link to={user?.role === 'CITIZEN' ? '/citizen/overview' : user?.role === 'COLLECTOR' ? '/collector/overview' : user?.role === 'RECYCLING_ORGANIZATION' ? '/recycling/overview' : user?.role === 'MUNICIPAL_ADMIN' ? '/admin/overview' : '/'} className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
@@ -65,10 +65,10 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
             </div>
           </div>
           <div>
-            <span className="text-lg sm:text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+            <span className="text-lg sm:text-xl font-bold tracking-tight text-slate-800">
               EcoBin
             </span>
-            <span className="hidden sm:inline-block ml-2 text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+            <span className="hidden sm:inline-block ml-2 rounded-full border border-emerald-100 bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-800">
               Smart Platform
             </span>
           </div>
@@ -82,8 +82,10 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
               <Link
                 key={l.label}
                 to={l.href}
-                className={`px-3 py-2 rounded-lg transition-all flex items-center gap-1.5 ${
-                  active ? 'text-emerald-400 bg-emerald-500/10 font-semibold' : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                className={`flex items-center gap-1.5 rounded-lg px-3 py-2 transition-colors ${
+                  active
+                    ? 'bg-emerald-50 font-semibold text-emerald-800'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-emerald-800'
                 }`}
               >
                 <l.icon className="w-4 h-4 shrink-0" />
@@ -130,11 +132,11 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
               )}
 
               {/* User Profile Avatar & Sign Out */}
-              <div className="flex items-center gap-1.5 sm:gap-2 pl-1.5 sm:pl-2 border-l border-slate-800">
+              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-1.5 sm:gap-2 sm:pl-2">
                 <img
                   src={user.avatarUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80'}
                   alt={user.name}
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-slate-700 ring-2 ring-emerald-500/30 shrink-0"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-slate-200 ring-2 ring-emerald-100 shrink-0"
                 />
                 <div className="hidden lg:block text-left">
                   <div className="text-xs font-semibold text-slate-200 line-clamp-1">{user.name}</div>
@@ -152,19 +154,26 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
           )}
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle navigation menu"
-            className="md:hidden p-1.5 sm:p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition"
+          {user?.role !== 'CITIZEN' && (
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={mobileMenuOpen}
+              className="rounded-lg p-2 text-slate-600 transition hover:bg-emerald-50 hover:text-emerald-800 md:hidden"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
           </button>
+        )}
         </div>
       </div>
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-900 border-b border-slate-800 px-4 py-3 space-y-2 text-sm shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="md:hidden border-b border-slate-200 bg-white px-4 py-3 text-sm shadow-lg">
           {!user ? (
             <div className="space-y-2 pt-1 pb-2">
               <Link
@@ -217,7 +226,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
               <div className="pt-2 border-t border-slate-800">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 py-2 px-2.5 rounded-lg text-rose-400 hover:bg-rose-500/10 font-medium w-full text-left transition"
+                  className="rounded-lg p-1.5 text-slate-500 transition hover:bg-rose-50 hover:text-rose-600"
                 >
                   <LogOut className="w-4 h-4 shrink-0" />
                   <span>Sign out</span>
