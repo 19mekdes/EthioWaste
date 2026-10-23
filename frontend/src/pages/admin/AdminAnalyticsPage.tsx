@@ -1,7 +1,15 @@
+
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { adminService } from '../../services/adminService';
-import { BarChart3, TrendingUp, Users, Trash2, Truck, Recycle, Award, AlertCircle } from 'lucide-react';
+import {
+  TrendingUp,
+  Users,
+  Trash2,
+  Truck,
+  Recycle,
+  AlertCircle,
+} from 'lucide-react';
 
 export const AdminAnalyticsPage: React.FC = () => {
   const [analytics, setAnalytics] = useState<any>(null);
@@ -16,107 +24,161 @@ export const AdminAnalyticsPage: React.FC = () => {
         const data = await adminService.getAnalyticsOverview();
         setAnalytics(data);
       } catch (err: any) {
-        setError(err.response?.data?.error || 'Failed to load municipal analytics metrics.');
+        setError(
+          err.response?.data?.error ||
+          'Failed to load municipal analytics metrics.'
+        );
       } finally {
         setLoading(false);
       }
     };
+
     fetchAnalytics();
   }, []);
 
+  const recycledKg = analytics?.totalRecycledKg || 0;
+  const totalReports = analytics?.totalReports || 0;
+  const totalRequests = analytics?.totalRequests || 0;
+
   return (
     <AdminLayout title="Municipal Environmental Analytics">
-      <div className="space-y-8 max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl space-y-8">
+        {/* Page heading */}
         <div>
-          <h2 className="text-xl font-bold text-white">Addis Ababa City Waste Management Metrics</h2>
-          <p className="text-sm text-slate-400">High-level environmental impact and operational metrics.</p>
+          <h2 className="text-xl font-bold text-slate-800">
+            Addis Ababa City Waste Management Metrics
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            High-level environmental impact and operational metrics.
+          </p>
         </div>
 
+        {/* Error message */}
         {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+          <div className="flex justify-center rounded-2xl border border-slate-100 bg-white py-12">
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-600" />
           </div>
         ) : (
           <div className="space-y-8">
-            {/* KPI Cards Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div className="p-3 bg-amber-500/10 text-amber-400 rounded-xl w-fit mb-3">
-                  <Trash2 className="w-6 h-6" />
+            {/* KPI cards */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600">
+                  <Trash2 className="h-6 w-6" />
                 </div>
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Citizen Waste Reports</span>
-                <span className="text-3xl font-black text-white mt-1 block">{analytics?.totalReports || 0}</span>
-                <span className="text-xs text-emerald-400 font-semibold mt-2 inline-block">100% System Tracked</span>
-              </div>
-
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div className="p-3 bg-blue-500/10 text-blue-400 rounded-xl w-fit mb-3">
-                  <Truck className="w-6 h-6" />
-                </div>
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Doorstep Pickups</span>
-                <span className="text-3xl font-black text-white mt-1 block">{analytics?.totalRequests || 0}</span>
-                <span className="text-xs text-blue-400 font-semibold mt-2 inline-block">Collector Dispatched</span>
-              </div>
-
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div className="p-3 bg-purple-500/10 text-purple-400 rounded-xl w-fit mb-3">
-                  <Recycle className="w-6 h-6" />
-                </div>
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Recycled Tonnage</span>
-                <span className="text-3xl font-black text-white mt-1 block">
-                  {((analytics?.totalRecycledKg || 0) / 1000).toFixed(2)} <span className="text-sm font-medium text-slate-400">tons</span>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Citizen Waste Reports
                 </span>
-                <span className="text-xs text-purple-400 font-semibold mt-2 inline-block">
-                  ({(analytics?.totalRecycledKg || 0).toLocaleString()} kg total)
+                <span className="mt-1 block text-3xl font-black text-slate-800">
+                  {analytics?.totalReports || 0}
+                </span>
+                <span className="mt-2 inline-block text-xs font-semibold text-emerald-700">
+                  100% System Tracked
                 </span>
               </div>
 
-              <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl">
-                <div className="p-3 bg-emerald-500/10 text-emerald-400 rounded-xl w-fit mb-3">
-                  <Users className="w-6 h-6" />
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <Truck className="h-6 w-6" />
                 </div>
-                <span className="text-xs text-slate-400 font-semibold uppercase tracking-wider block">Registered Platform Users</span>
-                <span className="text-3xl font-black text-white mt-1 block">{analytics?.totalUsers || 0}</span>
-                <span className="text-xs text-emerald-400 font-semibold mt-2 inline-block">Active Ecosystem</span>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Doorstep Pickups
+                </span>
+                <span className="mt-1 block text-3xl font-black text-slate-800">
+                  {analytics?.totalRequests || 0}
+                </span>
+                <span className="mt-2 inline-block text-xs font-semibold text-blue-700">
+                  Collector Dispatched
+                </span>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+                  <Recycle className="h-6 w-6" />
+                </div>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Recycled Tonnage
+                </span>
+                <span className="mt-1 block text-3xl font-black text-slate-800">
+                  {(recycledKg / 1000).toFixed(2)}{' '}
+                  <span className="text-sm font-medium text-slate-500">
+                    tons
+                  </span>
+                </span>
+                <span className="mt-2 inline-block text-xs font-semibold text-purple-700">
+                  ({recycledKg.toLocaleString()} kg total)
+                </span>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+                  <Users className="h-6 w-6" />
+                </div>
+                <span className="block text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  Registered Platform Users
+                </span>
+                <span className="mt-1 block text-3xl font-black text-slate-800">
+                  {analytics?.totalUsers || 0}
+                </span>
+                <span className="mt-2 inline-block text-xs font-semibold text-emerald-700">
+                  Active Ecosystem
+                </span>
               </div>
             </div>
 
-            {/* Environmental Impact Summary */}
-            <div className="bg-gradient-to-r from-slate-800/90 to-slate-900 border border-slate-700/60 rounded-3xl p-8 shadow-2xl space-y-6">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-emerald-400" /> Sustainability Impact Assessment
+            {/* Environmental impact summary */}
+            <div className="space-y-6 rounded-3xl border border-emerald-100 bg-white p-6 shadow-sm sm:p-8">
+              <h3 className="flex items-center gap-2 text-xl font-bold text-slate-800">
+                <TrendingUp className="h-5 w-5 text-emerald-600" />
+                Sustainability Impact Assessment
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-slate-300">
-                <div className="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-2">
-                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">CO2 Emissions Saved</span>
-                  <div className="text-2xl font-black text-white">
-                    {(((analytics?.totalRecycledKg || 0) * 1.5) / 1000).toFixed(2)} Metric Tons
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+                <div className="space-y-3 rounded-2xl border border-slate-100 bg-[#F8FAF8] p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-emerald-700">
+                    CO2 Emissions Saved
+                  </span>
+                  <div className="text-2xl font-black text-slate-800">
+                    {((recycledKg * 1.5) / 1000).toFixed(2)} Metric Tons
                   </div>
-                  <p className="text-xs text-slate-400">Estimated based on recycled plastic and metal diversion from landfills.</p>
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    Estimated based on recycled plastic and metal diversion
+                    from landfills.
+                  </p>
                 </div>
 
-                <div className="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-2">
-                  <span className="text-xs font-bold text-teal-400 uppercase tracking-wider">Landfill Diverted Space</span>
-                  <div className="text-2xl font-black text-white">
-                    {(((analytics?.totalRecycledKg || 0) * 2.2)).toFixed(0)} m³
+                <div className="space-y-3 rounded-2xl border border-slate-100 bg-[#F8FAF8] p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-teal-700">
+                    Landfill Diverted Space
+                  </span>
+                  <div className="text-2xl font-black text-slate-800">
+                    {(recycledKg * 2.2).toFixed(0)} m³
                   </div>
-                  <p className="text-xs text-slate-400">Conserved landfill volume in Repi & Addis Ababa dump sites.</p>
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    Conserved landfill volume in Repi and Addis Ababa dump
+                    sites.
+                  </p>
                 </div>
 
-                <div className="bg-slate-950/60 p-5 rounded-2xl border border-slate-800 space-y-2">
-                  <span className="text-xs font-bold text-amber-400 uppercase tracking-wider">Community Eco-Points Distributed</span>
-                  <div className="text-2xl font-black text-white">
-                    {((analytics?.totalReports || 0) * 15 + (analytics?.totalRequests || 0) * 25).toLocaleString()} pts
+                <div className="space-y-3 rounded-2xl border border-slate-100 bg-[#F8FAF8] p-5">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-700">
+                    Community Eco-Points Distributed
+                  </span>
+                  <div className="text-2xl font-black text-slate-800">
+                    {(totalReports * 15 + totalRequests * 25).toLocaleString()}{' '}
+                    pts
                   </div>
-                  <p className="text-xs text-slate-400">Total Eco-Points awarded to citizens for active participation.</p>
+                  <p className="text-xs leading-relaxed text-slate-500">
+                    Total Eco-Points awarded to citizens for active
+                    participation.
+                  </p>
                 </div>
               </div>
             </div>
