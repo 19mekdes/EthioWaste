@@ -1,54 +1,72 @@
+
 import React from 'react';
 import { CollectorLayout } from '../../layouts/CollectorLayout';
 import { useAuth } from '../../contexts/AuthContext';
-import { User, Truck, Phone, Mail, Shield, MapPin } from 'lucide-react';
+import { Truck, Phone, Mail, MapPin } from 'lucide-react';
 
 export const CollectorProfilePage: React.FC = () => {
   const { user } = useAuth();
 
   return (
     <CollectorLayout title="Collector Profile">
-      <div className="max-w-3xl mx-auto space-y-6">
-        <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl space-y-6">
-          <div className="flex items-center gap-4 border-b border-slate-700 pb-6">
-            <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-400">
-              <Truck className="w-10 h-10" />
+      <div className="mx-auto max-w-3xl space-y-6">
+        <div className="space-y-6 rounded-xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8">
+          {/* Collector identity */}
+          <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
+            <div className="rounded-2xl bg-emerald-50 p-4 text-emerald-700">
+              <Truck className="h-10 w-10" />
             </div>
-            <div>
-              <h2 className="text-2xl font-bold text-white">{user?.name || 'Collector'}</h2>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+
+            <div className="min-w-0">
+              <h2 className="break-words text-2xl font-bold text-slate-800">
+                {user?.name || 'Collector'}
+              </h2>
+              <span className="mt-2 inline-flex rounded-full border border-emerald-100 bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">
                 Municipal Waste Collector
               </span>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <Mail className="w-4 h-4 text-emerald-400" /> Email Address
+          {/* Profile information */}
+          <div className="grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
+            <div className="space-y-2 rounded-xl border border-slate-100 bg-[#F8FAF8] p-4">
+              <span className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <Mail className="h-4 w-4 text-emerald-700" />
+                Email Address
               </span>
-              <p className="font-semibold text-white">{user?.email || 'N/A'}</p>
+              <p className="break-words font-semibold text-slate-800">
+                {user?.email || 'N/A'}
+              </p>
             </div>
 
-            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <Phone className="w-4 h-4 text-teal-400" /> Contact Phone
+            <div className="space-y-2 rounded-xl border border-slate-100 bg-[#F8FAF8] p-4">
+              <span className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <Phone className="h-4 w-4 text-emerald-700" />
+                Contact Phone
               </span>
-              <p className="font-semibold text-white">{user?.phone || 'N/A'}</p>
+              <p className="break-words font-semibold text-slate-800">
+                {user?.phone || 'N/A'}
+              </p>
             </div>
 
-            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-cyan-400" /> Assigned Vehicle #
+            <div className="space-y-2 rounded-xl border border-slate-100 bg-[#F8FAF8] p-4">
+              <span className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <Truck className="h-4 w-4 text-emerald-700" />
+                Assigned Vehicle #
               </span>
-              <p className="font-semibold text-white">{user?.vehicleNumber || 'AA-C-4092'}</p>
+              <p className="break-words font-semibold text-slate-800">
+                {user?.vehicleNumber || 'AA-C-4092'}
+              </p>
             </div>
 
-            <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/40 space-y-1">
-              <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <MapPin className="w-4 h-4 text-amber-400" /> Sub-City Operating Zone
+            <div className="space-y-2 rounded-xl border border-slate-100 bg-[#F8FAF8] p-4">
+              <span className="flex items-center gap-2 text-xs font-medium text-slate-500">
+                <MapPin className="h-4 w-4 text-emerald-700" />
+                Sub-City Operating Zone
               </span>
-              <p className="font-semibold text-white">{user?.subCity || 'Addis Ababa Central Zone'}</p>
+              <p className="break-words font-semibold text-slate-800">
+                {user?.subCity || 'Addis Ababa Central Zone'}
+              </p>
             </div>
           </div>
         </div>

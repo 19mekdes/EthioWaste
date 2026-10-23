@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -49,6 +50,7 @@ export const CitizenOverviewPage: React.FC = () => {
       setLoading(true);
       try {
         const res: any = await citizenService.getDashboardStats();
+
         if (res && res.stats) {
           setData(res);
         } else if (res && res.data && res.data.stats) {
@@ -60,121 +62,174 @@ export const CitizenOverviewPage: React.FC = () => {
         setLoading(false);
       }
     }
+
     loadStats();
   }, []);
 
   if (loading) {
     return (
-      <div className="py-12 flex justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-      </div>
+      <CitizenLayout>
+        <div className="flex justify-center py-12">
+          <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-600" />
+        </div>
+      </CitizenLayout>
     );
   }
 
   const { stats, recentNotifications, recentReports, recentRequests } = data;
 
+  const cardClass =
+    'rounded-2xl border border-slate-200 bg-white p-5 shadow-sm';
+
+  const linkClass =
+    'flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-800';
+
+  const smallHeadingClass =
+    'flex items-center gap-2 text-sm font-bold text-slate-800';
+
+  const mutedTextClass = 'text-xs text-slate-500';
+
   return (
     <CitizenLayout>
       <div className="space-y-6">
         {/* Welcome Banner */}
-        <div className="glass-card p-4 sm:p-6 bg-gradient-to-r from-slate-900 via-emerald-950/40 to-slate-900 border border-emerald-500/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 rounded-2xl">
+        <div className="flex flex-col items-start justify-between gap-4 rounded-2xl border border-emerald-100 bg-[#E8F3E7] p-5 sm:p-6 md:flex-row md:items-center">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 font-black text-lg sm:text-xl flex items-center justify-center shadow-lg shadow-emerald-500/20 shrink-0">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-600 text-lg font-bold text-white sm:h-14 sm:w-14 sm:text-xl">
               {user?.name ? user.name.charAt(0) : 'U'}
             </div>
+
             <div>
-              <div className="text-[11px] sm:text-xs text-emerald-400 font-bold uppercase tracking-wider mb-0.5">
-                Authenticated Citizen Portal
+              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-800">
+                Citizen Dashboard
               </div>
-              <h1 className="text-xl sm:text-2xl font-extrabold text-white">
-                Welcome back, {user?.name ? user.name.split(' ')[0] : 'Citizen'} 👋
+
+              <h1 className="text-xl font-bold text-slate-800 sm:text-2xl">
+                Welcome back, {user?.name ? user.name.split(' ')[0] : 'Citizen'}!
               </h1>
-              <p className="text-xs text-slate-400">
-                Track your waste reports, manage collection requests, and monitor environmental cleanup activities.
+
+              <p className="mt-1 max-w-2xl text-xs leading-5 text-slate-600 sm:text-sm">
+                Track your waste reports, manage collection requests, and
+                monitor cleanup activities.
               </p>
             </div>
           </div>
 
-          <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 w-full md:w-auto">
-            <Link to="/citizen/report-waste" className="flex-1 sm:flex-none justify-center px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-              <AlertTriangle className="w-4 h-4 text-slate-950 shrink-0" />
+          <div className="flex w-full flex-wrap gap-2 sm:flex-nowrap md:w-auto">
+            <Link
+              to="/citizen/report-waste"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-white px-4 py-2.5 text-xs font-semibold text-emerald-800 transition hover:bg-emerald-50 sm:flex-none"
+            >
+              <AlertTriangle className="h-4 w-4 shrink-0" />
               <span>Report Waste</span>
             </Link>
-            <Link to="/citizen/request-collection" className="flex-1 sm:flex-none justify-center px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
-              <PlusCircle className="w-4 h-4 text-slate-950 shrink-0" />
+
+            <Link
+              to="/citizen/request-collection"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-emerald-700 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-emerald-800 sm:flex-none"
+            >
+              <PlusCircle className="h-4 w-4 shrink-0" />
               <span>Request Pickup</span>
             </Link>
           </div>
         </div>
 
-        {/* Real Statistics Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-          <div className="glass-card p-4 border border-slate-800 bg-slate-900/60 rounded-2xl">
-            <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider">Total Reports</span>
-              <div className="p-2 rounded-xl bg-slate-800 text-emerald-400">
-                <FileText className="w-4 h-4" />
+        {/* Statistics */}
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          <div className={cardClass}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-slate-500">
+                Total Reports
+              </span>
+              <div className="rounded-lg bg-emerald-50 p-2 text-emerald-700">
+                <FileText className="h-4 w-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-white">{stats.totalReports}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Submitted waste & dumping reports</div>
+            <div className="text-2xl font-bold text-slate-800">
+              {stats.totalReports}
+            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Submitted waste reports
+            </p>
           </div>
 
-          <div className="glass-card p-4 border border-slate-800 bg-slate-900/60 rounded-2xl">
-            <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider">Pending Reports</span>
-              <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-                <Clock className="w-4 h-4" />
+          <div className={cardClass}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-slate-500">
+                Pending Reports
+              </span>
+              <div className="rounded-lg bg-amber-50 p-2 text-amber-700">
+                <Clock className="h-4 w-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-amber-400">{stats.pendingReports}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Awaiting admin verification</div>
+            <div className="text-2xl font-bold text-amber-700">
+              {stats.pendingReports}
+            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Awaiting verification
+            </p>
           </div>
 
-          <div className="glass-card p-4 border border-slate-800 bg-slate-900/60 rounded-2xl">
-            <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider">Active Requests</span>
-              <div className="p-2 rounded-xl bg-sky-500/10 text-sky-400">
-                <Truck className="w-4 h-4" />
+          <div className={cardClass}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-slate-500">
+                Active Requests
+              </span>
+              <div className="rounded-lg bg-sky-50 p-2 text-sky-700">
+                <Truck className="h-4 w-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-sky-400">{stats.activeCollectionRequests}</div>
-            <div className="text-[11px] text-slate-400 mt-1">In pickup pipeline</div>
+            <div className="text-2xl font-bold text-sky-700">
+              {stats.activeCollectionRequests}
+            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Collection requests in progress
+            </p>
           </div>
 
-          <div className="glass-card p-4 border border-slate-800 bg-slate-900/60 rounded-2xl">
-            <div className="flex items-center justify-between text-slate-400 mb-2">
-              <span className="text-xs font-semibold uppercase tracking-wider">Completed</span>
-              <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
-                <CheckCircle2 className="w-4 h-4" />
+          <div className={cardClass}>
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-slate-500">
+                Completed
+              </span>
+              <div className="rounded-lg bg-emerald-50 p-2 text-emerald-700">
+                <CheckCircle2 className="h-4 w-4" />
               </div>
             </div>
-            <div className="text-2xl font-black text-emerald-400">{stats.completedCollections}</div>
-            <div className="text-[11px] text-slate-400 mt-1">Resolved collections & reports</div>
+            <div className="text-2xl font-bold text-emerald-700">
+              {stats.completedCollections}
+            </div>
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Completed collections
+            </p>
           </div>
         </div>
 
-        {/* Two Column Layout: Recent Reports & Collection Requests */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="glass-card p-5 border border-slate-800 rounded-2xl bg-slate-900/60 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <FileText className="w-4 h-4 text-emerald-400" />
+        {/* Recent Reports and Collection Requests */}
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          {/* Recent Waste Reports */}
+          <div className={`${cardClass} space-y-4`}>
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className={smallHeadingClass}>
+                <FileText className="h-4 w-4 text-emerald-700" />
                 Recent Waste Reports
               </h3>
-              <Link
-                to="/citizen/my-reports"
-                className="text-xs text-emerald-400 hover:text-emerald-300 font-semibold flex items-center gap-1"
-              >
-                View All <ChevronRight className="w-3.5 h-3.5" />
+
+              <Link to="/citizen/my-reports" className={linkClass}>
+                View All <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {recentReports.length === 0 ? (
-              <div className="py-8 text-center space-y-2">
-                <FileText className="w-8 h-8 text-slate-600 mx-auto" />
-                <p className="text-xs text-slate-400">No waste reports submitted yet.</p>
-                <Link to="/citizen/report-waste" className="text-xs text-emerald-400 underline font-medium">
+              <div className="space-y-2 py-8 text-center">
+                <FileText className="mx-auto h-8 w-8 text-slate-300" />
+                <p className={mutedTextClass}>
+                  No waste reports submitted yet.
+                </p>
+                <Link
+                  to="/citizen/report-waste"
+                  className="text-xs font-medium text-emerald-700 underline"
+                >
                   Submit your first report
                 </Link>
               </div>
@@ -183,26 +238,37 @@ export const CitizenOverviewPage: React.FC = () => {
                 {recentReports.map((report) => (
                   <div
                     key={report.id}
-                    className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex items-center justify-between gap-3"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-[#FAFCF9] p-3.5"
                   >
-                    <div className="space-y-1 min-w-0">
+                    <div className="min-w-0 space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-200 truncate">{report.title || `${report.wasteType || report.category || 'Waste'} Site`}</span>
+                        <span className="truncate text-xs font-bold text-slate-800">
+                          {report.title ||
+                            `${report.wasteType || report.category || 'Waste'} Site`}
+                        </span>
+
                         {report.isIllegalDumping && (
-                          <span className="text-[10px] px-1.5 py-0.5 rounded font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30">
+                          <span className="rounded border border-rose-200 bg-rose-50 px-1.5 py-0.5 text-[10px] font-semibold text-rose-700">
                             Illegal Dumping
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-slate-400">
+
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
                         <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-slate-500" /> {report.address || 'Geo-pinned'}
+                          <MapPin className="h-3 w-3" />
+                          {report.address || 'Geo-pinned'}
                         </span>
                         <span>•</span>
-                        <span>{new Date(report.createdAt).toLocaleDateString()}</span>
+                        <span>
+                          {new Date(report.createdAt).toLocaleDateString()}
+                        </span>
                       </div>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${getStatusBadgeStyle(report.status)}`}>
+
+                    <span
+                      className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${getStatusBadgeStyle(report.status)}`}
+                    >
                       {report.status}
                     </span>
                   </div>
@@ -211,25 +277,32 @@ export const CitizenOverviewPage: React.FC = () => {
             )}
           </div>
 
-          <div className="glass-card p-5 border border-slate-800 rounded-2xl bg-slate-900/60 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-              <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                <Truck className="w-4 h-4 text-sky-400" />
+          {/* Recent Collection Requests */}
+          <div className={`${cardClass} space-y-4`}>
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className={smallHeadingClass}>
+                <Truck className="h-4 w-4 text-sky-700" />
                 Recent Collection Requests
               </h3>
+
               <Link
                 to="/citizen/my-requests"
-                className="text-xs text-sky-400 hover:text-sky-300 font-semibold flex items-center gap-1"
+                className="flex items-center gap-1 text-xs font-semibold text-sky-700 hover:text-sky-800"
               >
-                View All <ChevronRight className="w-3.5 h-3.5" />
+                View All <ChevronRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
             {recentRequests.length === 0 ? (
-              <div className="py-8 text-center space-y-2">
-                <Truck className="w-8 h-8 text-slate-600 mx-auto" />
-                <p className="text-xs text-slate-400">No collection requests created yet.</p>
-                <Link to="/citizen/request-collection" className="text-xs text-sky-400 underline font-medium">
+              <div className="space-y-2 py-8 text-center">
+                <Truck className="mx-auto h-8 w-8 text-slate-300" />
+                <p className={mutedTextClass}>
+                  No collection requests created yet.
+                </p>
+                <Link
+                  to="/citizen/request-collection"
+                  className="text-xs font-medium text-sky-700 underline"
+                >
                   Request a waste pickup
                 </Link>
               </div>
@@ -239,28 +312,37 @@ export const CitizenOverviewPage: React.FC = () => {
                   <Link
                     key={req.id}
                     to={`/citizen/requests/${req.id}`}
-                    className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 hover:border-sky-500/40 transition-all flex items-center justify-between gap-3 block"
+                    className="flex items-center justify-between gap-3 rounded-xl border border-slate-100 bg-[#FAFCF9] p-3.5 transition hover:border-sky-200 hover:bg-sky-50/40"
                   >
-                    <div className="space-y-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-slate-200">{req.wasteType} Waste</span>
+                    <div className="min-w-0 space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-xs font-bold text-slate-800">
+                          {req.wasteType} Waste
+                        </span>
                         {req.estimatedQuantity && (
-                          <span className="text-[10px] text-slate-400 font-mono">({req.estimatedQuantity})</span>
+                          <span className="text-[10px] text-slate-500">
+                            ({req.estimatedQuantity})
+                          </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-3 text-[11px] text-slate-400">
+
+                      <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3 text-slate-500" /> {new Date(req.preferredDate).toLocaleDateString()}
+                          <Calendar className="h-3 w-3" />
+                          {new Date(req.preferredDate).toLocaleDateString()}
                         </span>
                         <span>•</span>
                         <span>{req.address}</span>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${getStatusBadgeStyle(req.status)}`}>
+
+                    <div className="flex shrink-0 items-center gap-2">
+                      <span
+                        className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold ${getStatusBadgeStyle(req.status)}`}
+                      >
                         {req.status}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-slate-500" />
+                      <ChevronRight className="h-4 w-4 text-slate-400" />
                     </div>
                   </Link>
                 ))}
@@ -270,44 +352,54 @@ export const CitizenOverviewPage: React.FC = () => {
         </div>
 
         {/* Notifications */}
-        <div className="glass-card p-5 border border-slate-800 rounded-2xl bg-slate-900/60 space-y-4">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-            <h3 className="text-sm font-bold text-white flex items-center gap-2">
-              <Bell className="w-4 h-4 text-amber-400" />
+        <div className={`${cardClass} space-y-4`}>
+          <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <h3 className={smallHeadingClass}>
+              <Bell className="h-4 w-4 text-amber-600" />
               Recent Notifications
             </h3>
+
             <Link
               to="/citizen/notifications"
-              className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center gap-1"
+              className="flex items-center gap-1 text-xs font-semibold text-amber-700 hover:text-amber-800"
             >
-              Notifications Feed ({stats.unreadNotificationsCount} unread) <ChevronRight className="w-3.5 h-3.5" />
+              <span>
+                Notifications ({stats.unreadNotificationsCount} unread)
+              </span>
+              <ChevronRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
           {recentNotifications.length === 0 ? (
-            <div className="py-6 text-center text-xs text-slate-400">
-              No notifications yet. You will receive updates as your reports and requests progress.
+            <div className="py-6 text-center text-xs text-slate-500">
+              No notifications yet. You will receive updates as your reports
+              and requests progress.
             </div>
           ) : (
             <div className="space-y-2.5">
               {recentNotifications.map((notif) => (
                 <div
                   key={notif.id}
-                  className={`p-3.5 rounded-xl border flex items-start justify-between gap-3 ${
+                  className={`flex items-start justify-between gap-3 rounded-xl border p-3.5 ${
                     !notif.isRead
-                      ? 'bg-amber-500/10 border-amber-500/30'
-                      : 'bg-slate-900/40 border-slate-800/80'
+                      ? 'border-amber-200 bg-amber-50'
+                      : 'border-slate-100 bg-[#FAFCF9]'
                   }`}
                 >
-                  <div className="space-y-0.5">
-                    <div className="text-xs font-bold text-slate-200">{notif.title}</div>
-                    <div className="text-xs text-slate-300">{notif.message}</div>
-                    <div className="text-[10px] text-slate-400 pt-1">
+                  <div className="space-y-1">
+                    <div className="text-xs font-bold text-slate-800">
+                      {notif.title}
+                    </div>
+                    <div className="text-xs leading-5 text-slate-600">
+                      {notif.message}
+                    </div>
+                    <div className="pt-1 text-[10px] text-slate-500">
                       {new Date(notif.createdAt).toLocaleString()}
                     </div>
                   </div>
+
                   {!notif.isRead && (
-                    <span className="w-2 h-2 rounded-full bg-amber-400 shrink-0 mt-1" />
+                    <span className="mt-1 h-2 w-2 shrink-0 rounded-full bg-amber-500" />
                   )}
                 </div>
               ))}
@@ -322,20 +414,20 @@ export const CitizenOverviewPage: React.FC = () => {
 function getStatusBadgeStyle(status: string) {
   switch (status) {
     case 'PENDING':
-      return 'bg-amber-500/10 text-amber-400 border border-amber-500/20';
+      return 'border-amber-200 bg-amber-50 text-amber-800';
     case 'VERIFIED':
     case 'APPROVED':
-      return 'bg-blue-500/10 text-blue-400 border border-blue-500/20';
+      return 'border-blue-200 bg-blue-50 text-blue-800';
     case 'ASSIGNED':
-      return 'bg-purple-500/10 text-purple-400 border border-purple-500/20';
+      return 'border-purple-200 bg-purple-50 text-purple-800';
     case 'IN_PROGRESS':
-      return 'bg-sky-500/10 text-sky-400 border border-sky-500/20 animate-pulse';
+      return 'border-sky-200 bg-sky-50 text-sky-800';
     case 'COLLECTED':
     case 'COMPLETED':
-      return 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+      return 'border-emerald-200 bg-emerald-50 text-emerald-800';
     case 'REJECTED':
-      return 'bg-rose-500/10 text-rose-400 border border-rose-500/20';
+      return 'border-rose-200 bg-rose-50 text-rose-800';
     default:
-      return 'bg-slate-800 text-slate-400';
+      return 'border-slate-200 bg-slate-100 text-slate-600';
   }
 }
