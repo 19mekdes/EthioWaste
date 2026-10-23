@@ -14,8 +14,8 @@ export const AdminLayout: React.FC<LayoutProps> = ({ title, children }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+      <div className="min-h-screen bg-[#F8FAF8] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
       </div>
     );
   }
@@ -25,15 +25,15 @@ export const AdminLayout: React.FC<LayoutProps> = ({ title, children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#F8FAF8] text-slate-800 flex flex-col font-sans">
       <Header />
       <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row gap-8">
           <AdminSidebar />
           <main className="flex-1 min-w-0">
             {title && (
-              <div className="mb-6 border-b border-slate-800 pb-4">
-                <h1 className="text-2xl font-extrabold text-white tracking-tight">{title}</h1>
+              <div className="mb-6 border-b border-slate-200 pb-4">
+                <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">{title}</h1>
               </div>
             )}
             {children || <Outlet />}
