@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -9,13 +10,16 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-export const CollectorLayout: React.FC<LayoutProps> = ({ title, children }) => {
+export const CollectorLayout: React.FC<LayoutProps> = ({
+  title,
+  children,
+}) => {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
+      <div className="flex min-h-screen items-center justify-center bg-[#F8FAF8]">
+        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
       </div>
     );
   }
@@ -25,17 +29,26 @@ export const CollectorLayout: React.FC<LayoutProps> = ({ title, children }) => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col font-sans">
+    <div className="flex min-h-screen flex-col bg-[#F8FAF8] font-sans text-slate-800 md:h-screen md:min-h-0 md:overflow-hidden">
       <Header />
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row gap-8">
-          <CollectorSidebar />
-          <main className="flex-1 min-w-0">
+
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8 md:min-h-0 md:overflow-hidden">
+        <div className="flex flex-col gap-5 md:h-full md:min-h-0 md:flex-row md:gap-8">
+          {/* Desktop sidebar */}
+          <aside className="md:h-full md:min-h-0 md:w-64 md:shrink-0 md:overflow-y-auto">
+            <CollectorSidebar />
+          </aside>
+
+          {/* Main content */}
+          <main className="min-w-0 flex-1 md:h-full md:min-h-0 md:overflow-y-auto">
             {title && (
-              <div className="mb-6 border-b border-slate-800 pb-4">
-                <h1 className="text-2xl font-extrabold text-white tracking-tight">{title}</h1>
+              <div className="mb-6 border-b border-slate-200 pb-4">
+                <h1 className="text-2xl font-bold tracking-tight text-slate-800">
+                  {title}
+                </h1>
               </div>
             )}
+
             {children || <Outlet />}
           </main>
         </div>
