@@ -49,15 +49,15 @@ export const NotificationsPage: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h2 className="text-xl font-bold text-white">System Notifications</h2>
-            <p className="text-sm text-slate-400">Updates regarding your waste reports, collection requests, and eco-rewards.</p>
+            <h2 className="text-xl font-bold text-slate-800">System Notifications</h2>
+            <p className="text-sm text-slate-500">Updates regarding your waste reports, collection requests, and eco-rewards.</p>
           </div>
           {notifications.some(n => !n.isRead) && (
             <button
               onClick={handleMarkAllAsRead}
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition shrink-0"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-emerald-50 text-slate-700 text-xs font-semibold border border-slate-200 transition shrink-0"
             >
-              <Check className="w-4 h-4 text-emerald-400" /> Mark All as Read
+              <Check className="w-4 h-4 text-emerald-600" /> Mark All as Read
             </button>
           )}
         </div>
@@ -74,7 +74,7 @@ export const NotificationsPage: React.FC = () => {
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500" />
           </div>
         ) : notifications.length === 0 ? (
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-12 text-center">
+          <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center">
             <Bell className="w-12 h-12 text-slate-600 mx-auto mb-4" />
             <h3 className="text-lg font-semibold text-slate-300">No notifications yet</h3>
             <p className="text-sm text-slate-500 mt-1">You will receive alerts here when your requests change status.</p>
@@ -84,11 +84,10 @@ export const NotificationsPage: React.FC = () => {
             {notifications.map((n) => (
               <div
                 key={n.id}
-                className={`p-5 rounded-2xl border transition flex items-start justify-between gap-4 ${
-                  n.isRead
-                    ? 'bg-slate-800/40 border-slate-700/40 text-slate-400'
-                    : 'bg-slate-800 border-emerald-500/30 text-slate-100 shadow-md'
-                }`}
+                className={`p-5 rounded-2xl border transition flex items-start justify-between gap-4 ${n.isRead
+                    ? 'bg-slate-50 border-slate-200 text-slate-600'
+                    : 'bg-white border-emerald-200 text-slate-700 shadow-sm'
+                  }`}
               >
                 <div className="flex items-start gap-3.5">
                   <div className={`p-2.5 rounded-xl ${n.isRead ? 'bg-slate-700/50 text-slate-400' : 'bg-emerald-500/10 text-emerald-400'}`}>
