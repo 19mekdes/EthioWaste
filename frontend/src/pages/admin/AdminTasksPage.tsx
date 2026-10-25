@@ -1,8 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { adminService } from '../../services/adminService';
 import { CollectionRequest } from '../../types';
-import { Truck, MapPin, CheckCircle2, Clock, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 export const AdminTasksPage: React.FC = () => {
   const [tasks, setTasks] = useState<CollectionRequest[]>([]);
@@ -27,54 +28,58 @@ export const AdminTasksPage: React.FC = () => {
 
   return (
     <AdminLayout title="Dispatch Fleet Overview">
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-white">Active Collection Fleet & Dispatch Log</h2>
-          <p className="text-sm text-slate-400">Monitor en-route pickup trucks and completed dispatches.</p>
+          <h2 className="text-xl font-bold text-slate-800">
+            Active Collection Fleet &amp; Dispatch Log
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Monitor en-route pickup trucks and completed dispatches.
+          </p>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <AlertCircle className="h-5 w-5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
           </div>
         ) : tasks.length === 0 ? (
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-12 text-center text-slate-400">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm sm:p-12">
             No active dispatch tasks in system.
           </div>
         ) : (
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl overflow-hidden shadow-xl">
+          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[650px]">
+              <table className="w-full min-w-[650px] border-collapse text-left">
                 <thead>
-                  <tr className="bg-slate-900/80 border-b border-slate-700 text-slate-400 text-xs uppercase tracking-wider">
-                    <th className="p-4">Waste Type</th>
-                    <th className="p-4">Address</th>
-                    <th className="p-4">Assigned Collector</th>
-                    <th className="p-4">Status</th>
-                    <th className="p-4">Date</th>
+                  <tr className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
+                    <th scope="col" className="p-4 font-semibold">Waste Type</th>
+                    <th scope="col" className="p-4 font-semibold">Address</th>
+                    <th scope="col" className="p-4 font-semibold">Assigned Collector</th>
+                    <th scope="col" className="p-4 font-semibold">Status</th>
+                    <th scope="col" className="p-4 font-semibold">Date</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-700/60 text-sm text-slate-200">
+                <tbody className="divide-y divide-slate-100 text-sm text-slate-700">
                   {tasks.map((t) => (
-                    <tr key={t.id} className="hover:bg-slate-700/30 transition">
-                      <td className="p-4 font-bold text-white">{t.wasteType}</td>
-                      <td className="p-4 text-xs text-slate-300 max-w-xs truncate">{t.address}</td>
-                      <td className="p-4 text-xs font-semibold text-blue-400">
+                    <tr key={t.id} className="transition hover:bg-emerald-50/40">
+                      <td className="p-4 font-semibold text-slate-800">{t.wasteType}</td>
+                      <td className="max-w-xs truncate p-4 text-xs text-slate-600">{t.address}</td>
+                      <td className="p-4 text-xs font-semibold text-emerald-700">
                         {t.assignedCollector?.name || 'Unassigned'}
                       </td>
                       <td className="p-4">
-                        <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-700 text-emerald-400 border border-emerald-500/30">
+                        <span className="inline-flex rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                           {t.status}
                         </span>
                       </td>
-                      <td className="p-4 text-xs text-slate-400">
+                      <td className="p-4 text-xs text-slate-500">
                         {new Date(t.preferredDate).toLocaleDateString()}
                       </td>
                     </tr>

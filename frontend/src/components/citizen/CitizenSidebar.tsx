@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import {
   LayoutDashboard,
   PlusCircle,
@@ -11,7 +13,10 @@ import {
   Star,
   Recycle,
   AlertTriangle,
+  Menu,
+  X,
   ChevronDown,
+  LogOut,
 } from 'lucide-react';
 
 interface CitizenSidebarProps {
@@ -22,7 +27,10 @@ export function CitizenSidebar({
   unreadNotificationsCount = 0,
 }: CitizenSidebarProps) {
   const [mobileExpanded, setMobileExpanded] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const pathname = location.pathname;
 
   const navItems = [
@@ -56,46 +64,62 @@ export function CitizenSidebar({
 
   const currentItem =
     navItems.find(
-      (item) =>
-        pathname === item.href ||
-        (item.href !== '/dashboard/citizen' &&
-          pathname.startsWith(item.href))
+      (item) => pathname === item.href || pathname.startsWith(item.href)
     ) || navItems[0];
+
+  useEffect(() => {
+    setMobileExpanded(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!mobileExpanded) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setMobileExpanded(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileExpanded]);
+
+  const handleLogout = async () => {
+    await logout();
+    setMobileExpanded(false);
+    navigate('/login');
+  };
 
   const renderNavLinks = () => (
     <nav className="space-y-1">
       {navItems.map((item) => {
         const isActive =
-          pathname === item.href ||
-          (item.href !== '/dashboard/citizen' &&
-            pathname.startsWith(item.href));
+          pathname === item.href || pathname.startsWith(item.href);
 
         return (
           <Link
             key={item.href}
             to={item.href}
             onClick={() => setMobileExpanded(false)}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${isActive
-              ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm'
-              : item.highlight
-                ? 'text-amber-400 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/20'
-                : 'text-slate-400 hover:bg-slate-800/60 hover:text-white'
+            className={`flex w-full items-center justify-between rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors ${isActive
+                ? 'border-emerald-100 bg-emerald-50 text-emerald-800'
+                : item.highlight
+                  ? 'border-transparent text-emerald-800 hover:bg-emerald-50'
+                  : 'border-transparent text-slate-600 hover:bg-slate-50 hover:text-emerald-800'
               }`}
           >
-            <div className="flex items-center gap-2.5">
+            <span className="flex items-center gap-3">
               <item.icon
-                className={`w-4 h-4 shrink-0 ${isActive
-                  ? 'text-emerald-400'
-                  : item.highlight
-                    ? 'text-amber-400'
-                    : 'text-slate-400'
+                className={`h-4 w-4 shrink-0 ${isActive || item.highlight
+                    ? 'text-emerald-700'
+                    : 'text-slate-500'
                   }`}
               />
               <span>{item.label}</span>
-            </div>
+            </span>
 
             {item.badge !== undefined && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500 text-white animate-pulse">
+              <span className="rounded-full bg-emerald-700 px-2 py-0.5 text-xs font-semibold text-white">
                 {item.badge}
               </span>
             )}
@@ -105,103 +129,180 @@ export function CitizenSidebar({
     </nav>
   );
 
+  const quickActions = (
+    <div className="space-y-3 border-t border-slate-100 pt-4">
+      <h4 className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-700">
+        <PlusCircle className="h-4 w-4 text-emerald-700" />
+        Quick Actions
+      </h4>
+
+      <p className="text-xs leading-5 text-slate-500">
+        Spotted illegal dumping or need a bulk waste collection? Submit a
+        report in under 60 seconds.
+      </p>
+
+      <div className="space-y-2">
+        <Link
+          to="/citizen/report-waste"
+          onClick={() => setMobileExpanded(false)}
+          className="flex w-full items-center justify-center rounded-lg bg-emerald-700 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+        >
+          Report Waste Issue
+        </Link>
+
+        <Link
+          to="/citizen/request-collection"
+          onClick={() => setMobileExpanded(false)}
+          className="flex w-full items-center justify-center rounded-lg border border-emerald-200 bg-white px-3 py-2.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+        >
+          Request Collection
+        </Link>
+      </div>
+    </div>
+  );
+
   return (
-    <aside className="w-full md:w-64 shrink-0">
-      {/* Mobile Collapsible Subnav Bar */}
-      <div className="md:hidden mb-4">
+    <>
+      {/* Mobile menu bar */}
+      <div className="fixed left-0 right-0 top-16 z-30 border-b border-slate-200 bg-white px-4 py-3 shadow-sm md:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+          <div className="flex min-w-0 items-center gap-2">
+            <Recycle className="h-5 w-5 shrink-0 text-emerald-700" />
+            <span className="truncate text-sm font-semibold text-slate-800">
+              {currentItem.label}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileExpanded(true)}
+            aria-label="Open citizen navigation"
+            aria-controls="citizen-mobile-sidebar"
+            aria-expanded={mobileExpanded}
+            className="shrink-0 rounded-lg p-2 text-slate-700 transition hover:bg-emerald-50 hover:text-emerald-800"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Reserve space for the fixed mobile menu bar */}
+      <div className="h-14 md:hidden" aria-hidden="true" />
+
+      {/* Mobile backdrop */}
+      {mobileExpanded && (
         <button
           type="button"
-          onClick={() => setMobileExpanded(!mobileExpanded)}
-          className="w-full flex items-center justify-between p-3.5 rounded-2xl bg-slate-900 border border-slate-800 text-xs font-bold text-slate-300 shadow-sm"
-        >
+          aria-label="Close navigation menu"
+          onClick={() => setMobileExpanded(false)}
+          className="fixed inset-0 z-40 bg-slate-900/40 md:hidden"
+        />
+      )}
+
+      {/* Mobile drawer */}
+      <aside
+        id="citizen-mobile-sidebar"
+        aria-label="Citizen navigation"
+        aria-hidden={!mobileExpanded}
+        className={`fixed inset-y-0 left-0 z-50 flex w-[min(19rem,85vw)] flex-col overflow-y-auto border-r border-slate-200 bg-white p-5 shadow-xl transition-transform duration-200 md:hidden ${mobileExpanded ? 'translate-x-0' : '-translate-x-full'
+          }`}
+      >
+        <div className="mb-6 flex items-center justify-between border-b border-slate-100 pb-4">
           <div className="flex items-center gap-2">
-            <Recycle className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span className="text-emerald-400 uppercase tracking-wider text-[11px]">
-              Citizen Menu:
+            <Recycle className="h-5 w-5 text-emerald-700" />
+            <span className="font-bold text-slate-800">Citizen Portal</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileExpanded(false)}
+            aria-label="Close citizen navigation"
+            className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        <div className="space-y-5">
+          {renderNavLinks()}
+          {quickActions}
+        </div>
+
+        <div className="mt-5 border-t border-slate-200 pt-4">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-rose-50 hover:text-rose-700"
+          >
+            <LogOut className="h-4 w-4" />
+            Sign out
+          </button>
+        </div>
+      </aside>
+
+      {/* Desktop sidebar */}
+      <aside className="hidden w-64 shrink-0 md:block">
+        <div className="relative flex max-h-[calc(100vh-8rem)] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white">
+          <div className="flex shrink-0 items-center gap-2 border-b border-slate-100 bg-white px-6 pb-4 pt-4">
+            <Recycle className="h-5 w-5 text-emerald-700" />
+            <span className="text-sm font-bold text-slate-800">
+              Citizen Portal
             </span>
-            <span className="text-white">{currentItem.label}</span>
           </div>
 
-          <div className="flex items-center gap-1.5 text-slate-400 text-[11px]">
-            {unreadNotificationsCount > 0 && (
-              <span className="px-1.5 py-0.5 rounded-full bg-rose-500 text-white text-[10px] font-bold">
-                {unreadNotificationsCount}
-              </span>
-            )}
-
-            <span>{mobileExpanded ? 'Hide' : 'All Sections'}</span>
-
-            <ChevronDown
-              className={`w-4 h-4 transition-transform duration-200 ${mobileExpanded ? 'rotate-180' : ''
-                }`}
-            />
-          </div>
-        </button>
-
-        {mobileExpanded && (
-          <div className="mt-2 p-3 rounded-2xl bg-slate-900 border border-slate-800 space-y-3 shadow-2xl animate-in fade-in slide-in-from-top-2 duration-150">
-            {renderNavLinks()}
-
-            <div className="pt-2 border-t border-slate-800 flex gap-2">
-              <Link
-                to="/citizen/report-waste"
-                onClick={() => setMobileExpanded(false)}
-                className="flex-1 py-2 text-center text-xs font-bold bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl"
-              >
-                Report Waste
-              </Link>
-
-              <Link
-                to="/citizen/request-collection"
-                onClick={() => setMobileExpanded(false)}
-                className="flex-1 py-2 text-center text-xs font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-xl"
-              >
-                Request Pickup
-              </Link>
+          {/* Independently scrollable sidebar content */}
+          <div
+            className="min-h-0 flex-1 overflow-y-auto px-4 py-4"
+            onScroll={(event) => {
+              const element = event.currentTarget;
+              setCanScrollDown(
+                element.scrollTop + element.clientHeight <
+                element.scrollHeight - 2
+              );
+            }}
+            ref={(element) => {
+              if (element) {
+                setCanScrollDown(
+                  element.scrollTop + element.clientHeight <
+                  element.scrollHeight - 2
+                );
+              }
+            }}
+          >
+            <div className="space-y-5">
+              {renderNavLinks()}
+              {quickActions}
             </div>
           </div>
-        )}
-      </div>
 
-      {/* Desktop Persistent Sidebar */}
-      <div className="hidden md:block space-y-6">
-        <div className="glass-card p-4 space-y-1.5 border border-slate-800 bg-slate-900/60 backdrop-blur-md rounded-2xl">
-          <div className="px-3 py-2 text-xs font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
-            <Recycle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-            <span>Citizen Portal</span>
-          </div>
+          {/* Scroll indicator */}
+          <button
+            type="button"
+            aria-label="Scroll sidebar down"
+            title="Scroll down"
+            onClick={(event) => {
+              const scrollArea = event.currentTarget.previousElementSibling;
+              scrollArea?.scrollBy({ top: 180, behavior: 'smooth' });
+            }}
+            className={`flex shrink-0 items-center justify-center border-t border-slate-100 bg-white py-2 text-emerald-700 transition hover:bg-emerald-50 ${canScrollDown ? 'animate-pulse' : ''
+              }`}
+          >
+            <ChevronDown className="h-5 w-5" />
+          </button>
 
-          {renderNavLinks()}
-        </div>
-
-        <div className="glass-card p-4 bg-gradient-to-br from-emerald-950/30 via-slate-900/60 to-slate-900 border border-emerald-500/20 rounded-2xl space-y-3">
-          <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
-            <PlusCircle className="w-3.5 h-3.5 shrink-0" />
-            Quick Actions
-          </h4>
-
-          <p className="text-[11px] text-slate-400 leading-relaxed">
-            Spotted illegal dumping or need a bulk waste collection? Submit a
-            report in under 60 seconds.
-          </p>
-
-          <div className="space-y-2 pt-1">
-            <Link
-              to="/citizen/report-waste"
-              className="w-full glass-button-primary text-xs py-2 justify-center"
+          {/* Sign out at the bottom of the sidebar */}
+          <div className="shrink-0 border-t border-slate-200 p-3">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-rose-50 hover:text-rose-700"
             >
-              Report Waste Issue
-            </Link>
-
-            <Link
-              to="/citizen/request-collection"
-              className="w-full glass-button-secondary text-xs py-2 justify-center"
-            >
-              Request Collection
-            </Link>
+              <LogOut className="h-4 w-4" />
+              Sign out
+            </button>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside>
+    </>
   );
 }

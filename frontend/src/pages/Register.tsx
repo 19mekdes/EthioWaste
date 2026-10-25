@@ -12,6 +12,8 @@ import {
   AlertCircle,
   CheckCircle2,
   Recycle,
+  ArrowLeft,
+  Leaf,
 } from 'lucide-react';
 
 export function Register() {
@@ -32,183 +34,292 @@ export function Register() {
     setError('');
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError('Passwords do not match.');
       return;
     }
 
     setLoading(true);
-    const res = await register({
-      name,
-      email,
-      phone,
-      password,
-      confirmPassword,
-    });
-    setLoading(false);
 
-    if (!res.success) {
-      setError(res.message || 'Registration failed');
-      return;
+    try {
+      const res = await register({
+        name,
+        email,
+        phone,
+        password,
+        confirmPassword,
+      });
+
+      if (!res.success) {
+        setError(res.message || 'Registration failed. Please try again.');
+        return;
+      }
+
+      setSuccess(true);
+
+      setTimeout(() => {
+        navigate('/citizen/overview');
+      }, 1000);
+    } catch {
+      setError('Unable to create your account. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    setSuccess(true);
-    setTimeout(() => {
-      navigate('/citizen/overview');
-    }, 1000);
   };
 
   const labelClass =
-    'block text-xs font-semibold text-slate-300 mb-1 flex items-center gap-1.5';
+    'mb-1.5 flex items-center gap-2 text-sm font-semibold text-slate-700';
 
   const inputClass =
-    'w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all';
+    'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 disabled:bg-slate-50';
 
   return (
-    <div className="min-h-screen bg-brand-dark text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-md w-full glass-card p-6 sm:p-8 bg-slate-900/70 border border-slate-800/80 rounded-3xl shadow-2xl relative z-10 space-y-5 sm:space-y-6">
-        <div className="text-center space-y-2">
-          <Link
-            to="/"
-            title="Go back to Home Page"
-            aria-label="Back to home page"
-            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 mb-2 shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer group"
-          >
-            <Recycle className="w-6 h-6 text-slate-950 group-hover:rotate-180 transition-transform duration-500" />
+    <div className="min-h-screen bg-[#F5F8F4] px-4 py-6 font-sans text-slate-800 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl flex-col">
+        {/* Header */}
+        <header className="mb-8 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2.5">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
+              <Recycle className="h-5 w-5" />
+            </div>
+            <span className="text-xl font-extrabold tracking-tight text-slate-800">
+              Eco<span className="text-emerald-600">Bin</span>
+            </span>
           </Link>
 
-          <h2 className="text-2xl font-extrabold text-white tracking-tight">
-            Create Your Account
-          </h2>
-
-          <p className="text-xs text-slate-400">
-            Join EcoBin to report waste, earn Eco-Points, and keep Addis Ababa clean
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          {success && (
-            <div className="flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 p-3 rounded-xl text-xs">
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
-              <span>Account created! Redirecting to dashboard...</span>
-            </div>
-          )}
-
-          <div>
-            <label className={labelClass}>
-              <UserIcon className="w-3.5 h-3.5 text-emerald-400" />
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Jane Citizen"
-              className={inputClass}
-              required
-              autoComplete="name"
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>
-              <Mail className="w-3.5 h-3.5 text-emerald-400" />
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className={inputClass}
-              required
-              autoComplete="email"
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>
-              <Phone className="w-3.5 h-3.5 text-emerald-400" />
-              Phone Number (Optional)
-            </label>
-            <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+251 911 234 567"
-              className={inputClass}
-              autoComplete="tel"
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="At least 8 characters"
-              className={inputClass}
-              required
-              minLength={8}
-              autoComplete="new-password"
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>
-              <Lock className="w-3.5 h-3.5 text-emerald-400" />
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter your password"
-              className={inputClass}
-              required
-              minLength={8}
-              autoComplete="new-password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading || success}
-            className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60"
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-emerald-700"
           >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <UserPlus className="w-4 h-4" />
-            )}
-            <span>
-              {loading ? 'Creating Account...' : 'Create Free Account'}
-            </span>
-          </button>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to home</span>
+            <span className="sm:hidden">Home</span>
+          </Link>
+        </header>
 
-          <div className="text-center text-xs text-slate-400 pt-2">
-            Already have an account?{' '}
-            <Link
-              to="/login"
-              className="text-emerald-400 font-semibold hover:text-emerald-300 hover:underline"
-            >
-              Sign in
-            </Link>
+        {/* Main content */}
+        <main className="flex flex-1 items-center justify-center py-2">
+          <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40 lg:grid-cols-2">
+            {/* Welcome panel */}
+            <section className="relative hidden flex-col justify-between overflow-hidden bg-[#E8F3E7] p-10 lg:flex xl:p-12">
+              <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-emerald-200/50 blur-3xl" />
+              <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-lime-200/40 blur-3xl" />
+
+              <div className="relative">
+                <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-emerald-700 shadow-sm">
+                  <Leaf className="h-7 w-7" />
+                </div>
+
+                <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">
+                  A cleaner Addis Ababa
+                </p>
+
+                <h1 className="max-w-md text-4xl font-extrabold leading-tight tracking-tight text-slate-800 xl:text-5xl">
+                  Small actions.
+                  <span className="block text-emerald-700">
+                    Cleaner communities.
+                  </span>
+                </h1>
+
+                <p className="mt-5 max-w-md text-base leading-7 text-slate-600">
+                  Join EcoBin to report waste issues, discover responsible
+                  waste management options, and help make your community cleaner.
+                </p>
+              </div>
+
+              <div className="relative mt-12 rounded-2xl border border-emerald-100 bg-white/80 p-5">
+                <div className="flex items-start gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                    <Recycle className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-slate-800">
+                      Be part of the change
+                    </h2>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                      Create an account and take your first step toward
+                      responsible waste management.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Registration form */}
+            <section className="p-6 sm:p-9 lg:p-10 xl:p-12">
+              <div className="mb-7">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 lg:hidden">
+                  <Recycle className="h-6 w-6" />
+                </div>
+
+                <p className="mb-2 text-sm font-semibold text-emerald-700">
+                  Get started for free
+                </p>
+
+                <h2 className="text-3xl font-extrabold tracking-tight text-slate-800">
+                  Create your account
+                </h2>
+
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Join EcoBin and help keep your community clean.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 p-3.5 text-sm text-rose-700"
+                  >
+                    <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                {success && (
+                  <div
+                    role="status"
+                    className="flex items-start gap-2.5 rounded-xl border border-emerald-200 bg-emerald-50 p-3.5 text-sm text-emerald-800"
+                  >
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+                    <span>
+                      Account created successfully! Redirecting to your
+                      dashboard...
+                    </span>
+                  </div>
+                )}
+
+                <div>
+                  <label htmlFor="register-name" className={labelClass}>
+                    <UserIcon className="h-4 w-4 text-emerald-600" />
+                    Full name
+                  </label>
+                  <input
+                    id="register-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Your full name"
+                    className={inputClass}
+                    required
+                    autoComplete="name"
+                    disabled={loading || success}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-email" className={labelClass}>
+                    <Mail className="h-4 w-4 text-emerald-600" />
+                    Email address
+                  </label>
+                  <input
+                    id="register-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className={inputClass}
+                    required
+                    autoComplete="email"
+                    disabled={loading || success}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-phone" className={labelClass}>
+                    <Phone className="h-4 w-4 text-emerald-600" />
+                    Phone number
+                    <span className="font-normal text-slate-400">
+                      (Optional)
+                    </span>
+                  </label>
+                  <input
+                    id="register-phone"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+251 911 234 567"
+                    className={inputClass}
+                    autoComplete="tel"
+                    disabled={loading || success}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="register-password" className={labelClass}>
+                    <Lock className="h-4 w-4 text-emerald-600" />
+                    Password
+                  </label>
+                  <input
+                    id="register-password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="At least 8 characters"
+                    className={inputClass}
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                    disabled={loading || success}
+                  />
+                  <p className="mt-1.5 text-xs text-slate-500">
+                    Use at least 8 characters.
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="register-confirm-password"
+                    className={labelClass}
+                  >
+                    <Lock className="h-4 w-4 text-emerald-600" />
+                    Confirm password
+                  </label>
+                  <input
+                    id="register-confirm-password"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Enter your password again"
+                    className={inputClass}
+                    required
+                    minLength={8}
+                    autoComplete="new-password"
+                    disabled={loading || success}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading || success}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/15 transition hover:bg-emerald-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <UserPlus className="h-4 w-4" />
+                  )}
+                  <span>
+                    {loading ? 'Creating account...' : 'Create free account'}
+                  </span>
+                </button>
+
+                <p className="pt-2 text-center text-sm text-slate-500">
+                  Already have an account?{' '}
+                  <Link
+                    to="/login"
+                    className="font-bold text-emerald-700 transition hover:text-emerald-800 hover:underline"
+                  >
+                    Sign in
+                  </Link>
+                </p>
+              </form>
+            </section>
           </div>
-        </form>
+        </main>
+
+        <footer className="py-5 text-center text-xs text-slate-500">
+          Making waste management smarter, one step at a time.
+        </footer>
       </div>
     </div>
   );

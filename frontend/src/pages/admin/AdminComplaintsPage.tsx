@@ -1,8 +1,15 @@
+
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { complaintService } from '../../services/complaintService';
 import { Complaint } from '../../types';
-import { AlertTriangle, MessageSquare, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import {
+  AlertTriangle,
+  MessageSquare,
+  CheckCircle2,
+  AlertCircle,
+  X,
+} from 'lucide-react';
 
 export const AdminComplaintsPage: React.FC = () => {
   const [complaints, setComplaints] = useState<Complaint[]>([]);
@@ -36,7 +43,11 @@ export const AdminComplaintsPage: React.FC = () => {
 
     try {
       setUpdating(true);
-      await complaintService.resolveComplaint(selectedComplaint.id, 'RESOLVED', adminNotes);
+      await complaintService.resolveComplaint(
+        selectedComplaint.id,
+        'RESOLVED',
+        adminNotes
+      );
       setSelectedComplaint(null);
       setAdminNotes('');
       fetchComplaints();
@@ -49,64 +60,80 @@ export const AdminComplaintsPage: React.FC = () => {
 
   return (
     <AdminLayout title="Municipal Complaints Management">
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-white">Citizen Complaints & Service Issues</h2>
-          <p className="text-sm text-slate-400">Review reported service bottlenecks and respond to citizen inquiries.</p>
+          <h2 className="text-xl font-bold text-slate-800">
+            Citizen Complaints &amp; Service Issues
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Review reported service bottlenecks and respond to citizen inquiries.
+          </p>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <AlertCircle className="h-5 w-5 flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-600" />
           </div>
         ) : complaints.length === 0 ? (
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-12 text-center text-slate-400">
-            No complaints recorded.
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm sm:p-12">
+            <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-700">
+              <MessageSquare className="h-6 w-6" />
+            </div>
+            <p className="font-semibold text-slate-800">No complaints recorded.</p>
+            <p className="mt-1 text-sm text-slate-500">
+              Citizen complaints will appear here when submitted.
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
             {complaints.map((c) => (
               <div
                 key={c.id}
-                className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                className="flex flex-col items-start justify-between gap-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-200 hover:shadow-md sm:p-6 md:flex-row md:items-center"
               >
-                <div className="space-y-2 flex-1">
-                  <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                <div className="min-w-0 flex-1 space-y-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold text-amber-800">
                       {c.category}
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
                       Status: {c.status}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white">{c.subject}</h3>
-                  <p className="text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-700/40">
+                  <h3 className="text-base font-bold text-slate-800">
+                    {c.subject}
+                  </h3>
+
+                  <p className="whitespace-pre-wrap break-words rounded-xl border border-slate-100 bg-slate-50 p-3 text-sm text-slate-600">
                     "{c.description}"
                   </p>
+
                   {c.adminNotes && (
-                    <div className="text-xs text-emerald-300 bg-emerald-950/30 border border-emerald-800/40 p-2.5 rounded-xl">
+                    <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-3 text-sm text-emerald-800">
                       <strong>Resolution Response:</strong> {c.adminNotes}
                     </div>
                   )}
                 </div>
 
-                <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+                <div className="flex w-full flex-shrink-0 justify-end md:w-auto">
                   <button
+                    type="button"
                     onClick={() => {
                       setSelectedComplaint(c);
                       setAdminNotes(c.adminNotes || '');
                     }}
-                    className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700"
                   >
-                    Respond & Resolve
+                    <CheckCircle2 className="h-4 w-4" />
+                    Respond &amp; Resolve
                   </button>
                 </div>
               </div>
@@ -116,21 +143,48 @@ export const AdminComplaintsPage: React.FC = () => {
 
         {/* Modal for Admin Response */}
         {selectedComplaint && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-700 pb-4">
-                <h3 className="text-xl font-bold text-white">Resolve Complaint</h3>
-                <button onClick={() => setSelectedComplaint(null)} className="text-slate-400 hover:text-white font-bold">✕</button>
+          <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm">
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="resolve-complaint-title"
+              className="my-auto w-full max-w-lg space-y-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl sm:p-6"
+            >
+              <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div className="flex items-center gap-3">
+                  <div className="rounded-xl bg-emerald-50 p-2.5 text-emerald-700">
+                    <AlertTriangle className="h-5 w-5" />
+                  </div>
+                  <h3
+                    id="resolve-complaint-title"
+                    className="text-lg font-bold text-slate-800"
+                  >
+                    Resolve Complaint
+                  </h3>
+                </div>
+
+                <button
+                  type="button"
+                  aria-label="Close dialog"
+                  onClick={() => setSelectedComplaint(null)}
+                  className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
 
-              <form onSubmit={handleResolve} className="space-y-4">
+              <form onSubmit={handleResolve} className="space-y-5">
                 <div>
-                  <span className="text-xs text-slate-400 block mb-1">Subject</span>
-                  <p className="text-sm font-bold text-white">{selectedComplaint.subject}</p>
+                  <span className="mb-1 block text-xs font-semibold text-slate-500">
+                    Subject
+                  </span>
+                  <p className="break-words text-sm font-bold text-slate-800">
+                    {selectedComplaint.subject}
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label className="mb-1.5 block text-xs font-semibold text-slate-600">
                     Municipal Response / Action Notes *
                   </label>
                   <textarea
@@ -138,25 +192,26 @@ export const AdminComplaintsPage: React.FC = () => {
                     onChange={(e) => setAdminNotes(e.target.value)}
                     rows={4}
                     placeholder="Describe resolution steps taken or instructions to collector team..."
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-slate-100"
+                    className="w-full resize-y rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
                     required
                   />
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4 border-t border-slate-700">
+                <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:justify-end">
                   <button
                     type="button"
                     onClick={() => setSelectedComplaint(null)}
-                    className="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold"
+                    className="rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={updating}
-                    className="px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-md"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-xs font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
                   >
-                    Save & Mark Resolved
+                    <CheckCircle2 className="h-4 w-4" />
+                    {updating ? 'Saving...' : 'Save & Mark Resolved'}
                   </button>
                 </div>
               </form>

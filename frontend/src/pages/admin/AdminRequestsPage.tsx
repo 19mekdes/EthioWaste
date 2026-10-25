@@ -1,9 +1,9 @@
+
 import React, { useEffect, useState } from 'react';
 import { AdminLayout } from '../../layouts/AdminLayout';
 import { adminService } from '../../services/adminService';
-import { collectionRequestService } from '../../services/collectionRequestService';
 import { CollectionRequest, User } from '../../types';
-import { Truck, MapPin, Calendar, Clock, AlertCircle, UserCheck, CheckCircle2 } from 'lucide-react';
+import { MapPin, Calendar, AlertCircle, UserCheck, X } from 'lucide-react';
 
 export const AdminRequestsPage: React.FC = () => {
   const [requests, setRequests] = useState<CollectionRequest[]>([]);
@@ -44,7 +44,7 @@ export const AdminRequestsPage: React.FC = () => {
       setUpdating(true);
       await adminService.assignCollectorToRequest(selectedRequest.id, assignedCollectorId);
       setSelectedRequest(null);
-      fetchData();
+      await fetchData();
     } catch (err: any) {
       alert(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to dispatch collector.');
     } finally {
@@ -54,77 +54,84 @@ export const AdminRequestsPage: React.FC = () => {
 
   return (
     <AdminLayout title="Collection Request Dispatches">
-      <div className="space-y-6 max-w-7xl mx-auto">
+      <div className="mx-auto max-w-7xl space-y-6">
         <div>
-          <h2 className="text-xl font-bold text-white">Doorstep Waste Collection Requests</h2>
-          <p className="text-sm text-slate-400">Dispatch registered municipal collectors to citizen pickup locations.</p>
+          <h2 className="text-xl font-bold text-slate-800">Doorstep Waste Collection Requests</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Dispatch registered municipal collectors to citizen pickup locations.
+          </p>
         </div>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div className="flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <AlertCircle className="h-5 w-5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         {loading ? (
           <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-500" />
+            <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
           </div>
         ) : requests.length === 0 ? (
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-12 text-center text-slate-400">
+          <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm sm:p-12">
             No collection requests in system.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {requests.map((req) => (
               <div
                 key={req.id}
-                className="bg-slate-800/80 border border-slate-700/60 hover:border-blue-500/40 rounded-2xl p-6 shadow-lg flex flex-col justify-between transition space-y-4"
+                className="flex flex-col justify-between space-y-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-emerald-200 hover:shadow-md sm:p-6"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-xs font-bold text-blue-400 uppercase">
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold uppercase text-emerald-700">
                       {req.wasteType}
                     </span>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-slate-700 text-emerald-400 border border-emerald-500/30">
+                    <span className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                       {req.status}
                     </span>
                   </div>
 
-                  <h3 className="text-base font-bold text-white mb-2">
+                  <h3 className="mb-3 text-base font-bold text-slate-800">
                     Quantity: {req.estimatedQuantity}
                   </h3>
 
-                  <p className="text-xs text-slate-300 flex items-center gap-1.5 mb-2">
-                    <MapPin className="w-4 h-4 text-emerald-400 flex-shrink-0" /> {req.address}
+                  <p className="mb-3 flex items-start gap-1.5 text-xs text-slate-600">
+                    <MapPin className="h-4 w-4 shrink-0 text-emerald-600" />
+                    <span>{req.address}</span>
                   </p>
 
-                  <p className="text-xs text-slate-400 flex items-center gap-1.5 mb-3">
-                    <Calendar className="w-3.5 h-3.5 text-teal-400" /> {new Date(req.preferredDate).toLocaleDateString()}
+                  <p className="mb-4 flex items-center gap-1.5 text-xs text-slate-500">
+                    <Calendar className="h-3.5 w-3.5 text-emerald-600" />
+                    {new Date(req.preferredDate).toLocaleDateString()}
                   </p>
 
                   {req.assignedCollector ? (
-                    <div className="bg-slate-900/60 p-3 rounded-xl border border-slate-700/40 text-xs">
-                      <span className="text-slate-400 block mb-0.5">Assigned Collector:</span>
-                      <span className="font-bold text-white">{req.assignedCollector.name}</span>
+                    <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs">
+                      <span className="mb-1 block text-slate-500">Assigned Collector:</span>
+                      <span className="font-semibold text-slate-800">
+                        {req.assignedCollector.name}
+                      </span>
                     </div>
                   ) : (
-                    <div className="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-xl text-xs text-amber-400 font-semibold">
+                    <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs font-semibold text-amber-800">
                       Unassigned - Needs Collector
                     </div>
                   )}
                 </div>
 
-                <div className="pt-3 border-t border-slate-700/60 flex justify-end">
+                <div className="flex justify-end border-t border-slate-100 pt-4">
                   <button
                     onClick={() => {
                       setSelectedRequest(req);
                       setAssignedCollectorId(req.assignedCollectorId || '');
                     }}
-                    className="px-4 py-2 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md transition flex items-center gap-1"
+                    className="flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
                   >
-                    <UserCheck className="w-4 h-4" /> Dispatch / Assign
+                    <UserCheck className="h-4 w-4" />
+                    Dispatch / Assign
                   </button>
                 </div>
               </div>
@@ -134,28 +141,54 @@ export const AdminRequestsPage: React.FC = () => {
 
         {/* Modal for Assigning Collector */}
         {selectedRequest && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4">
-            <div className="bg-slate-800 border border-slate-700 rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-lg w-full shadow-2xl space-y-5 sm:space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-700 pb-3 sm:pb-4">
-                <h3 className="text-lg sm:text-xl font-bold text-white">Dispatch Collector</h3>
-                <button onClick={() => setSelectedRequest(null)} className="text-slate-400 hover:text-white font-bold p-1">✕</button>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-3 backdrop-blur-sm sm:p-4"
+            onClick={(e) => {
+              if (e.target === e.currentTarget && !updating) {
+                setSelectedRequest(null);
+              }
+            }}
+          >
+            <div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="dispatch-modal-title"
+              className="max-h-[90vh] w-full max-w-lg space-y-5 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 shadow-2xl sm:space-y-6 sm:rounded-3xl sm:p-6"
+            >
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                <h3 id="dispatch-modal-title" className="text-lg font-bold text-slate-800 sm:text-xl">
+                  Dispatch Collector
+                </h3>
+                <button
+                  type="button"
+                  aria-label="Close dispatch dialog"
+                  onClick={() => !updating && setSelectedRequest(null)}
+                  disabled={updating}
+                  className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 disabled:opacity-50"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
 
               <form onSubmit={handleAssignCollector} className="space-y-4">
                 <div>
-                  <span className="text-xs text-slate-400 block mb-1">Pickup Address</span>
-                  <p className="text-sm font-bold text-white">{selectedRequest.address}</p>
+                  <span className="mb-1 block text-xs text-slate-500">Pickup Address</span>
+                  <p className="text-sm font-semibold text-slate-800">
+                    {selectedRequest.address}
+                  </p>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                  <label htmlFor="collector-select" className="mb-1 block text-xs font-semibold text-slate-700">
                     Select Collector Fleet Unit *
                   </label>
                   <select
+                    id="collector-select"
                     value={assignedCollectorId}
                     onChange={(e) => setAssignedCollectorId(e.target.value)}
-                    className="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 sm:text-sm"
                     required
+                    disabled={updating}
                   >
                     <option value="">-- Choose Collector --</option>
                     {collectors.map((c) => (
@@ -166,20 +199,21 @@ export const AdminRequestsPage: React.FC = () => {
                   </select>
                 </div>
 
-                <div className="flex justify-end gap-2 sm:gap-3 pt-4 border-t border-slate-700">
+                <div className="flex flex-col-reverse justify-end gap-2 border-t border-slate-100 pt-4 sm:flex-row sm:gap-3">
                   <button
                     type="button"
                     onClick={() => setSelectedRequest(null)}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-xl border border-slate-700 text-slate-300 text-xs font-semibold"
+                    disabled={updating}
+                    className="rounded-xl border border-slate-300 px-4 py-2.5 text-xs font-semibold text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 sm:flex-none"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
-                    disabled={updating}
-                    className="flex-1 sm:flex-none px-6 py-2.5 rounded-xl bg-blue-500 hover:bg-blue-400 text-slate-950 font-bold text-xs shadow-md"
+                    disabled={updating || !assignedCollectorId}
+                    className="rounded-xl bg-emerald-600 px-6 py-2.5 text-xs font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none"
                   >
-                    Confirm Dispatch
+                    {updating ? 'Dispatching...' : 'Confirm Dispatch'}
                   </button>
                 </div>
               </form>

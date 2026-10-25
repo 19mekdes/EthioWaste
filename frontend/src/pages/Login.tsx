@@ -9,6 +9,8 @@ import {
   LogIn,
   AlertCircle,
   Recycle,
+  ArrowLeft,
+  Leaf,
 } from 'lucide-react';
 
 export function Login() {
@@ -23,23 +25,33 @@ export function Login() {
   const executeLogin = async (loginEmail: string, loginPass: string) => {
     setLoading(true);
     setError('');
-    const res = await login({ email: loginEmail, password: loginPass });
-    setLoading(false);
 
-    if (!res.success) {
-      setError(res.message || 'Invalid email or password.');
-      return;
-    }
+    try {
+      const res = await login({
+        email: loginEmail,
+        password: loginPass,
+      });
 
-    const emailLower = loginEmail.toLowerCase();
-    if (emailLower.includes('admin')) {
-      navigate('/admin/overview');
-    } else if (emailLower.includes('collector')) {
-      navigate('/collector/overview');
-    } else if (emailLower.includes('recycling')) {
-      navigate('/recycling/overview');
-    } else {
-      navigate('/citizen/overview');
+      if (!res.success) {
+        setError(res.message || 'Invalid email or password.');
+        return;
+      }
+
+      const emailLower = loginEmail.toLowerCase();
+
+      if (emailLower.includes('admin')) {
+        navigate('/admin/overview');
+      } else if (emailLower.includes('collector')) {
+        navigate('/collector/overview');
+      } else if (emailLower.includes('recycling')) {
+        navigate('/recycling/overview');
+      } else {
+        navigate('/citizen/overview');
+      }
+    } catch {
+      setError('Unable to sign in right now. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,157 +60,232 @@ export function Login() {
     await executeLogin(email, password);
   };
 
-  const labelClass =
-    'block text-xs font-semibold text-slate-300 mb-1.5 flex items-center gap-1.5';
-
   const inputClass =
-    'w-full bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all';
+    'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 disabled:opacity-60';
+
+  const labelClass =
+    'mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700';
 
   return (
-    <div className="min-h-screen bg-brand-dark text-slate-100 flex flex-col justify-center items-center px-4 sm:px-6 lg:px-8 py-8 sm:py-12 font-sans relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="max-w-md w-full glass-card p-6 sm:p-8 bg-slate-900/70 border border-slate-800/80 rounded-3xl shadow-2xl relative z-10 space-y-5 sm:space-y-6">
-        <div className="text-center space-y-2">
+    <main className="min-h-screen bg-[#F5F8F4] px-4 py-6 font-sans text-slate-800 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl flex-col">
+        <header className="flex items-center justify-between py-3">
           <Link
             to="/"
-            title="Go back to Home Page"
-            aria-label="Back to home page"
-            className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-slate-950 mb-2 shadow-lg shadow-emerald-500/20 hover:scale-105 active:scale-95 transition-all cursor-pointer group"
+            aria-label="Back to homepage"
+            className="inline-flex items-center gap-2 rounded-lg text-lg font-extrabold tracking-tight text-slate-800"
           >
-            <Recycle className="w-6 h-6 text-slate-950 group-hover:rotate-180 transition-transform duration-500" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white">
+              <Recycle className="h-6 w-6" />
+            </span>
+            Eco<span className="text-emerald-700">Bin</span>
           </Link>
 
-          <h2 className="text-2xl font-extrabold text-white tracking-tight">
-            Welcome Back to EcoBin
-          </h2>
-          <p className="text-xs text-slate-400">
-            Sign in to manage waste reports, collections, and recycling operations
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
-          {error && (
-            <div className="flex items-center gap-2 bg-rose-500/10 border border-rose-500/30 text-rose-300 p-3 rounded-xl text-xs">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          <div>
-            <label className={labelClass}>
-              <Mail className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className={inputClass}
-              required
-              autoComplete="email"
-            />
-          </div>
-
-          <div>
-            <label className={labelClass}>
-              <Lock className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className={inputClass}
-              required
-              autoComplete="current-password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 disabled:opacity-60"
+          <Link
+            to="/"
+            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-emerald-700"
           >
-            {loading ? (
-              <Loader2 className="w-4 h-4 animate-spin shrink-0" />
-            ) : (
-              <LogIn className="w-4 h-4 shrink-0" />
-            )}
-            <span>Sign In to EcoBin</span>
-          </button>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to home</span>
+            <span className="sm:hidden">Home</span>
+          </Link>
+        </header>
 
-          <div className="text-center text-xs text-slate-400">
-            New to EcoBin?{' '}
-            <Link
-              to="/register"
-              className="text-emerald-400 font-semibold hover:text-emerald-300 hover:underline"
-            >
-              Create an account
-            </Link>
-          </div>
+        <section className="flex flex-1 items-center justify-center py-8 sm:py-12">
+          <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/50 md:grid-cols-2">
+            <aside className="relative hidden flex-col justify-between overflow-hidden bg-emerald-800 p-10 text-white md:flex lg:p-12">
+              <div className="pointer-events-none absolute -right-20 -top-16 h-64 w-64 rounded-full border-[40px] border-white/5" />
+              <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-emerald-700/80" />
 
-          <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-3 sm:p-4 text-[11px] text-slate-400 space-y-2.5 pt-3 sm:pt-4">
-            <div className="flex items-center gap-1.5 font-bold text-slate-300 text-xs">
-              <Recycle className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-              Quick 1-Click Login:
+              <div className="relative z-10 flex items-center gap-2 text-sm font-semibold text-emerald-100">
+                <Leaf className="h-5 w-5" />
+                A cleaner future starts here
+              </div>
+
+              <div className="relative z-10 my-12">
+                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
+                  <Recycle className="h-9 w-9" />
+                </div>
+
+                <h1 className="text-3xl font-extrabold leading-tight lg:text-4xl">
+                  Welcome back to EcoBin.
+                </h1>
+
+                <p className="mt-5 max-w-sm text-sm leading-7 text-emerald-100">
+                  Sign in to manage waste reports, coordinate collections,
+                  and support a cleaner community.
+                </p>
+              </div>
+
+              <p className="relative z-10 text-xs text-emerald-100/80">
+                Small actions. Cleaner neighborhoods. A better tomorrow.
+              </p>
+            </aside>
+
+            <div className="p-6 sm:p-9 lg:p-12">
+              <div className="mb-8">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 md:hidden">
+                  <Recycle className="h-6 w-6" />
+                </div>
+
+                <p className="text-sm font-semibold text-emerald-700">
+                  Welcome back
+                </p>
+
+                <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+                  Sign in to your account
+                </h2>
+
+                <p className="mt-3 text-sm leading-6 text-slate-500">
+                  Enter your email and password to continue to EcoBin.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {error && (
+                  <div
+                    role="alert"
+                    className="flex items-start gap-3 rounded-xl border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700"
+                  >
+                    <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                )}
+
+                <div>
+                  <label htmlFor="login-email" className={labelClass}>
+                    <Mail className="h-4 w-4 text-emerald-700" />
+                    Email address
+                  </label>
+
+                  <input
+                    id="login-email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className={inputClass}
+                    required
+                    autoComplete="email"
+                    disabled={loading}
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="login-password" className={labelClass}>
+                    <Lock className="h-4 w-4 text-emerald-700" />
+                    Password
+                  </label>
+
+                  <input
+                    id="login-password"
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className={inputClass}
+                    required
+                    autoComplete="current-password"
+                    disabled={loading}
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-700 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-700/15 transition hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-600/20 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <LogIn className="h-4 w-4" />
+                  )}
+                  {loading ? 'Signing in...' : 'Sign In'}
+                </button>
+
+                <p className="text-center text-sm text-slate-500">
+                  New to EcoBin?{' '}
+                  <Link
+                    to="/register"
+                    className="font-bold text-emerald-700 hover:text-emerald-900 hover:underline"
+                  >
+                    Create an account
+                  </Link>
+                </p>
+
+                <div className="border-t border-slate-100 pt-5">
+                  <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
+                    Quick demo access
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => {
+                        setEmail('citizen@ecobin.org');
+                        setPassword('password123');
+                        void executeLogin('citizen@ecobin.org', 'password123');
+                      }}
+                      className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100 disabled:opacity-50"
+                    >
+                      Citizen
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => {
+                        setEmail('collector@ecobin.org');
+                        setPassword('password123');
+                        void executeLogin('collector@ecobin.org', 'password123');
+                      }}
+                      className="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2.5 text-sm font-semibold text-sky-800 transition hover:bg-sky-100 disabled:opacity-50"
+                    >
+                      Collector
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => {
+                        setEmail('recycling@ecobin.org');
+                        setPassword('password123');
+                        void executeLogin('recycling@ecobin.org', 'password123');
+                      }}
+                      className="rounded-xl border border-teal-200 bg-teal-50 px-3 py-2.5 text-sm font-semibold text-teal-800 transition hover:bg-teal-100 disabled:opacity-50"
+                    >
+                      Recycler
+                    </button>
+
+                    <button
+                      type="button"
+                      disabled={loading}
+                      onClick={() => {
+                        setEmail('admin@ecobin.org');
+                        setPassword('password123');
+                        void executeLogin('admin@ecobin.org', 'password123');
+                      }}
+                      className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100 disabled:opacity-50"
+                    >
+                      Admin
+                    </button>
+                  </div>
+
+                  <p className="mt-3 text-xs leading-5 text-slate-400">
+                    Demo access works only when these accounts are configured
+                    in your development environment.
+                  </p>
+                </div>
+              </form>
             </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('citizen@ecobin.org');
-                  setPassword('password123');
-                  executeLogin('citizen@ecobin.org', 'password123');
-                }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
-              >
-                👤 Citizen
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('collector@ecobin.org');
-                  setPassword('password123');
-                  executeLogin('collector@ecobin.org', 'password123');
-                }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-sky-500/10 text-sky-400 border border-sky-500/20 hover:bg-sky-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
-              >
-                🚚 Collector
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('recycling@ecobin.org');
-                  setPassword('password123');
-                  executeLogin('recycling@ecobin.org', 'password123');
-                }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-teal-500/10 text-teal-400 border border-teal-500/20 hover:bg-teal-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
-              >
-                ♻️ Recycler
-              </button>
-
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('admin@ecobin.org');
-                  setPassword('password123');
-                  executeLogin('admin@ecobin.org', 'password123');
-                }}
-                className="px-1.5 sm:px-2 py-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20 font-semibold text-center transition-all text-[11px] sm:text-xs truncate"
-              >
-                🛡️ Admin
-              </button>
-            </div>
           </div>
-        </form>
+        </section>
+
+        <footer className="py-4 text-center text-xs text-slate-400">
+          EcoBin · Smarter waste management for cleaner communities
+        </footer>
       </div>
-    </div>
+    </main>
   );
 }

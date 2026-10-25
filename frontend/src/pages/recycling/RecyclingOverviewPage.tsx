@@ -1,9 +1,18 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { RecyclingLayout } from '../../layouts/RecyclingLayout';
 import { recyclingService } from '../../services/recyclingService';
 import { RecyclingRecord } from '../../types';
-import { Building2, Scale, Recycle, Plus, ArrowRight, AlertCircle, TrendingUp } from 'lucide-react';
+import {
+  Building2,
+  Scale,
+  Recycle,
+  Plus,
+  ArrowRight,
+  AlertCircle,
+  TrendingUp,
+} from 'lucide-react';
 
 export const RecyclingOverviewPage: React.FC = () => {
   const [records, setRecords] = useState<RecyclingRecord[]>([]);
@@ -18,7 +27,12 @@ export const RecyclingOverviewPage: React.FC = () => {
         const data = await recyclingService.getMyRecords();
         setRecords(data);
       } catch (err: any) {
-        setError(err.response?.data?.message || err.response?.data?.error || err.message || 'Failed to load recycling records.');
+        setError(
+          err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.message ||
+            'Failed to load recycling records.'
+        );
       } finally {
         setLoading(false);
       }
@@ -26,110 +40,148 @@ export const RecyclingOverviewPage: React.FC = () => {
     fetchOverview();
   }, []);
 
-  const totalWeightKg = records.reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
-  const plasticKg = records.filter(r => (r.materialType || r.material) === 'PLASTIC').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
-  const glassKg = records.filter(r => (r.materialType || r.material) === 'GLASS').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
-  const metalKg = records.filter(r => (r.materialType || r.material) === 'METAL').reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+  const totalWeightKg = records.reduce(
+    (acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0),
+    0
+  );
+
+  const plasticKg = records
+    .filter((r) => (r.materialType || r.material) === 'PLASTIC')
+    .reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+
+  const glassKg = records
+    .filter((r) => (r.materialType || r.material) === 'GLASS')
+    .reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+
+  const metalKg = records
+    .filter((r) => (r.materialType || r.material) === 'METAL')
+    .reduce((acc, r) => acc + (r.quantityKg ?? r.quantity ?? 0), 0);
+
+  const metrics = [
+    {
+      label: 'Total Processed',
+      value: totalWeightKg,
+      icon: Scale,
+    },
+    {
+      label: 'Plastic Weight',
+      value: plasticKg,
+      icon: Recycle,
+    },
+    {
+      label: 'Glass Weight',
+      value: glassKg,
+      icon: TrendingUp,
+    },
+    {
+      label: 'Metal Scrap',
+      value: metalKg,
+      icon: Building2,
+    },
+  ];
 
   return (
     <RecyclingLayout title="Facility Dashboard">
-      <div className="space-y-8 max-w-7xl mx-auto">
-        {/* Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-purple-500/10 text-purple-400">
-              <Scale className="w-7 h-7" />
-            </div>
-            <div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Total Processed</span>
-              <span className="text-2xl font-black text-white">{totalWeightKg.toLocaleString()} kg</span>
-            </div>
-          </div>
+      <div className="mx-auto max-w-7xl space-y-8">
+        {/* Recycling statistics */}
+        <section
+          aria-label="Recycling statistics"
+          className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2 xl:grid-cols-4"
+        >
+          {metrics.map((metric) => (
+            <div
+              key={metric.label}
+              className="flex items-start gap-4 border-b border-slate-200 py-4 sm:border-b-0 sm:border-l-2 sm:border-l-emerald-200 sm:pl-4"
+            >
+              <div className="shrink-0 rounded-lg bg-emerald-50 p-3 text-emerald-700">
+                <metric.icon className="h-6 w-6" />
+              </div>
 
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-blue-500/10 text-blue-400">
-              <Recycle className="w-7 h-7" />
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                  {metric.label}
+                </p>
+                <p className="mt-1 break-words text-2xl font-bold text-slate-800">
+                  {metric.value.toLocaleString()} kg
+                </p>
+              </div>
             </div>
-            <div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Plastic Weight</span>
-              <span className="text-2xl font-black text-white">{plasticKg.toLocaleString()} kg</span>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-emerald-500/10 text-emerald-400">
-              <TrendingUp className="w-7 h-7" />
-            </div>
-            <div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Glass Weight</span>
-              <span className="text-2xl font-black text-white">{glassKg.toLocaleString()} kg</span>
-            </div>
-          </div>
-
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-6 shadow-xl flex items-center gap-4">
-            <div className="p-4 rounded-2xl bg-amber-500/10 text-amber-400">
-              <Building2 className="w-7 h-7" />
-            </div>
-            <div>
-              <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">Metal Scrap</span>
-              <span className="text-2xl font-black text-white">{metalKg.toLocaleString()} kg</span>
-            </div>
-          </div>
-        </div>
+          ))}
+        </section>
 
         {error && (
-          <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-3">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <div
+            role="alert"
+            className="flex items-center gap-3 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+          >
+            <AlertCircle className="h-5 w-5 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        {/* Action Header */}
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-white">Recent Material Intake & Processing</h2>
-          <Link
-            to="/recycling/records"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-purple-500 hover:bg-purple-400 text-slate-950 font-bold text-xs shadow-lg shadow-purple-500/20 transition"
-          >
-            <Plus className="w-4 h-4" /> Log New Shipment
-          </Link>
-        </div>
+        {/* Recent shipments heading */}
+        <section>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4">
+            <h2 className="text-lg font-bold text-slate-800">
+              Recent Material Intake &amp; Processing
+            </h2>
 
-        {/* Processing Logs */}
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-500" />
+            <Link
+              to="/recycling/records"
+              className="inline-flex items-center gap-2 rounded-lg bg-emerald-700 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800"
+            >
+              <Plus className="h-4 w-4" />
+              Log New Shipment
+            </Link>
           </div>
-        ) : records.length === 0 ? (
-          <div className="bg-slate-800/60 border border-slate-700/60 rounded-2xl p-12 text-center text-slate-400">
-            No recycling shipment records registered yet.
-          </div>
-        ) : (
-          <div className="bg-slate-800/80 border border-slate-700/60 rounded-2xl p-4 divide-y divide-slate-700/60 shadow-xl">
-            {records.slice(0, 5).map((r) => (
-              <div key={r.id} className="py-4 px-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="px-3 py-1 rounded-full text-xs font-extrabold bg-purple-500/10 text-purple-400 border border-purple-500/30">
-                      {r.materialType || r.material}
-                    </span>
-                    <span className="font-bold text-white text-base">{(r.quantityKg ?? r.quantity ?? 0)} kg</span>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-1">
-                    Source: {r.source || 'Municipal Dispatch'} | Processed on {new Date(r.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
 
-                <Link
-                  to={`/recycling/records/${r.id}`}
-                  className="px-4 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-semibold transition"
+          {/* Shipment records */}
+          {loading ? (
+            <div className="flex justify-center py-12">
+              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-600" />
+            </div>
+          ) : records.length === 0 ? (
+            <div className="py-10 text-sm text-slate-500">
+              No recycling shipment records registered yet.
+            </div>
+          ) : (
+            <div className="divide-y divide-slate-200">
+              {records.slice(0, 5).map((r) => (
+                <div
+                  key={r.id}
+                  className="flex flex-col items-start justify-between gap-3 py-5 sm:flex-row sm:items-center"
                 >
-                  View Details
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800">
+                        {r.materialType || r.material}
+                      </span>
+
+                      <span className="text-base font-semibold text-slate-800">
+                        {(r.quantityKg ?? r.quantity ?? 0).toLocaleString()} kg
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-sm text-slate-500">
+                      Source: {r.source || 'Municipal Dispatch'}{' '}
+                      <span className="mx-1 text-slate-300">|</span>
+                      Processed on{' '}
+                      {new Date(r.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  <Link
+                    to={`/recycling/records/${r.id}`}
+                    className="inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-800"
+                  >
+                    View Details
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </RecyclingLayout>
   );
