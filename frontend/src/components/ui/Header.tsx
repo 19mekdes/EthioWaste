@@ -1,4 +1,4 @@
-
+﻿
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
@@ -62,31 +62,8 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-2 px-3 sm:gap-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link
-          to={
-            user?.role === 'CITIZEN'
-              ? '/citizen/overview'
-              : user?.role === 'COLLECTOR'
-                ? '/collector/overview'
-                : user?.role === 'RECYCLING_ORGANIZATION'
-                  ? '/recycling/overview'
-                  : user?.role === 'MUNICIPAL_ADMIN'
-                    ? '/admin/overview'
-                    : user
-                      ? '/'
-                      : '/login'
-          }
+          to="/"
           className="group flex shrink-0 items-center gap-2.5 sm:gap-3"
-          onClick={(event) => {
-            event.preventDefault();
-
-            const confirmed = window.confirm(
-              'Are you sure you want to leave this page?'
-            );
-
-            if (confirmed) {
-              navigate(user ? '/' : '/login');
-            }
-          }}
         >
           <div className="h-9 w-9 shrink-0 rounded-xl bg-gradient-to-tr from-emerald-600 via-teal-500 to-cyan-400 p-0.5 shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-105 sm:h-10 sm:w-10">
             <div className="flex h-full w-full items-center justify-center rounded-[10px] bg-slate-950">
@@ -139,7 +116,7 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
                 </div>
               )}
 
-              {/* User Profile — no separate sign-out icon */}
+              {/* User Profile â€” no separate sign-out icon */}
               <div className="flex items-center gap-2 border-l border-slate-200 pl-2 sm:pl-3">
                 <img
                   src={
@@ -249,3 +226,4 @@ export function Header({ unreadCount = 0 }: HeaderProps) {
     </header>
   );
 }
+
