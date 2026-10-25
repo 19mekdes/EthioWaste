@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -92,37 +92,9 @@ export function Login() {
         </header>
 
         <section className="flex flex-1 items-center justify-center py-8 sm:py-12">
-          <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/50 md:grid-cols-2">
-            <aside className="relative hidden flex-col justify-between overflow-hidden bg-emerald-800 p-10 text-white md:flex lg:p-12">
-              <div className="pointer-events-none absolute -right-20 -top-16 h-64 w-64 rounded-full border-[40px] border-white/5" />
-              <div className="pointer-events-none absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-emerald-700/80" />
+          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/50">
 
-              <div className="relative z-10 flex items-center gap-2 text-sm font-semibold text-emerald-100">
-                <Leaf className="h-5 w-5" />
-                A cleaner future starts here
-              </div>
-
-              <div className="relative z-10 my-12">
-                <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/20">
-                  <Recycle className="h-9 w-9" />
-                </div>
-
-                <h1 className="text-3xl font-extrabold leading-tight lg:text-4xl">
-                  Welcome back to EcoBin.
-                </h1>
-
-                <p className="mt-5 max-w-sm text-sm leading-7 text-emerald-100">
-                  Sign in to manage waste reports, coordinate collections,
-                  and support a cleaner community.
-                </p>
-              </div>
-
-              <p className="relative z-10 text-xs text-emerald-100/80">
-                Small actions. Cleaner neighborhoods. A better tomorrow.
-              </p>
-            </aside>
-
-            <div className="p-6 sm:p-9 lg:p-12">
+            <div className="p-6 sm:p-9 lg:p-10">
               <div className="mb-8">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 md:hidden">
                   <Recycle className="h-6 w-6" />
@@ -283,9 +255,10 @@ export function Login() {
         </section>
 
         <footer className="py-4 text-center text-xs text-slate-400">
-          EcoBin · Smarter waste management for cleaner communities
+          EcoBin ┬╖ Smarter waste management for cleaner communities
         </footer>
       </div>
     </main>
   );
 }
+
