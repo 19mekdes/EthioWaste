@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: ecobin-backend
+    runtime: node
+    rootDir: backend
+    plan: free
+    region: frankfurt
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: file:./dev.db
+      - key: JWT_SECRET
+        value: smart-waste-management-secret-key-addis-ababa-2026
+      - key: FRONTEND_URL
+        value: "*"
