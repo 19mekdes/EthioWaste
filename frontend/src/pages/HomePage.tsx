@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 import {
   Recycle,
   Trash2,
@@ -15,7 +16,24 @@ import {
   Sprout,
   Globe2,
   ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  Award,
 } from 'lucide-react';
+
+const getDashboardRoute = (role?: string) => {
+  switch (role) {
+    case 'MUNICIPAL_ADMIN':
+      return '/admin/overview';
+    case 'COLLECTOR':
+      return '/collector/overview';
+    case 'RECYCLING_ORGANIZATION':
+      return '/recycling/overview';
+    case 'CITIZEN':
+    default:
+      return '/citizen/overview';
+  }
+};
 
 const stakeholders = [
   {
@@ -73,6 +91,9 @@ const steps = [
 ];
 
 export const HomePage: React.FC = () => {
+  const { user, logout } = useAuth();
+  const dashboardRoute = getDashboardRoute(user?.role);
+
   return (
     <div className="min-h-screen bg-[#F8FAF8] text-slate-800 font-sans">
       {/* Navigation */}
@@ -95,20 +116,84 @@ export const HomePage: React.FC = () => {
             </div>
           </Link>
 
-          <div className="flex items-center gap-2 sm:gap-4">
-            <Link
-              to="/login"
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:text-emerald-700 sm:px-4"
-            >
-              Sign In
-            </Link>
-            <Link
-              to="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 sm:px-5"
-            >
-              Get Started
-              <ArrowRight className="h-4 w-4" />
-            </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            {!user ? (
+              <>
+                <Link
+                  to="/login"
+                  className="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 transition hover:text-emerald-700 sm:px-4"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  to="/register"
+                  className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 sm:px-5"
+                >
+                  Get Started
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              </>
+            ) : (
+              <div className="flex items-center gap-2 sm:gap-3">
+                {/* Eco Points for citizens */}
+                {user.role === 'CITIZEN' && (
+                  <div className="hidden shrink-0 items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-1 sm:flex">
+                    <Award className="h-3.5 w-3.5 shrink-0 text-amber-600" />
+                    <span className="text-xs font-bold tracking-wide text-amber-800">
+                      {user.ecoPoints}{' '}
+                      <span className="text-[10px] font-normal text-amber-700">
+                        PTS
+                      </span>
+                    </span>
+                  </div>
+                )}
+
+                {/* Dashboard button */}
+                <Link
+                  to={dashboardRoute}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 sm:px-4"
+                >
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span className="hidden sm:inline">Dashboard</span>
+                </Link>
+
+                {/* Logged in User Profile */}
+                <Link
+                  to={dashboardRoute}
+                  className="flex items-center gap-2.5 rounded-xl border border-slate-200/80 bg-white px-2.5 py-1.5 shadow-sm transition hover:border-emerald-300 hover:bg-slate-50"
+                  title="Go to dashboard"
+                >
+                  <img
+                    src={
+                      user.avatarUrl ||
+                      'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80'
+                    }
+                    alt={user.name}
+                    className="h-8 w-8 shrink-0 rounded-full border border-slate-200 object-cover ring-2 ring-emerald-100"
+                  />
+                  <div className="hidden text-left sm:block">
+                    <div className="line-clamp-1 max-w-[120px] text-xs font-bold text-slate-800 lg:max-w-[160px]">
+                      {user.name}
+                    </div>
+                    <div className="text-[10px] font-semibold uppercase tracking-wider text-emerald-700">
+                      {user.role.replace('_', ' ')}
+                    </div>
+                  </div>
+                </Link>
+
+                {/* Sign Out Button */}
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await logout();
+                  }}
+                  title="Sign out"
+                  className="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-500 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+                >
+                  <LogOut className="h-4 w-4" />
+                </button>
+              </div>
+            )}
           </div>
         </nav>
       </header>
@@ -139,10 +224,10 @@ export const HomePage: React.FC = () => {
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Link
-                  to="/register"
+                  to={user ? dashboardRoute : '/register'}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 py-4 font-bold text-white shadow-lg shadow-emerald-600/20 transition hover:-translate-y-0.5 hover:bg-emerald-700"
                 >
-                  Get Started
+                  {user ? 'Go to Dashboard' : 'Get Started'}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
 
@@ -371,10 +456,10 @@ export const HomePage: React.FC = () => {
                 Explore EcoBin and discover how you can participate.
               </p>
               <Link
-                to="/register"
+                to={user ? dashboardRoute : '/register'}
                 className="mt-8 inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3.5 font-bold text-emerald-800 shadow-sm transition hover:bg-emerald-50"
               >
-                Get Started Today
+                {user ? 'Go to Dashboard' : 'Get Started Today'}
                 <ArrowRight className="h-5 w-5" />
               </Link>
             </div>
