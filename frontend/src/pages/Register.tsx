@@ -90,9 +90,9 @@ export function Register() {
         <main className="w-full">
           <div className="w-full overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40">
             <section className="p-6 sm:p-9 lg:p-10">
-              <div className="mb-7">
-                {/* EcoBin Brand Logo placed inside the card at the top */}
-                <div className="mb-6">
+              <div className="mb-7 text-center">
+                {/* EcoBin Brand Logo placed inside the card at the top in center */}
+                <div className="mb-6 flex justify-center">
                   <Link
                     to="/"
                     aria-label="Back to homepage"
