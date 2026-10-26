@@ -166,77 +166,13 @@ export const HomePage: React.FC = () => {
               </div>
             </div>
 
-            {/* Decorative hero illustration */}
+            {/* Recycling facility photo */}
             <div className="relative mx-auto w-full max-w-lg">
-              <div className="absolute inset-6 rounded-[2rem] bg-emerald-200/50 blur-2xl" />
-
-              <div className="relative overflow-hidden rounded-3xl border border-emerald-100 bg-white p-6 shadow-xl shadow-emerald-900/5 sm:p-8">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-500">
-                      A shared responsibility
-                    </p>
-                    <h2 className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
-                      Better together.
-                    </h2>
-                  </div>
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
-                    <Sprout className="h-7 w-7" />
-                  </div>
-                </div>
-
-                <div className="my-7 flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-lime-50 py-10">
-                  <div className="relative flex h-44 w-44 items-center justify-center rounded-full border border-emerald-200 bg-white/80 shadow-inner">
-                    <div className="absolute -left-3 top-7 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-emerald-700 shadow-md">
-                      <Users className="h-6 w-6" />
-                    </div>
-                    <div className="absolute -right-3 top-7 flex h-12 w-12 items-center justify-center rounded-xl bg-white text-sky-700 shadow-md">
-                      <Truck className="h-6 w-6" />
-                    </div>
-                    <div className="absolute -bottom-2 left-1/2 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-xl bg-white text-violet-700 shadow-md">
-                      <Building2 className="h-6 w-6" />
-                    </div>
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full bg-emerald-600 text-white shadow-lg shadow-emerald-600/20">
-                      <Recycle className="h-12 w-12" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <div className="rounded-xl bg-emerald-50 p-3 text-center">
-                    <Users className="mx-auto h-5 w-5 text-emerald-700" />
-                    <p className="mt-2 text-xs font-semibold text-slate-700">
-                      Community
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-sky-50 p-3 text-center">
-                    <Truck className="mx-auto h-5 w-5 text-sky-700" />
-                    <p className="mt-2 text-xs font-semibold text-slate-700">
-                      Collection
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-lime-50 p-3 text-center">
-                    <Recycle className="mx-auto h-5 w-5 text-lime-700" />
-                    <p className="mt-2 text-xs font-semibold text-slate-700">
-                      Recycling
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="absolute -bottom-5 -left-3 hidden items-center gap-3 rounded-2xl border border-slate-100 bg-white p-4 shadow-lg sm:flex">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-lime-100 text-lime-700">
-                  <Globe2 className="h-5 w-5" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-slate-800">
-                    A greener future
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    One community at a time
-                  </p>
-                </div>
-              </div>
+              <img
+                src="/images/ecobin-recycling-facility.png"
+                alt="Workers sorting recyclable materials at a recycling facility"
+                className="relative h-[320px] w-full rounded-3xl object-cover shadow-xl sm:h-[420px]"
+              />
             </div>
           </div>
         </section>

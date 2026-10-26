@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -98,54 +98,11 @@ export function Register() {
 
         {/* Main content */}
         <main className="flex flex-1 items-center justify-center py-2">
-          <div className="grid w-full max-w-5xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40 lg:grid-cols-2">
-            {/* Welcome panel */}
-            <section className="relative hidden flex-col justify-between overflow-hidden bg-[#E8F3E7] p-10 lg:flex xl:p-12">
-              <div className="absolute -right-20 -top-20 h-72 w-72 rounded-full bg-emerald-200/50 blur-3xl" />
-              <div className="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-lime-200/40 blur-3xl" />
+          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40">
 
-              <div className="relative">
-                <div className="mb-8 flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-emerald-700 shadow-sm">
-                  <Leaf className="h-7 w-7" />
-                </div>
 
-                <p className="mb-3 text-sm font-bold uppercase tracking-[0.18em] text-emerald-700">
-                  A cleaner Addis Ababa
-                </p>
-
-                <h1 className="max-w-md text-4xl font-extrabold leading-tight tracking-tight text-slate-800 xl:text-5xl">
-                  Small actions.
-                  <span className="block text-emerald-700">
-                    Cleaner communities.
-                  </span>
-                </h1>
-
-                <p className="mt-5 max-w-md text-base leading-7 text-slate-600">
-                  Join EcoBin to report waste issues, discover responsible
-                  waste management options, and help make your community cleaner.
-                </p>
-              </div>
-
-              <div className="relative mt-12 rounded-2xl border border-emerald-100 bg-white/80 p-5">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
-                    <Recycle className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h2 className="font-bold text-slate-800">
-                      Be part of the change
-                    </h2>
-                    <p className="mt-1 text-sm leading-6 text-slate-600">
-                      Create an account and take your first step toward
-                      responsible waste management.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Registration form */}
-            <section className="p-6 sm:p-9 lg:p-10 xl:p-12">
+            
+            <section className="p-6 sm:p-9 lg:p-10">
               <div className="mb-7">
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 lg:hidden">
                   <Recycle className="h-6 w-6" />
@@ -324,3 +281,4 @@ export function Register() {
     </div>
   );
 }
+
