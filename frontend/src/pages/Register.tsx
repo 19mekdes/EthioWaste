@@ -1,4 +1,4 @@
-﻿
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -73,39 +73,38 @@ export function Register() {
     'w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 placeholder:text-slate-400 outline-none transition-all focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100 disabled:bg-slate-50';
 
   return (
-    <div className="min-h-screen bg-[#F5F8F4] px-4 py-6 font-sans text-slate-800 sm:px-6 lg:px-8">
-      <div className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl flex-col">
-        {/* Header */}
-        <header className="mb-8 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm">
-              <Recycle className="h-5 w-5" />
-            </div>
-            <span className="text-xl font-extrabold tracking-tight text-slate-800">
-              Eco<span className="text-emerald-600">Bin</span>
-            </span>
-          </Link>
-
+    <div className="flex min-h-screen flex-col items-center justify-center bg-[#F5F8F4] px-4 py-8 font-sans text-slate-800 sm:px-6 sm:py-12 lg:px-8">
+      <div className="w-full max-w-xl">
+        {/* Back to home link */}
+        <div className="mb-4">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-emerald-700"
+            className="inline-flex items-center gap-2 rounded-xl border border-slate-200/80 bg-white/90 px-3.5 py-2 text-sm font-medium text-slate-600 shadow-sm backdrop-blur-sm transition hover:border-emerald-300 hover:bg-white hover:text-emerald-700"
           >
             <ArrowLeft className="h-4 w-4" />
-            <span className="hidden sm:inline">Back to home</span>
-            <span className="sm:hidden">Home</span>
+            <span>Back to home</span>
           </Link>
-        </header>
+        </div>
 
         {/* Main content */}
-        <main className="flex flex-1 items-center justify-center py-2">
-          <div className="w-full max-w-xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40">
-
-
-            
+        <main className="w-full">
+          <div className="w-full overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-xl shadow-slate-200/40">
             <section className="p-6 sm:p-9 lg:p-10">
               <div className="mb-7">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-700 lg:hidden">
-                  <Recycle className="h-6 w-6" />
+                {/* EcoBin Brand Logo placed inside the card at the top */}
+                <div className="mb-6">
+                  <Link
+                    to="/"
+                    aria-label="Back to homepage"
+                    className="group inline-flex items-center gap-2.5 transition-transform hover:scale-105"
+                  >
+                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-600/25">
+                      <Recycle className="h-6 w-6" />
+                    </span>
+                    <span className="text-2xl font-extrabold tracking-tight text-slate-900">
+                      Eco<span className="text-emerald-600">Bin</span>
+                    </span>
+                  </Link>
                 </div>
 
                 <p className="mb-2 text-sm font-semibold text-emerald-700">
