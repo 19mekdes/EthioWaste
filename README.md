@@ -169,7 +169,8 @@ cd EthioWaste
 
 
    Project documentation link= https://drive.google.com/file/d/1aMh7_lWdNa_A3oSioS-RXSngc3wYWhAA/view?usp=sharing
-   Video Presentation link=  
+   
+   Video Presentation link= https://drive.google.com/file/d/1EIZ6Xp1AHVC9ID-JN2GeRt38OaiWhjiO/view?usp=sharing 
 
 
  Name...................................CTC........................... ....role
