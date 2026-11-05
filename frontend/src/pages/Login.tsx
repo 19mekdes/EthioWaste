@@ -186,77 +186,14 @@ export function Login() {
                   </Link>
                 </p>
 
-                <div className="border-t border-slate-100 pt-5">
-                  <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
-                    Quick demo access
-                  </p>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => {
-                        setEmail('citizen@ecobin.org');
-                        setPassword('password123');
-                        void executeLogin('citizen@ecobin.org', 'password123');
-                      }}
-                      className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100 disabled:opacity-50"
-                    >
-                      Citizen
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => {
-                        setEmail('collector@ecobin.org');
-                        setPassword('password123');
-                        void executeLogin('collector@ecobin.org', 'password123');
-                      }}
-                      className="rounded-xl border border-sky-200 bg-sky-50 px-3 py-2.5 text-sm font-semibold text-sky-800 transition hover:bg-sky-100 disabled:opacity-50"
-                    >
-                      Collector
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => {
-                        setEmail('recycling@ecobin.org');
-                        setPassword('password123');
-                        void executeLogin('recycling@ecobin.org', 'password123');
-                      }}
-                      className="rounded-xl border border-teal-200 bg-teal-50 px-3 py-2.5 text-sm font-semibold text-teal-800 transition hover:bg-teal-100 disabled:opacity-50"
-                    >
-                      Recycler
-                    </button>
-
-                    <button
-                      type="button"
-                      disabled={loading}
-                      onClick={() => {
-                        setEmail('admin@ecobin.org');
-                        setPassword('password123');
-                        void executeLogin('admin@ecobin.org', 'password123');
-                      }}
-                      className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100 disabled:opacity-50"
-                    >
-                      Admin
-                    </button>
-                  </div>
-
-                  <p className="mt-3 text-xs leading-5 text-slate-400">
-                    Demo access works only when these accounts are configured
-                    in your development environment.
-                  </p>
-                </div>
               </form>
             </div>
           </div>
         </section>
 
         <footer className="py-4 text-center text-xs text-slate-400">
-          EcoBin ┬╖ Smarter waste management for cleaner communities
+          EcoBin  Smarter waste management for cleaner communities
         </footer>
       </div>
     </main>
