@@ -168,6 +168,11 @@ cd EthioWaste
    npm run dev both the backend and frontend
 
 
+   Project documentation link= https://drive.google.com/file/d/1aMh7_lWdNa_A3oSioS-RXSngc3wYWhAA/view?usp=sharing
+   
+   Video Presentation link= https://drive.google.com/file/d/1EIZ6Xp1AHVC9ID-JN2GeRt38OaiWhjiO/view?usp=sharing 
+
+
  Name...................................CTC........................... ....role
    1.  Mekdes Wale..............566-26.................Backend Developer
    2.  Kanariya Habtamu.........1783-26................Frontend Developer
